@@ -1,7 +1,7 @@
 "use server";
 
+import type { ChapterItem, WordItem } from "@/modules/corpus/core/types";
 import { db } from "@/modules/db/client";
-import type { ChapterItem, WordItem } from "@/modules/listen/corpus/core/types";
 
 /** 从 DB 获取章节列表（用于侧栏与选择） */
 export async function getChapters(): Promise<ChapterItem[]> {

@@ -1,4 +1,4 @@
-import { getChapters, getWords } from "@/modules/listen/actions";
+import { getChapters, getWords } from "@/modules/corpus/actions";
 import type { ChapterItem, WordItem } from "./types";
 
 /** 从 DB 加载章节列表（服务端） */

@@ -3,7 +3,7 @@
 import {
   getWordsForDictation,
   type DictationFilter,
-} from "@/modules/listen/actions";
+} from "@/modules/corpus/actions";
 import { useControls } from "leva";
 import React, { startTransition, useCallback, useState } from "react";
 import type { ChapterItem } from "../core";

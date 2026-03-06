@@ -5,7 +5,7 @@ import {
   getUserWordStatsForWords,
   getWordsForDictation,
   setWordMastered,
-} from "@/modules/listen/actions";
+} from "@/modules/corpus/actions";
 import { useRequest } from "ahooks";
 import { useObservable } from "rcrx";
 import { useEffect, useMemo, useState } from "react";

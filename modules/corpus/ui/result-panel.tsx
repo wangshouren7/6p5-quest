@@ -4,7 +4,7 @@ import {
   getMasteredWordSet,
   setWordMastered,
   updateUserWordStats,
-} from "@/modules/listen/actions";
+} from "@/modules/corpus/actions";
 import { useRequest } from "ahooks";
 import { useObservable } from "rcrx";
 import { useEffect, useMemo, useRef } from "react";

@@ -1,8 +1,8 @@
 "use client";
 
+import { cn } from "@/modules/ui/jsx";
 import { useObservable } from "rcrx";
 import { useEffect, useRef, useState } from "react";
-import { cn } from "../../../ui/jsx";
 import { RESULT_GRID_COLS } from "../core/constants";
 import { useCorpus } from "./context";
 import { WordCard } from "./word-card";

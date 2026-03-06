@@ -1,6 +1,6 @@
 "use client";
 
-import type { DictationFilter } from "@/modules/listen/actions";
+import type { DictationFilter } from "@/modules/corpus/actions";
 import { cn } from "@/modules/ui/jsx";
 import { Search } from "lucide-react";
 import React, { useMemo } from "react";

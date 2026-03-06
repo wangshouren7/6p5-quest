@@ -1,7 +1,7 @@
 export const pathnames = {
   words: () => "/words",
   grammar: () => "/grammar",
-  listen: () => "/listen",
+  corpus: () => "/corpus",
   speak: () => "/speak",
   read: () => "/read",
   write: () => "/write",

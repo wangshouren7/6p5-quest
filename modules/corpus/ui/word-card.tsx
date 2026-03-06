@@ -1,7 +1,7 @@
 "use client";
 
+import { cn } from "@/modules/ui/jsx";
 import { Play } from "lucide-react";
-import { cn } from "../../../ui/jsx";
 import { playWordAudio } from "../core/audio";
 
 export interface WordCardProps {

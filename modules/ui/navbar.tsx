@@ -17,8 +17,8 @@ const items = [
   //   href: pathnames.grammar(),
   // },
   {
-    label: "Listen",
-    href: pathnames.listen(),
+    label: "Corpus",
+    href: pathnames.corpus(),
   },
   // {
   //   label: "Speak",
