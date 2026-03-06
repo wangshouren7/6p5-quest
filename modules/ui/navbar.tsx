@@ -17,7 +17,7 @@ const items = [
   //   href: pathnames.grammar(),
   // },
   {
-    label: "Corpus",
+    label: "语料库",
     href: pathnames.corpus(),
   },
   // {
