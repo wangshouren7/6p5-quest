@@ -1,3 +1,9 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+/* 让 dark: 跟随 data-theme="dark"（next-themes），而不是仅跟随系统暗色 */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@plugin "daisyui" {
+  themes: all;
+}

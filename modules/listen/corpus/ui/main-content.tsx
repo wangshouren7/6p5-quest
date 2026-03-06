@@ -1,0 +1,309 @@
+"use client";
+
+import {
+  getMasteredWordSet,
+  getUserWordStatsForWords,
+  getWordsForDictation,
+  setWordMastered,
+} from "@/modules/listen/actions";
+import { useRequest } from "ahooks";
+import { useObservable } from "rcrx";
+import { useEffect, useMemo, useState } from "react";
+import { USER_ID } from "../core/constants";
+import { shuffleWords } from "../core/shuffle";
+import type { ICorpus } from "../core/types";
+import { useCorpus } from "./context";
+import { DictationGrid } from "./dictation-grid";
+import { ResultPanel } from "./result-panel";
+import { WordGrid, type WordStat } from "./word-grid";
+
+function normalizeWord(w: string): string {
+  return w.trim().toLowerCase();
+}
+
+type PageSizeOption = 200 | 300 | 500 | "custom" | "all";
+
+/** 分页器：使用 daisyUI join + join-item btn，见 https://daisyui.com/components/pagination/ */
+function Pagination({
+  currentPage,
+  totalPages,
+  onPageChange,
+}: {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}) {
+  const showPages = ((): number[] => {
+    if (totalPages <= 7)
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    const pages: number[] = [1];
+    const lo = Math.max(2, currentPage - 1);
+    const hi = Math.min(totalPages - 1, currentPage + 1);
+    if (lo > 2) pages.push(-1);
+    for (let p = lo; p <= hi; p++)
+      if (p !== 1 && p !== totalPages) pages.push(p);
+    if (hi < totalPages - 1) pages.push(-2);
+    if (totalPages > 1) pages.push(totalPages);
+    return pages;
+  })();
+
+  return (
+    <div className="join">
+      <button
+        type="button"
+        className="btn btn-sm join-item"
+        disabled={currentPage <= 1}
+        onClick={() => onPageChange(currentPage - 1)}
+        aria-label="上一页"
+      >
+        «
+      </button>
+      {showPages.map((p, i) =>
+        p === -1 || p === -2 ? (
+          <button
+            key={`ellipsis-${i}`}
+            type="button"
+            className="btn btn-sm join-item btn-disabled"
+            disabled
+          >
+            …
+          </button>
+        ) : (
+          <button
+            key={p}
+            type="button"
+            className={`btn btn-sm join-item ${p === currentPage ? "btn-active" : ""}`}
+            onClick={() => onPageChange(p)}
+            aria-label={`第 ${p} 页`}
+          >
+            {p}
+          </button>
+        ),
+      )}
+      <button
+        type="button"
+        className="btn btn-sm join-item"
+        disabled={currentPage >= totalPages}
+        onClick={() => onPageChange(currentPage + 1)}
+        aria-label="下一页"
+      >
+        »
+      </button>
+    </div>
+  );
+}
+
+/** 练习模式结束：不进入结果页，直接重置回单词列表 */
+function PracticeEndReset({ corpus }: { corpus: ICorpus }) {
+  useEffect(() => {
+    corpus.resetTest();
+  }, [corpus]);
+  return null;
+}
+
+interface MainContentProps {
+  filteredWords: Awaited<ReturnType<typeof getWordsForDictation>> | null;
+  setFilteredWords: React.Dispatch<
+    React.SetStateAction<Awaited<
+      ReturnType<typeof getWordsForDictation>
+    > | null>
+  >;
+}
+
+export function MainContent({
+  filteredWords,
+  setFilteredWords,
+}: MainContentProps) {
+  const corpus = useCorpus();
+  const controls = useObservable(corpus.controls.value$);
+  const testActive = useObservable(corpus.data.testActive$) ?? false;
+  const testFinished = useObservable(corpus.data.testFinished$) ?? false;
+
+  const [page, setPage] = useState(1);
+  const [pageSizeOption, setPageSizeOption] = useState<PageSizeOption>(200);
+  const [customPageSize, setCustomPageSize] = useState(100);
+
+  const displayList = useMemo(() => filteredWords ?? [], [filteredWords]);
+  const effectivePageSize =
+    pageSizeOption === "all"
+      ? Infinity
+      : pageSizeOption === "custom"
+        ? Math.max(1, customPageSize)
+        : pageSizeOption;
+  const totalPages =
+    effectivePageSize === Infinity
+      ? 1
+      : Math.max(1, Math.ceil(displayList.length / effectivePageSize));
+  const safePage = Math.min(page, totalPages);
+  const pageSlice =
+    effectivePageSize === Infinity
+      ? displayList
+      : displayList.slice(
+          (safePage - 1) * effectivePageSize,
+          safePage * effectivePageSize,
+        );
+
+  const wordIds = useMemo(
+    () => displayList.map((w) => w.id).filter((id): id is number => id != null),
+    [displayList],
+  );
+  const wordIdsKey = wordIds.join(",");
+  const { data: wordStatsArray, run: runWordStats } = useRequest(
+    () => getUserWordStatsForWords(USER_ID, wordIds),
+    { ready: wordIds.length > 0, refreshDeps: [wordIdsKey] },
+  );
+  const wordStats = useMemo(() => {
+    if (!wordStatsArray?.length) return undefined;
+    const m = new Map<number, WordStat>();
+    wordStatsArray.forEach((s) =>
+      m.set(s.wordId, {
+        totalCount: s.totalCount,
+        correctCount: s.correctCount,
+        mastered: s.mastered,
+      }),
+    );
+    return m;
+  }, [wordStatsArray]);
+
+  const { data: masteredWords = [], run: runMastered } = useRequest(
+    () => getMasteredWordSet(USER_ID),
+    { refreshDeps: [] },
+  );
+  const masteredSet = useMemo(() => new Set(masteredWords), [masteredWords]);
+
+  const handleToggleMastered = async (word: string) => {
+    const item = displayList.find(
+      (w) => normalizeWord(w.word) === normalizeWord(word),
+    );
+    if (item?.id == null) return;
+    const current = masteredSet.has(normalizeWord(word));
+    await setWordMastered(USER_ID, item.id, !current);
+    runMastered();
+    runWordStats();
+  };
+
+  const shuffle = controls?.shuffle ?? false;
+  const rate = controls?.rate ?? 1;
+  const listForTest = shuffle ? shuffleWords(displayList) : displayList;
+  const handleStartTest = () => {
+    corpus.startTest(listForTest, { rate, shuffle });
+  };
+  const handleStartPractice = () => {
+    corpus.startTest(listForTest, { rate, shuffle, practiceMode: true });
+  };
+
+  if (testFinished) {
+    const { practiceMode } = corpus.getLastTestMeta();
+    if (practiceMode) {
+      return <PracticeEndReset corpus={corpus} />;
+    }
+    return <ResultPanel />;
+  }
+
+  if (testActive) {
+    return <DictationGrid />;
+  }
+
+  if (filteredWords === null) {
+    return (
+      <p className="text-base-content/70">请设置筛选条件并点击「搜索」。</p>
+    );
+  }
+
+  if (displayList.length === 0) {
+    return (
+      <div className="flex flex-col gap-2">
+        <p className="text-base-content/70">没有符合条件的单词。</p>
+        <button
+          type="button"
+          className="btn btn-ghost btn-sm w-fit"
+          onClick={() => setFilteredWords(null)}
+        >
+          清空并重新筛选
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className="mb-3 flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={handleStartTest}
+        >
+          开始听写
+        </button>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={handleStartPractice}
+        >
+          开始练习
+        </button>
+        <span className="text-sm text-base-content/60">
+          共 {displayList.length} 个单词
+        </span>
+        <button
+          type="button"
+          className="btn btn-ghost btn-sm"
+          onClick={() => setFilteredWords(null)}
+        >
+          清空结果
+        </button>
+      </div>
+
+      <div className="mb-3 flex flex-wrap items-center gap-3">
+        <span className="label-text">每页</span>
+        <select
+          className="select select-bordered select-sm w-32"
+          value={pageSizeOption}
+          onChange={(e) => {
+            const v = e.target.value;
+            if (v === "custom" || v === "all") {
+              setPageSizeOption(v);
+            } else {
+              setPageSizeOption(Number(v) as 200 | 300 | 500);
+            }
+            setPage(1);
+          }}
+        >
+          <option value={200}>200</option>
+          <option value={300}>300</option>
+          <option value={500}>500</option>
+          <option value="custom">自定义</option>
+          <option value="all">全部展示</option>
+        </select>
+        {pageSizeOption === "custom" && (
+          <input
+            type="number"
+            min={1}
+            max={1000}
+            className="input input-bordered input-sm w-24"
+            value={customPageSize}
+            onChange={(e) => {
+              const next = Math.max(1, parseInt(e.target.value, 10) || 1);
+              setCustomPageSize(next);
+              setPage(1);
+            }}
+          />
+        )}
+        <span className="text-sm text-base-content/60">
+          第 {safePage} / {totalPages} 页，共 {displayList.length} 条
+        </span>
+        <Pagination
+          currentPage={safePage}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
+      </div>
+
+      <WordGrid
+        words={pageSlice}
+        wordStats={wordStats}
+        onToggleMastered={handleToggleMastered}
+      />
+    </>
+  );
+}

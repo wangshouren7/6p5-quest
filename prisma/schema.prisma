@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../modules/db/generated"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model CorpusChapter {
+  id         Int        @id // from chapters.json, no autoincrement for sync
+  title      String
+  sortOrder  Int?       @default(0)
+  tests      CorpusTest[]
+}
+
+model CorpusTest {
+  id         Int         @id @default(autoincrement())
+  chapterId  Int
+  testIndex  Int         // 1-based, matches testId in files
+  chapter    CorpusChapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  words      CorpusWord[]
+
+  @@unique([chapterId, testIndex])
+}
+
+model CorpusWord {
+  id         Int      @id @default(autoincrement())
+  testId     Int
+  index      Int      // order within test
+  word       String
+  phonetic   String?
+  meaning   String
+  audioPath  String   // e.g. /listen/corpus/chapters/3/tests/1/audio/0.wav
+  test       CorpusTest @relation(fields: [testId], references: [id], onDelete: Cascade)
+  userStats  UserCorpusWordStat[]
+
+  @@unique([testId, index])
+}
+
+model UserCorpusWordStat {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  wordId        Int
+  totalCount    Int      @default(0)
+  correctCount  Int      @default(0)
+  mastered      Boolean  @default(false)
+  historyInputs String?  // JSON array of strings ["input1","input2"]
+  word          CorpusWord @relation(fields: [wordId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, wordId])
+}

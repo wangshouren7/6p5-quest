@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "UserWordStat" ADD COLUMN "mastered" BOOLEAN NOT NULL DEFAULT 0;
