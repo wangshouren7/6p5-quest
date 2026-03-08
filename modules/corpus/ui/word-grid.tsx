@@ -2,7 +2,7 @@
 
 import { useObservable } from "rcrx";
 import type { WordItem } from "../core";
-import { RESULT_GRID_COLS } from "../core/constants";
+import { getGridColsClass } from "../core/constants";
 import { useCorpus } from "./context";
 import { WordCard } from "./word-card";
 
@@ -28,12 +28,14 @@ export function WordGrid({
   const corpus = useCorpus();
   const controls = useObservable(corpus.controls.value$);
   const rate = controls?.rate ?? 1;
+  const gridCols = controls?.gridCols ?? 4;
+  const gridColsClass = getGridColsClass(gridCols);
 
   return (
-    <div className="grid grid-cols-4 border border-base-300">
+    <div className={`grid ${gridColsClass} border border-base-300`}>
       {words.map((item, index) => {
         const { word, phonetic, meaning, audioUrl, id: wordId } = item;
-        const rowIndex = Math.floor(index / RESULT_GRID_COLS);
+        const rowIndex = Math.floor(index / gridCols);
         const isStripeRow = rowIndex % 2 === 0;
         const stat =
           wordId != null && wordStats ? wordStats.get(wordId) : undefined;

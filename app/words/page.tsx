@@ -1,9 +1,6 @@
+import { redirect } from "next/navigation";
 
-export default function CorpusPage() {
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Words</h1>
-
-    </div>
-  );
+/** 兼容旧链接：/words 重定向到 /vocabulary */
+export default function WordsPage() {
+  redirect("/vocabulary");
 }

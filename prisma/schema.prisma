@@ -53,3 +53,79 @@ model UserCorpusWordStat {
 
   @@unique([userId, wordId])
 }
+
+// --- Vocabulary (词汇) ---
+
+model VocabularyCategory {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  entries VocabularyEntry[]
+}
+
+model VocabularyMorpheme {
+  id       Int    @id @default(autoincrement())
+  type     String // 'prefix' | 'suffix' | 'root'
+  text     String
+  meanings String? // JSON array string[] (multiple Chinese meanings)
+  entries  VocabularyEntryMorpheme[]
+
+  @@unique([type, text])
+}
+
+model VocabularyEntry {
+  id           Int       @id @default(autoincrement())
+  word         String
+  wordLower    String    @unique
+  phonetic     String?
+  mnemonic     String?   // 记法：如何记忆该词（建议结合词根词缀 MFP）
+  categoryId   Int?
+  category     VocabularyCategory?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  meanings     String?   // JSON: [{ partOfSpeech: string, meanings: string[] }]
+  collocations String?   // JSON: [{ phrase: string, meaning: string }] 固定搭配
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  morphemes    VocabularyEntryMorpheme[]
+  partsOfSpeech VocabularyEntryPartOfSpeech[]
+}
+
+model VocabularyEntryMorpheme {
+  entryId    Int
+  morphemeId Int
+  role       String // 'prefix' | 'suffix' | 'root'
+  entry      VocabularyEntry  @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  morpheme   VocabularyMorpheme @relation(fields: [morphemeId], references: [id], onDelete: Cascade)
+
+  @@id([entryId, morphemeId])
+}
+
+model VocabularyEntryPartOfSpeech {
+  entryId      Int
+  partOfSpeech String
+  entry        VocabularyEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+
+  @@id([entryId, partOfSpeech])
+}
+
+// --- 词汇 AI 回填任务（一单词一条）---
+
+model VocabularyAiFillTask {
+  id        Int      @id @default(autoincrement())
+  word      String // 本任务对应的一个单词
+  status    String // PENDING | RUNNING | COMPLETED | FAILED
+  result    String? // JSON: { entryId } 或 null；COMPLETED 时可为空
+  error     String? // 失败原因，仅 FAILED 时有效
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+}
+
+// --- 词汇 AI 配置（单行，供后台回填使用）---
+
+model VocabularyAiSettings {
+  id          Int      @id @default(autoincrement())
+  baseUrl     String   @default("https://api.openai.com/v1")
+  accessToken String
+  model       String   @default("gpt-4o-mini")
+  updatedAt   DateTime @updatedAt
+}

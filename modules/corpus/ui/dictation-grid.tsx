@@ -3,7 +3,7 @@
 import { cn } from "@/modules/ui/jsx";
 import { useObservable } from "rcrx";
 import { useEffect, useRef, useState } from "react";
-import { RESULT_GRID_COLS } from "../core/constants";
+import { getGridColsClass } from "../core/constants";
 import { useCorpus } from "./context";
 import { WordCard } from "./word-card";
 
@@ -18,6 +18,8 @@ export function DictationGrid() {
   const controls = useObservable(corpus.controls.value$);
   const showResultOnBlur = controls?.showResultOnBlur ?? false;
   const rate = controls?.rate ?? 1;
+  const gridCols = controls?.gridCols ?? 4;
+  const gridColsClass = getGridColsClass(gridCols);
   const currentPlayingIndex =
     useObservable(corpus.data.currentPlayingIndex$) ?? -1;
   const testPaused = useObservable(corpus.data.testPaused$) ?? false;
@@ -27,6 +29,18 @@ export function DictationGrid() {
   const [revealedIndices, setRevealedIndices] = useState<Set<number>>(
     () => new Set(),
   );
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    const grid = e.currentTarget.closest("[class*='grid']");
+    if (!grid) return;
+    const inputs =
+      grid.querySelectorAll<HTMLInputElement>("input[type='text']");
+    const arr = Array.from(inputs);
+    const i = arr.indexOf(e.currentTarget);
+    if (i >= 0 && i < arr.length - 1) arr[i + 1].focus();
+  };
 
   // 挂载后聚焦第一个输入框并播放第一个单词（onFocusFirstInput$ 在 startTest 里同步发出时本组件尚未挂载，收不到）
   useEffect(() => {
@@ -73,9 +87,9 @@ export function DictationGrid() {
           结束
         </button>
       </div>
-      <div className="grid grid-cols-4 border border-base-300">
+      <div className={`grid ${gridColsClass} border border-base-300`}>
         {words.map((item, index) => {
-          const rowIndex = Math.floor(index / RESULT_GRID_COLS);
+          const rowIndex = Math.floor(index / gridCols);
           const isStripeRow = rowIndex % 2 === 0;
           const isPlaying = currentPlayingIndex === index;
           const isRevealed =
@@ -157,6 +171,7 @@ export function DictationGrid() {
                     value={userAnswers[index] ?? ""}
                     onChange={(e) => corpus.setAnswer(index, e.target.value)}
                     onFocus={() => corpus.playWordAtIndex(index)}
+                    onKeyDown={handleKeyDown}
                     aria-label={`第 ${index + 1} 个单词`}
                     spellCheck={false}
                     autoComplete="off"
@@ -175,6 +190,7 @@ export function DictationGrid() {
                     value={userAnswers[index] ?? ""}
                     onChange={(e) => corpus.setAnswer(index, e.target.value)}
                     onFocus={() => corpus.playWordAtIndex(index)}
+                    onKeyDown={handleKeyDown}
                     onBlur={() => {
                       if (showResultOnBlur) {
                         setRevealedIndices((prev) => new Set(prev).add(index));

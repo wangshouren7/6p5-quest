@@ -10,6 +10,7 @@
     "postinstall": "pnpm rebuild better-sqlite3 || true",
     "db:rebuild": "pnpm rebuild better-sqlite3",
     "db:seed": "prisma db seed",
+    "db:reset": " pnpm prisma migrate reset && pnpm db:seed",
     "sync-corpus": "tsx prisma/seed.ts"
   },
   "prisma": {
@@ -24,10 +25,12 @@
     "cn": "^0.1.1",
     "daisyui": "^5.5.19",
     "dotenv": "^17.3.1",
+    "html2canvas-pro": "^2.0.2",
     "leva": "^0.10.1",
     "lucide-react": "^0.575.0",
     "next": "16.1.6",
     "next-themes": "^0.4.6",
+    "openai": "^6.27.0",
     "prisma": "^7.4.2",
     "rcrx": "^0.0.4",
     "react": "19.2.3",
@@ -35,7 +38,8 @@
     "react-use": "^17.6.0",
     "rxjs": "^7.8.2",
     "tailwind-merge": "^3.5.0",
-    "tsx": "^4.21.0"
+    "tsx": "^4.21.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

@@ -1,8 +1,8 @@
 "use client";
 
 import {
-  getWordsForDictation,
-  type DictationFilter,
+    getWordsForDictation,
+    type DictationFilter,
 } from "@/modules/corpus/actions";
 import { useControls } from "leva";
 import React, { startTransition, useCallback, useState } from "react";
@@ -11,6 +11,7 @@ import { Corpus as CorpusClass, fetchChapters } from "../core";
 import { DEFAULT_CORPUS_CONTROLS, USER_ID } from "../core/constants";
 import { CorpusContext } from "./context";
 import { FilterBar } from "./filter-bar";
+import { GridColsControl } from "./grid-cols-control";
 import { MainContent } from "./main-content";
 
 export function Corpus() {
@@ -64,10 +65,18 @@ export function Corpus() {
         step: 500,
         label: "听写间隔(ms)",
       },
+      gridCols: {
+        value: DEFAULT_CORPUS_CONTROLS.gridCols,
+        min: 2,
+        max: 8,
+        step: 1,
+        label: "网格每行列数",
+      },
     }),
     [],
   );
-  const { rate, shuffle, showResultOnBlur, dictationIntervalMs } = controls;
+  const { rate, shuffle, showResultOnBlur, dictationIntervalMs, gridCols } =
+    controls;
   React.useEffect(() => {
     if (corpus)
       corpus.controls.change({
@@ -75,8 +84,9 @@ export function Corpus() {
         shuffle,
         showResultOnBlur,
         dictationIntervalMs,
+        gridCols,
       });
-  }, [corpus, rate, shuffle, showResultOnBlur, dictationIntervalMs]);
+  }, [corpus, rate, shuffle, showResultOnBlur, dictationIntervalMs, gridCols]);
 
   const [fetchId, setFetchId] = useState(0);
   const handleFetchWords = useCallback(async () => {
@@ -100,13 +110,16 @@ export function Corpus() {
   return (
     <CorpusContext.Provider value={corpus}>
       <div className="flex flex-col gap-4">
-        <FilterBar
-          chapters={chapters}
-          filter={filter}
-          setFilter={setFilter}
-          loading={filterLoading}
-          onFetch={handleFetchWords}
-        />
+        <div className="flex flex-wrap items-center gap-4">
+          <FilterBar
+            chapters={chapters}
+            filter={filter}
+            setFilter={setFilter}
+            loading={filterLoading}
+            onFetch={handleFetchWords}
+          />
+          <GridColsControl />
+        </div>
         <main className="min-w-0 flex-1 overflow-auto">
           <MainContent
             key={fetchId}

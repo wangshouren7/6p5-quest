@@ -1,14 +1,14 @@
 "use client";
 
 import {
-  getMasteredWordSet,
-  setWordMastered,
-  updateUserWordStats,
+    getMasteredWordSet,
+    setWordMastered,
+    updateUserWordStats,
 } from "@/modules/corpus/actions";
 import { useRequest } from "ahooks";
 import { useObservable } from "rcrx";
 import { useEffect, useMemo, useRef } from "react";
-import { RESULT_GRID_COLS, USER_ID } from "../core/constants";
+import { getGridColsClass, USER_ID } from "../core/constants";
 import { computeResult } from "../core/result";
 import { useCorpus } from "./context";
 import { WordCard } from "./word-card";
@@ -24,6 +24,8 @@ export function ResultPanel() {
   const accuracy = useObservable(corpus.data.accuracy$);
   const controls = useObservable(corpus.controls.value$);
   const rate = controls?.rate ?? 1;
+  const gridCols = controls?.gridCols ?? 4;
+  const gridColsClass = getGridColsClass(gridCols);
   const submittedRef = useRef(false);
 
   const result = useMemo(
@@ -97,10 +99,10 @@ export function ResultPanel() {
         </p>
       </div>
 
-      <div className="grid grid-cols-4 border border-base-300">
+      <div className={`grid ${gridColsClass} border border-base-300`}>
         {words.map((w, index) => {
           const { word, phonetic, meaning, audioUrl, id } = w;
-          const rowIndex = Math.floor(index / RESULT_GRID_COLS);
+          const rowIndex = Math.floor(index / gridCols);
           const isStripeRow = rowIndex % 2 === 0;
           const userAnswer = (userAnswers[index] ?? "").trim();
           const isCorrect =

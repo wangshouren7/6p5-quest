@@ -32,6 +32,8 @@ export interface ICorpusControls {
   showResultOnBlur: boolean;
   /** 听写时每个单词播放间隔（毫秒） */
   dictationIntervalMs: number;
+  /** 单词网格每行列数（2–8） */
+  gridCols: number;
 }
 
 /** 历史记录展示用（含 Prisma 可选字段） */

@@ -1,0 +1,45 @@
+---
+description: 项目代码风格与架构：core/ui 分层、类实例 vs 接口形态、Context+hook、类型命名、API 层、常量与 utils、Server Actions、路由
+alwaysApply: true
+---
+
+# 项目代码风格（AI 必遵）
+
+### 1. **Core 内部架构**
+
+- **两种形态**
+  - **类实例形态**（microbleed）：core 有主领域类（如 `Microbleed`），接收 `I*Options`，内部组合子域（`MicrobleedData`、`Controls`、`PointCreator`）；UI 只负责创建后注入 Context。
+  - **接口形态**（vocabulary）：core 只定义实例形态接口（如 `IVocabulary`），由 UI 根组件用 `useMemo` 实现并注入。
+
+- **子域与数据层**（类实例时）
+  - 数据类（如 `MicrobleedData`）：私有 Map 维护索引，用 RxJS（`BehaviorSubject`/`Subject`）暴露 `points$`、`filteredPoints$`、`filter$` 等；提供 `getPoints`、`addPoints`、`markDeletePoint`、`refreshPoints` 等命令式 API；派生状态用 `pipe(combineLatestWith, ...)` 订阅后推到新流。
+  - 控制类（如 `Controls`）：持有 `BehaviorSubject<IControls>`，提供 `change(params)`。
+  - 主领域类：组合上述子域，暴露流（如 `activePoint$`、`reportText$`）和方法（如 `setActiveId`、`refreshPoints`），在构造函数里完成组装和事件订阅。
+
+- **actions 层**
+  - `domain/actions.ts` 定义改领域用到的 server actions
+
+- **常量与 utils**
+  - 常量：`DEFAULT_*` 表示默认值，`*_LIST`、`*_LABELS`、`*_COLORS` 等；复杂字面量用 `as const`。
+  - utils：`core/utils.ts` 只放纯函数；多参数用 **options 对象**（如 `IOptions`）。
+
+---
+
+### 2. **类型命名（补充）**
+
+- 构造/配置：**`I*Options`**（如 `IMicrobleedOptions`）。
+
+---
+
+### 3. **UI 与流的桥接（类实例 + RxJS + rcrx）**
+
+- rcrx：一个三方库，导出有**useObservable(stream$)**、**useSubscribe(stream$, callback)** 方法
+
+- 若 core 暴露的是 RxJS 流，UI 用 **useObservable(stream$)**、**useSubscribe(stream$, callback)** 接到 React；子组件只通过 hook 取实例，再读 `m.data.filter$`、调用 `m.refreshPoints()` 等，不在 UI 里维护一份同步状态拷贝。
+
+---
+
+### 4. **代码模板（AI 参考）**
+
+- **类实例 + RxJS + rcrx**：可直接复制 `modules/demo/` 作为新领域模板（core 内 DemoData/DemoControls/Demo 类、api.getCreation、ui 用 useRequest(getCreation)+useObservable/useSubscribe）；详见 `modules/demo/README.md`。
+- **接口形态**：参考 `modules/vocabulary/`。

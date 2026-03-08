@@ -23,7 +23,55 @@ const CORPUS_BASE = path.join(
   "chapters",
 );
 
+const VOCABULARY_CATEGORY_NAMES = [
+  "自然地理",
+  "植物研究",
+  "动物保护",
+  "太空探索",
+  "学校教育",
+  "科技发明",
+  "文化历史",
+  "语言演化",
+  "娱乐运动",
+  "物品材料",
+  "时尚潮流",
+  "饮食健康",
+  "建筑场所",
+  "交通旅行",
+  "国家政府",
+  "社会经济",
+  "法律法规",
+  "沙场争锋",
+  "社会角色",
+  "行为动作",
+  "身心健康",
+  "时间日期",
+];
+
 async function main() {
+  // Seed VocabularyCategory (22 categories) — only if client was generated with vocabulary models
+  if (
+    "vocabularyCategory" in db &&
+    typeof (
+      db as {
+        vocabularyCategory?: { upsert: (args: unknown) => Promise<unknown> };
+      }
+    ).vocabularyCategory?.upsert === "function"
+  ) {
+    for (const name of VOCABULARY_CATEGORY_NAMES) {
+      await (
+        db as {
+          vocabularyCategory: { upsert: (args: unknown) => Promise<unknown> };
+        }
+      ).vocabularyCategory.upsert({
+        where: { name },
+        create: { name },
+        update: {},
+      });
+    }
+    console.log("Vocabulary categories seeded: 22 categories");
+  }
+
   const chaptersJsonPath = path.join(CORPUS_BASE, "chapters.json");
   const raw = await fs.readFile(chaptersJsonPath, "utf-8");
   const chapters = JSON.parse(raw) as Array<{

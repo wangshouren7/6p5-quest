@@ -8,10 +8,10 @@ import { Settings } from "./settings";
 import { ThemeControl } from "./theme-control";
 
 const items = [
-  // {
-  //   label: "Words",
-  //   href: pathnames.words(),
-  // },
+  {
+    label: "词汇",
+    href: pathnames.vocabulary(),
+  },
   // {
   //   label: "Grammar",
   //   href: pathnames.grammar(),
