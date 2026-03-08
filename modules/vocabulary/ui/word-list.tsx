@@ -12,6 +12,7 @@ import {
   Trash2,
   Volume2,
 } from "lucide-react";
+import { useObservable } from "rcrx";
 import { useCallback, useRef, useState } from "react";
 import { deleteVocabularyEntry, getVocabularyEntryById } from "../actions";
 import type {
@@ -40,22 +41,29 @@ interface WordListProps {
 }
 
 export function VocabularyWordList({ className }: WordListProps = {}) {
-  const ctx = useVocabulary();
-  const items = ctx.result?.items ?? [];
-  const total = ctx.result?.total ?? 0;
-  const {
-    page,
-    pageSize,
-    aiConfig,
-    handlePageChange,
-    handlePageSizeChange,
-    handleRefresh,
-    setFormError,
-  } = ctx;
-  const onPageChange = handlePageChange;
-  const onPageSizeChange = handlePageSizeChange;
-  const onRefresh = handleRefresh;
-  const onError = setFormError;
+  const { vocabulary, aiConfig } = useVocabulary();
+  const result = useObservable(vocabulary.data.result$);
+  const page = useObservable(vocabulary.data.page$);
+  const pageSize = useObservable(vocabulary.data.pageSize$);
+  const items = result?.items ?? [];
+  const total = result?.total ?? 0;
+  const onPageChange = useCallback(
+    (p: number) => vocabulary.data.handlePageChange(p),
+    [vocabulary],
+  );
+  const onPageSizeChange = useCallback(
+    (s: number) => vocabulary.data.handlePageSizeChange(s),
+    [vocabulary],
+  );
+  const onRefresh = useCallback(
+    () => vocabulary.data.handleRefresh(),
+    [vocabulary],
+  );
+  const onError = useCallback(
+    (msg: string | null) => vocabulary.data.setFormError(msg),
+    [vocabulary],
+  );
+  const currentPage = page ?? 1;
   const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [gridCols, setGridCols] = useState(4);
   const [isGridFullscreen, setIsGridFullscreen] = useState(false);
@@ -87,7 +95,7 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
   const [reciteShuffle, setReciteShuffle] = useState(false);
   const { speak } = useWordSpeech();
 
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const totalPages = Math.max(1, Math.ceil(total / (pageSize ?? 200)));
 
   const gridCardNodes =
     viewMode === "grid"
@@ -328,8 +336,8 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
           <button
             type="button"
             className="btn btn-sm join-item"
-            disabled={page <= 1}
-            onClick={() => onPageChange(page - 1)}
+            disabled={currentPage <= 1}
+            onClick={() => onPageChange(currentPage - 1)}
             aria-label="上一页"
           >
             «
@@ -339,13 +347,13 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
             className="btn btn-sm join-item btn-disabled"
             aria-hidden
           >
-            {page}
+            {currentPage}
           </button>
           <button
             type="button"
             className="btn btn-sm join-item"
-            disabled={page >= totalPages}
-            onClick={() => onPageChange(page + 1)}
+            disabled={currentPage >= totalPages}
+            onClick={() => onPageChange(currentPage + 1)}
             aria-label="下一页"
           >
             »
@@ -354,7 +362,7 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
         {onPageSizeChange && (
           <select
             className="select select-bordered select-sm w-28"
-            value={pageSize}
+            value={pageSize ?? 200}
             onChange={(e) => onPageSizeChange(Number(e.target.value))}
           >
             <option value={50}>50/页</option>

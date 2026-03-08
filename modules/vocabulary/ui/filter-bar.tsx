@@ -2,6 +2,7 @@
 
 import { cn } from "@/modules/ui/jsx";
 import { Search } from "lucide-react";
+import { useObservable } from "rcrx";
 import { useFirstMountState } from "react-use";
 import type { IVocabularyFilter } from "../core";
 import { useVocabulary } from "./context";
@@ -61,13 +62,14 @@ export function FilterCheckboxes<T extends string | number>({
 }
 
 export function VocabularyFilterBar() {
-  const {
-    filterOptions: options,
-    filter,
-    setFilter,
-    filterLoading: loading,
-    fetchEntries: onFetch,
-  } = useVocabulary();
+  const { vocabulary } = useVocabulary();
+  const options = useObservable(vocabulary.data.filterOptions$);
+  const filter = useObservable(vocabulary.data.filter$);
+  const loading = useObservable(vocabulary.data.filterLoading$);
+  const setFilter = (
+    value: IVocabularyFilter | ((prev: IVocabularyFilter) => IVocabularyFilter),
+  ) => vocabulary.data.setFilter(value);
+  const onFetch = () => vocabulary.data.fetchEntriesPageOne();
   const isFirst = useFirstMountState();
 
   const partOfSpeechList = options?.partsOfSpeech ?? [];
@@ -76,16 +78,16 @@ export function VocabularyFilterBar() {
   const rootList = options?.roots ?? [];
   const categoryList = options?.categories ?? [];
 
-  const selectedPos = filter.partOfSpeech ?? [];
-  const selectedPrefixIds = filter.prefixIds ?? [];
-  const selectedSuffixIds = filter.suffixIds ?? [];
-  const selectedRootIds = filter.rootIds ?? [];
-  const selectedCategoryIds = filter.categoryIds ?? [];
-  const createdAtFrom = filter.createdAtFrom ?? "";
-  const createdAtTo = filter.createdAtTo ?? "";
+  const selectedPos = filter?.partOfSpeech ?? [];
+  const selectedPrefixIds = filter?.prefixIds ?? [];
+  const selectedSuffixIds = filter?.suffixIds ?? [];
+  const selectedRootIds = filter?.rootIds ?? [];
+  const selectedCategoryIds = filter?.categoryIds ?? [];
+  const createdAtFrom = filter?.createdAtFrom ?? "";
+  const createdAtTo = filter?.createdAtTo ?? "";
 
   const toggle = <T,>(key: keyof IVocabularyFilter, value: T, current: T[]) => {
-    setFilter((f) => {
+    setFilter((f: IVocabularyFilter) => {
       const arr = (f[key] as T[]) ?? [];
       const next = arr.includes(value)
         ? arr.filter((x) => x !== value)

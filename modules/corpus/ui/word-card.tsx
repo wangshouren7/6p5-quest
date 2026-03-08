@@ -48,15 +48,6 @@ export function WordCard({
     if (audioUrl) playWordAudio(audioUrl, rate);
   };
 
-  console.log(
-    "totalCount",
-    totalCount,
-    "correctRate",
-    correctRate,
-    "errorCount",
-    errorCount,
-  );
-
   return (
     <div
       className={cn(

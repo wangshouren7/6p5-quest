@@ -59,8 +59,18 @@ export function EntryForm({
 }: EntryFormProps) {
   const vocab = useVocabularyOptional();
   const aiConfig = aiConfigProp ?? vocab?.aiConfig;
-  const onSuccess = onSuccessProp ?? vocab?.handleFormSuccess;
-  const onError = onErrorProp ?? vocab?.setFormError;
+  const onSuccess =
+    onSuccessProp ??
+    (vocab?.vocabulary
+      ? () => {
+          void vocab.vocabulary.data.handleFormSuccess();
+        }
+      : undefined);
+  const onError =
+    onErrorProp ??
+    (vocab?.vocabulary
+      ? (message: string) => vocab.vocabulary.data.setFormError(message)
+      : undefined);
 
   const [word, setWord] = useState(initialData?.word ?? "");
   const [phonetic, setPhonetic] = useState(initialData?.phonetic ?? "");

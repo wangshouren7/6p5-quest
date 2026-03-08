@@ -1,15 +1,11 @@
 "use client";
 
 import { useControls } from "leva";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  getVocabularyEntries,
-  getVocabularyFilterOptions,
-  upsertVocabularyAiSettings,
-} from "../actions";
-import type { IVocabularyEntryListItem, IVocabularyFilter } from "../core";
-import { getStoredVocabularyAiConfig, saveVocabularyAiConfig } from "../core";
-import { VocabularyContext } from "./context";
+import { useObservable } from "rcrx";
+import { useEffect, useMemo, useState } from "react";
+import { upsertVocabularyAiSettings } from "../actions";
+import { getStoredVocabularyAiConfig, saveVocabularyAiConfig, Vocabulary as VocabularyClass } from "../core";
+import { useVocabulary, VocabularyContext } from "./context";
 import { VocabularyFilterBar } from "./filter-bar";
 import { VocabularyWordList } from "./word-list";
 
@@ -57,162 +53,59 @@ function VocabularyContent() {
     }).catch(() => {});
   }, [aiConfig.baseUrl, aiConfig.accessToken, aiConfig.model]);
 
-  const [filterOptions, setFilterOptions] = useState<Awaited<
-    ReturnType<typeof getVocabularyFilterOptions>
-  > | null>(null);
-  const [filter, setFilter] = useState<IVocabularyFilter>({});
-  const [result, setResult] = useState<{
-    items: IVocabularyEntryListItem[];
-    total: number;
-  } | null>(null);
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(200);
-  const [filterLoading, setFilterLoading] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
-
-  const loadOptions = useCallback(async () => {
-    const opts = await getVocabularyFilterOptions();
-    setFilterOptions(opts);
-  }, []);
-
+  const vocabulary = useMemo(() => new VocabularyClass(), []);
   useEffect(() => {
-    loadOptions();
-  }, [loadOptions]);
-
-  const fetchEntries = useCallback(async () => {
-    setFilterLoading(true);
-    try {
-      const { items, total } = await getVocabularyEntries(filter, {
-        page: 1,
-        pageSize,
-      });
-      setResult({ items, total });
-      setPage(1);
-    } finally {
-      setFilterLoading(false);
-    }
-  }, [filter, pageSize]);
-
-  const handlePageChange = useCallback(
-    async (newPage: number) => {
-      setFilterLoading(true);
-      try {
-        const { items, total } = await getVocabularyEntries(filter, {
-          page: newPage,
-          pageSize,
-        });
-        setResult({ items, total });
-        setPage(newPage);
-      } finally {
-        setFilterLoading(false);
-      }
-    },
-    [filter, pageSize],
-  );
-
-  const handlePageSizeChange = useCallback(
-    (newSize: number) => {
-      setPageSize(newSize);
-      setFilterLoading(true);
-      getVocabularyEntries(filter, { page: 1, pageSize: newSize })
-        .then(({ items, total }) => {
-          setResult({ items, total });
-          setPage(1);
-        })
-        .finally(() => setFilterLoading(false));
-    },
-    [filter],
-  );
-
-  const handleFormSuccess = useCallback(() => {
-    setFormError(null);
-    loadOptions();
-  }, [loadOptions]);
-
-  const handleRefresh = useCallback(async () => {
-    setFilterLoading(true);
-    try {
-      const { items, total } = await getVocabularyEntries(filter, {
-        page,
-        pageSize,
-      });
-      setResult({ items, total });
-    } finally {
-      setFilterLoading(false);
-    }
-  }, [filter, page, pageSize]);
+    vocabulary.data.loadFilterOptions();
+  }, [vocabulary]);
 
   const contextValue = useMemo(
     () => ({
-      filter,
-      setFilter,
-      filterOptions,
-      result,
-      page,
-      pageSize,
-      formError,
-      setFormError,
-      filterLoading,
+      vocabulary,
       aiConfig: {
         baseUrl: aiConfig.baseUrl,
         accessToken: aiConfig.accessToken,
         model: aiConfig.model,
       },
-      loadFilterOptions: loadOptions,
-      fetchEntries,
-      handlePageChange,
-      handlePageSizeChange,
-      handleRefresh,
-      handleFormSuccess,
     }),
-    [
-      filter,
-      filterOptions,
-      result,
-      page,
-      pageSize,
-      formError,
-      filterLoading,
-      aiConfig.baseUrl,
-      aiConfig.accessToken,
-      aiConfig.model,
-      loadOptions,
-      fetchEntries,
-      handlePageChange,
-      handlePageSizeChange,
-      handleRefresh,
-      handleFormSuccess,
-    ],
+    [vocabulary, aiConfig.baseUrl, aiConfig.accessToken, aiConfig.model],
   );
 
   return (
     <VocabularyContext.Provider value={contextValue}>
-      <div className="flex flex-col gap-4">
-        {formError && (
-          <div className="alert alert-error text-sm py-2">
-            <span>{formError}</span>
-            <button
-              type="button"
-              className="btn btn-ghost btn-xs"
-              onClick={() => setFormError(null)}
-            >
-              关闭
-            </button>
-          </div>
-        )}
-
-        <VocabularyFilterBar />
-
-        <main className="min-w-0 flex-1">
-          {result === null ? (
-            <p className="text-base-content/70">
-              请设置筛选条件并点击「搜索」。
-            </p>
-          ) : (
-            <VocabularyWordList />
-          )}
-        </main>
-      </div>
+      <VocabularyInner />
     </VocabularyContext.Provider>
+  );
+}
+
+function VocabularyInner() {
+  const { vocabulary } = useVocabulary();
+  const formError = useObservable(vocabulary.data.formError$);
+  const result = useObservable(vocabulary.data.result$);
+
+  return (
+    <div className="flex flex-col gap-4">
+      {formError != null && formError !== "" && (
+        <div className="alert alert-error text-sm py-2">
+          <span>{formError}</span>
+          <button
+            type="button"
+            className="btn btn-ghost btn-xs"
+            onClick={() => vocabulary.data.setFormError(null)}
+          >
+            关闭
+          </button>
+        </div>
+      )}
+
+      <VocabularyFilterBar />
+
+      <main className="min-w-0 flex-1">
+        {result === null ? (
+          <p className="text-base-content/70">请设置筛选条件并点击「搜索」。</p>
+        ) : (
+          <VocabularyWordList />
+        )}
+      </main>
+    </div>
   );
 }

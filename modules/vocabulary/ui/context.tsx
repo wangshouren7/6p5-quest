@@ -1,11 +1,18 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import type { IVocabulary } from "../core";
+import type { Vocabulary as VocabularyClass } from "../core";
 
-export const VocabularyContext = createContext<IVocabulary | null>(null);
+export interface IVocabularyContextValue {
+  vocabulary: VocabularyClass;
+  aiConfig: { baseUrl: string; accessToken: string; model: string };
+}
 
-export function useVocabulary(): IVocabulary {
+export const VocabularyContext = createContext<IVocabularyContextValue | null>(
+  null,
+);
+
+export function useVocabulary(): IVocabularyContextValue {
   const value = useContext(VocabularyContext);
   if (value == null) {
     throw new Error(
@@ -16,6 +23,6 @@ export function useVocabulary(): IVocabulary {
 }
 
 /** 在 Provider 外使用时返回 null（如 Import 页的 EntryForm） */
-export function useVocabularyOptional(): IVocabulary | null {
+export function useVocabularyOptional(): IVocabularyContextValue | null {
   return useContext(VocabularyContext);
 }

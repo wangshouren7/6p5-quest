@@ -91,10 +91,13 @@ export function Corpus() {
   const [fetchId, setFetchId] = useState(0);
   const handleFetchWords = useCallback(async () => {
     setFilterLoading(true);
+    setError(null);
     try {
       const list = await getWordsForDictation(USER_ID, filter);
       setFilteredWords(list);
       setFetchId((i) => i + 1);
+    } catch (e) {
+      setError(e instanceof Error ? e : new Error(String(e)));
     } finally {
       setFilterLoading(false);
     }

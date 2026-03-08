@@ -108,14 +108,18 @@ function VocabularyImportContent() {
   /** 解析出单词后加载分类选项 */
   useEffect(() => {
     if (words == null || words.length === 0) return;
-    getVocabularyFilterOptions().then(setFilterOptions);
+    getVocabularyFilterOptions()
+      .then(setFilterOptions)
+      .catch(() => {});
   }, [words?.length]);
 
   /** 当已展示任务列表时，每 5 秒轮询一次 */
   useEffect(() => {
     if (tasks === null) return;
     const t = setInterval(() => {
-      getVocabularyImportTasks().then((r) => setTasks(r.tasks));
+      getVocabularyImportTasks()
+        .then((r) => setTasks(r.tasks))
+        .catch(() => {});
     }, 5000);
     return () => clearInterval(t);
   }, [tasks === null]);

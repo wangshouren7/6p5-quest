@@ -28,6 +28,16 @@ import {
 
 const DEFAULT_AI_MODEL = "gpt-4o-mini";
 
+const devLog = (...args: unknown[]) => {
+  if (process.env.NODE_ENV !== "production") console.log(...args);
+};
+const devWarn = (...args: unknown[]) => {
+  if (process.env.NODE_ENV !== "production") console.warn(...args);
+};
+const devError = (...args: unknown[]) => {
+  if (process.env.NODE_ENV !== "production") console.error(...args);
+};
+
 function parseMeaningsJson(raw: string | null): IPartOfSpeechMeaning[] {
   if (!raw) return [];
   try {
@@ -887,11 +897,11 @@ export async function runVocabularyAiFillBatch(): Promise<void> {
     orderBy: { id: "asc" },
   });
   if (!settings) {
-    console.log("[词汇 AI 回填] 无 VocabularyAiSettings，跳过本轮");
+    devLog("[词汇 AI 回填] 无 VocabularyAiSettings，跳过本轮");
     return;
   }
   if (!settings.accessToken?.trim()) {
-    console.log("[词汇 AI 回填] 未配置 accessToken，跳过本轮");
+    devLog("[词汇 AI 回填] 未配置 accessToken，跳过本轮");
     return;
   }
 
@@ -907,11 +917,7 @@ export async function runVocabularyAiFillBatch(): Promise<void> {
     data: { status: "PENDING", error: null, updatedAt: new Date() },
   });
   if (reset.count > 0) {
-    console.log(
-      "[词汇 AI 回填] 已将",
-      reset.count,
-      "条超时 RUNNING 重置为 PENDING",
-    );
+    devLog("[词汇 AI 回填] 已将", reset.count, "条超时 RUNNING 重置为 PENDING");
   }
 
   const pending = await db.vocabularyAiFillTask.findMany({
@@ -1034,7 +1040,7 @@ export async function runVocabularyAiFillBatch(): Promise<void> {
     }
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
-    console.error("[词汇 AI 回填] 本批异常:", message);
+    devError("[词汇 AI 回填] 本批异常:", message);
     // 仅将仍为 RUNNING 的任务标为 FAILED，避免覆盖循环中已标为 COMPLETED 的任务
     await db.vocabularyAiFillTask
       .updateMany({
@@ -1098,7 +1104,7 @@ Use empty arrays or omit fields if unknown. All meanings in Chinese.`;
     response_format: "zodResponseFormat(vocabulary_fill)",
     temperature: 0.7,
   };
-  console.log("[词汇 AI] 请求:", JSON.stringify(requestPayload, null, 2));
+  devLog("[词汇 AI] 请求:", JSON.stringify(requestPayload, null, 2));
 
   try {
     const client = new OpenAI({
@@ -1119,35 +1125,32 @@ Use empty arrays or omit fields if unknown. All meanings in Chinese.`;
       temperature: 0.7,
     });
 
-    console.log("[词汇 AI] 已收到 completion，开始打印响应");
+    devLog("[词汇 AI] 已收到 completion，开始打印响应");
 
     const message = completion.choices?.[0]?.message;
     const raw = (message as { parsed?: unknown })?.parsed;
     const content = (message as { content?: string | null })?.content;
 
     if (!message) {
-      console.log(
+      devLog(
         "[词汇 AI] 响应 choices 原始结构:",
         JSON.stringify(completion.choices ?? [], null, 2),
       );
     }
 
-    console.log("[词汇 AI] 响应 meta:", {
+    devLog("[词汇 AI] 响应 meta:", {
       id: completion.id,
       model: completion.model,
       usage: completion.usage,
     });
-    console.log(
+    devLog(
       "[词汇 AI] 响应 message.content:",
       typeof content === "string" ? content : "(无 content)",
     );
     if (raw != null) {
-      console.log(
-        "[词汇 AI] 响应 message.parsed:",
-        JSON.stringify(raw, null, 2),
-      );
+      devLog("[词汇 AI] 响应 message.parsed:", JSON.stringify(raw, null, 2));
     } else {
-      console.log("[词汇 AI] 响应 message.parsed: (无 parsed)");
+      devLog("[词汇 AI] 响应 message.parsed: (无 parsed)");
     }
 
     if (raw == null) {
@@ -1155,13 +1158,13 @@ Use empty arrays or omit fields if unknown. All meanings in Chinese.`;
         const parsed = JSON.parse(content) as unknown;
         const result = safeParseVocabularyAiFillResult(parsed);
         if (result.success) {
-          console.log(
+          devLog(
             "[词汇 AI] 校验通过(从 content 解析):",
             JSON.stringify(result.data, null, 2),
           );
           return result.data as IVocabularyAiFillResult;
         }
-        console.warn("[词汇 AI] 校验失败:", result.error.message);
+        devWarn("[词汇 AI] 校验失败:", result.error.message);
         return {
           error: `返回格式校验失败: ${result.error.message}`,
         };
@@ -1171,10 +1174,10 @@ Use empty arrays or omit fields if unknown. All meanings in Chinese.`;
 
     const result = safeParseVocabularyAiFillResult(raw);
     if (result.success) {
-      console.log("[词汇 AI] 校验通过:", JSON.stringify(result.data, null, 2));
+      devLog("[词汇 AI] 校验通过:", JSON.stringify(result.data, null, 2));
       return result.data as IVocabularyAiFillResult;
     }
-    console.warn("[词汇 AI] 校验失败:", result.error.message);
+    devWarn("[词汇 AI] 校验失败:", result.error.message);
     return {
       error: `返回格式校验失败: ${result.error.message}`,
     };
@@ -1297,7 +1300,7 @@ export async function aiExtractWordsOnly(
 
   const userContent = `Extract all English vocabulary words/phrases from this text. Return JSON: { "words": ["word1", "word2", ...] }\n\n${text}`;
 
-  console.log("[词汇 仅提取单词] 请求:", {
+  devLog("[词汇 仅提取单词] 请求:", {
     baseUrl,
     model,
     userContentLength: userContent.length,
@@ -1348,7 +1351,7 @@ export async function aiExtractWordsOnly(
       .filter((w) => typeof w === "string" && w.trim().length > 0)
       .map((w) => (w as string).trim());
 
-    console.log("[词汇 仅提取单词] 单词列表:", trimmed);
+    devLog("[词汇 仅提取单词] 单词列表:", trimmed);
     return trimmed.length > 0 ? trimmed : { error: "未识别到单词" };
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
@@ -1409,7 +1412,7 @@ partOfSpeech MUST be exactly one of: ${posList}. Do NOT use "n." or "v." alone. 
   const wordListStr = list.map((w) => w.trim()).join("\n");
   const userContent = `Return vocabulary data for each of these words, in the same order. One entry per line:\n${wordListStr}`;
 
-  console.log("[词汇 分批回填] 请求:", {
+  devLog("[词汇 分批回填] 请求:", {
     baseUrl,
     model,
     wordsCount: list.length,
@@ -1485,10 +1488,7 @@ partOfSpeech MUST be exactly one of: ${posList}. Do NOT use "n." or "v." alone. 
       category: e.category ?? null,
       collocations: e.collocations ?? [],
     }));
-    console.log(
-      "[词汇 分批回填] 本批条目:",
-      JSON.stringify(logEntries, null, 2),
-    );
+    devLog("[词汇 分批回填] 本批条目:", JSON.stringify(logEntries, null, 2));
 
     const categories = await db.vocabularyCategory.findMany({
       orderBy: { id: "asc" },
@@ -1562,7 +1562,7 @@ Ignore line numbers and segment numbers in the text. Extract every vocabulary en
 
   const userContent = `Extract all vocabulary entries from the following text. Return JSON with key "entries" (array of objects with word, phonetic, mnemonic, partOfSpeechMeanings, prefixes, suffixes, root, category).\n\n${text}`;
 
-  console.log("[词汇 批量解析] 请求:", {
+  devLog("[词汇 批量解析] 请求:", {
     baseUrl,
     model,
     userContentLength: userContent.length,
@@ -1593,19 +1593,19 @@ Ignore line numbers and segment numbers in the text. Extract every vocabulary en
     const raw = (message as { parsed?: unknown })?.parsed;
     const content = (message as { content?: string | null })?.content;
 
-    console.log("[词汇 批量解析] 响应 meta:", {
+    devLog("[词汇 批量解析] 响应 meta:", {
       id: completion.id,
       model: completion.model,
       usage: completion.usage,
     });
-    console.log(
+    devLog(
       "[词汇 批量解析] 响应 message.parsed:",
       raw != null
         ? `${JSON.stringify(raw).slice(0, 500)}${JSON.stringify(raw).length > 500 ? "…" : ""}`
         : "(无 parsed)",
     );
     if (typeof content === "string") {
-      console.log(
+      devLog(
         "[词汇 批量解析] 响应 message.content 长度:",
         content.length,
         "预览:",
