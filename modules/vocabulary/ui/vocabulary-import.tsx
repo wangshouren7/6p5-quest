@@ -1,5 +1,6 @@
 "use client";
 
+import { devError } from "@/utils/logger";
 import { useControls } from "leva";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -13,7 +14,10 @@ import {
   upsertVocabularyAiSettings,
 } from "../actions";
 import type { IVocabularyEntryFormData } from "../core";
-import { getStoredVocabularyAiConfig, saveVocabularyAiConfig } from "../core";
+import {
+  getStoredVocabularyAiConfig,
+  saveVocabularyAiConfig,
+} from "./ai-config-storage";
 
 function minimalEntryFromWord(word: string): IVocabularyEntryFormData {
   return {
@@ -78,7 +82,9 @@ function VocabularyImportContent() {
       baseUrl: aiConfig.baseUrl,
       accessToken: aiConfig.accessToken,
       model: aiConfig.model,
-    }).catch(() => {});
+    }).catch((err) =>
+      devError("[vocabulary-import] upsertVocabularyAiSettings", err),
+    );
   }, [aiConfig.baseUrl, aiConfig.accessToken, aiConfig.model]);
 
   const [rawText, setRawText] = useState("");
@@ -110,7 +116,9 @@ function VocabularyImportContent() {
     if (words == null || words.length === 0) return;
     getVocabularyFilterOptions()
       .then(setFilterOptions)
-      .catch(() => {});
+      .catch((err) =>
+        devError("[vocabulary-import] getVocabularyFilterOptions", err),
+      );
   }, [words?.length]);
 
   /** 当已展示任务列表时，每 5 秒轮询一次 */
@@ -119,7 +127,9 @@ function VocabularyImportContent() {
     const t = setInterval(() => {
       getVocabularyImportTasks()
         .then((r) => setTasks(r.tasks))
-        .catch(() => {});
+        .catch((err) =>
+          devError("[vocabulary-import] getVocabularyImportTasks", err),
+        );
     }, 5000);
     return () => clearInterval(t);
   }, [tasks === null]);

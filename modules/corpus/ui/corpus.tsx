@@ -1,13 +1,17 @@
 "use client";
 
 import {
+    getChapters,
+    getWords,
     getWordsForDictation,
     type DictationFilter,
 } from "@/modules/corpus/actions";
+import { getErrorMessage } from "@/utils/error";
+import { getDefaultGridColsForWidth } from "@/utils/format";
 import { useControls } from "leva";
 import React, { startTransition, useCallback, useState } from "react";
 import type { ChapterItem } from "../core";
-import { Corpus as CorpusClass, fetchChapters } from "../core";
+import { Corpus as CorpusClass } from "../core";
 import { DEFAULT_CORPUS_CONTROLS, USER_ID } from "../core/constants";
 import { CorpusContext } from "./context";
 import { FilterBar } from "./filter-bar";
@@ -25,11 +29,15 @@ export function Corpus() {
 
   React.useEffect(() => {
     const tid = setTimeout(() => {
-      fetchChapters()
+      getChapters()
         .then((data) => startTransition(() => setChapters(data)))
         .catch((e) =>
           startTransition(() =>
-            setError(e instanceof Error ? e : new Error(String(e))),
+            setError(
+              e instanceof Error
+                ? e
+                : new Error(getErrorMessage(e, "加载失败")),
+            ),
           ),
         );
     }, 0);
@@ -37,7 +45,8 @@ export function Corpus() {
   }, []);
 
   const corpus = React.useMemo(
-    () => (chapters ? new CorpusClass({ chapters }) : null),
+    () =>
+      chapters ? new CorpusClass({ chapters, fetchWords: getWords }) : null,
     [chapters],
   );
   const [controls] = useControls(
@@ -65,18 +74,10 @@ export function Corpus() {
         step: 500,
         label: "听写间隔(ms)",
       },
-      gridCols: {
-        value: DEFAULT_CORPUS_CONTROLS.gridCols,
-        min: 2,
-        max: 8,
-        step: 1,
-        label: "网格每行列数",
-      },
     }),
     [],
   );
-  const { rate, shuffle, showResultOnBlur, dictationIntervalMs, gridCols } =
-    controls;
+  const { rate, shuffle, showResultOnBlur, dictationIntervalMs } = controls;
   React.useEffect(() => {
     if (corpus)
       corpus.controls.change({
@@ -84,9 +85,16 @@ export function Corpus() {
         shuffle,
         showResultOnBlur,
         dictationIntervalMs,
-        gridCols,
       });
-  }, [corpus, rate, shuffle, showResultOnBlur, dictationIntervalMs, gridCols]);
+  }, [corpus, rate, shuffle, showResultOnBlur, dictationIntervalMs]);
+  React.useEffect(() => {
+    if (!corpus || typeof window === "undefined") return;
+    const current = corpus.controls.value$.value.gridCols;
+    if (current === DEFAULT_CORPUS_CONTROLS.gridCols)
+      corpus.controls.change({
+        gridCols: getDefaultGridColsForWidth(window.innerWidth),
+      });
+  }, [corpus]);
 
   const [fetchId, setFetchId] = useState(0);
   const handleFetchWords = useCallback(async () => {
@@ -97,7 +105,9 @@ export function Corpus() {
       setFilteredWords(list);
       setFetchId((i) => i + 1);
     } catch (e) {
-      setError(e instanceof Error ? e : new Error(String(e)));
+      setError(
+        e instanceof Error ? e : new Error(getErrorMessage(e, "加载失败")),
+      );
     } finally {
       setFilterLoading(false);
     }

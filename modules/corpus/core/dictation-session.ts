@@ -1,3 +1,4 @@
+import { normalizeWord } from "@/utils/string";
 import { Controls } from "./controls";
 import { CorpusData } from "./data";
 import type { IStartTestOptions, ITestSession, WordItem } from "./types";
@@ -141,9 +142,7 @@ export class DictationSession implements ITestSession {
     this.playNextRef = null;
     const answers = this.data.userAnswers$.value;
     const correct = list.filter(
-      (w, idx) =>
-        w.word.trim().toLowerCase() ===
-        (answers[idx] ?? "").trim().toLowerCase(),
+      (w, idx) => normalizeWord(w.word) === normalizeWord(answers[idx] ?? ""),
     ).length;
     this.data.accuracy$.next((correct / list.length) * 100);
     this.data.testFinished$.next(true);

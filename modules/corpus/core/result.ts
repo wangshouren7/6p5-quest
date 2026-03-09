@@ -1,3 +1,4 @@
+import { normalizeWord } from "@/utils/string";
 import type { WordItem } from "./types";
 
 export interface ComputeResultReturn {
@@ -12,14 +13,11 @@ export function computeResult(
 ): ComputeResultReturn {
   const wrongIndices = words
     .map((w, i) =>
-      w.word.trim().toLowerCase() !==
-      (userAnswers[i] ?? "").trim().toLowerCase()
-        ? i
-        : -1,
+      normalizeWord(w.word) !== normalizeWord(userAnswers[i] ?? "") ? i : -1,
     )
     .filter((i) => i >= 0);
   const wrongWordStrings = wrongIndices.map((i) =>
-    words[i].word.trim().toLowerCase(),
+    normalizeWord(words[i].word),
   );
   const correctCount = words.length - wrongIndices.length;
   return { correctCount, wrongIndices, wrongWordStrings };

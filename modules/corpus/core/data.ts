@@ -1,6 +1,14 @@
 import { BehaviorSubject } from "rxjs";
-import { fetchWords } from "./loader";
 import type { ChapterItem, ICorpusData, Selection, WordItem } from "./types";
+
+export type FetchWordsFn = (
+  chapterId: number,
+  testId: number,
+) => Promise<(WordItem & { id: number })[]>;
+
+export interface ICorpusDataOptions {
+  fetchWords: FetchWordsFn;
+}
 
 function deriveSelectionState(
   chapters: readonly ChapterItem[],
@@ -44,7 +52,13 @@ export class CorpusData implements ICorpusData {
   >(null);
   practiceMode$ = new BehaviorSubject<boolean>(false);
 
-  constructor(public readonly chapters: ChapterItem[]) {
+  private readonly _fetchWords: FetchWordsFn;
+
+  constructor(
+    public readonly chapters: ChapterItem[],
+    options: ICorpusDataOptions,
+  ) {
+    this._fetchWords = options.fetchWords;
     this.syncDerivedSelection(this.selected$.value);
     // No auto-load: word list is driven by header filter + "获取单词" only
   }
@@ -72,7 +86,7 @@ export class CorpusData implements ICorpusData {
   }
 
   async loadWords(chapterId: number, testId: number): Promise<void> {
-    const words = await fetchWords(chapterId, testId);
+    const words = await this._fetchWords(chapterId, testId);
     this.words$.next(words);
   }
 

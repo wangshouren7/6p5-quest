@@ -4,6 +4,9 @@ type LevaThemeSlice = {
   shadows?: Record<string, string>;
 };
 
+/** 蓝底按钮上的文字色（Leva 按钮非 disabled 时为 color: highlight3 + backgroundColor: accent2），亮/暗主题均用白字 */
+const LEVA_TEXT_ON_ACCENT = "#ffffff";
+
 /** Leva 暗色主题（与默认一致，用于显式传入） */
 export const levaDarkTheme: LevaThemeSlice = {
   colors: {
@@ -15,11 +18,12 @@ export const levaDarkTheme: LevaThemeSlice = {
     accent3: "#3c93ff",
     highlight1: "#535760",
     highlight2: "#8c92a4",
-    highlight3: "#fefefe",
+    /** 按钮等前景文字（蓝底上的白字） */
+    highlight3: LEVA_TEXT_ON_ACCENT,
     vivid1: "#ffcc00",
     folderWidgetColor: "#8c92a4",
-    folderTextColor: "#fefefe",
-    toolTipBackground: "#fefefe",
+    folderTextColor: LEVA_TEXT_ON_ACCENT,
+    toolTipBackground: LEVA_TEXT_ON_ACCENT,
     toolTipText: "#181c20",
   },
   shadows: {
@@ -39,7 +43,8 @@ export const levaLightTheme: LevaThemeSlice = {
     accent3: "#60a5fa",
     highlight1: "#9ca3af",
     highlight2: "#6b7280",
-    highlight3: "#111827",
+    /** 按钮文字（蓝底上的白字），与暗色主题一致 */
+    highlight3: LEVA_TEXT_ON_ACCENT,
     vivid1: "#d97706",
     folderWidgetColor: "#6b7280",
     folderTextColor: "#111827",

@@ -9,6 +9,7 @@ import type {
     IVocabularyFilter,
     IVocabularyFilterOptions,
 } from "@/modules/vocabulary/core";
+import { normalizeWord } from "@/utils/string";
 import {
     normalizeMorphemeText,
     parseCollocationsJson,
@@ -81,6 +82,14 @@ export async function getVocabularyEntries(
   const pageSize = Math.min(500, Math.max(1, options.pageSize ?? 200));
 
   const where: VocabularyEntryWhereInput = {};
+
+  const wordQuery = filter.word?.trim();
+  if (wordQuery) {
+    const normalized = normalizeWord(wordQuery);
+    if (normalized) {
+      where.wordLower = { contains: normalized };
+    }
+  }
 
   if (filter.partOfSpeech?.length) {
     where.partsOfSpeech = {

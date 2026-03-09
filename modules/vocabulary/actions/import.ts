@@ -2,6 +2,7 @@
 
 import { db } from "@/modules/db/client";
 import type { IVocabularyEntryFormData } from "@/modules/vocabulary/core";
+import { normalizeWord } from "@/utils/string";
 import { DEFAULT_AI_MODEL } from "./constants";
 import { createVocabularyEntry } from "./crud";
 import type { IVocabularyAiConfig } from "./types";
@@ -116,9 +117,7 @@ export async function updateVocabularyEntriesCategoryByWords(
   }
   const wordLowers = [
     ...new Set(
-      words
-        .filter((w) => typeof w === "string" && w.trim())
-        .map((w) => w.trim().toLowerCase()),
+      words.filter((w) => typeof w === "string" && w.trim()).map(normalizeWord),
     ),
   ];
   if (wordLowers.length === 0) return { ok: true, updated: 0 };

@@ -1,10 +1,19 @@
 "use client";
 
+import { devError } from "@/utils/logger";
 import { useControls } from "leva";
 import { useObservable } from "rcrx";
 import { useEffect, useMemo, useState } from "react";
-import { upsertVocabularyAiSettings } from "../actions";
-import { getStoredVocabularyAiConfig, saveVocabularyAiConfig, Vocabulary as VocabularyClass } from "../core";
+import {
+  getVocabularyEntries,
+  getVocabularyFilterOptions,
+  upsertVocabularyAiSettings,
+} from "../actions";
+import { Vocabulary as VocabularyClass } from "../core";
+import {
+  getStoredVocabularyAiConfig,
+  saveVocabularyAiConfig,
+} from "./ai-config-storage";
 import { useVocabulary, VocabularyContext } from "./context";
 import { VocabularyFilterBar } from "./filter-bar";
 import { VocabularyWordList } from "./word-list";
@@ -50,10 +59,19 @@ function VocabularyContent() {
       baseUrl: aiConfig.baseUrl,
       accessToken: aiConfig.accessToken,
       model: aiConfig.model,
-    }).catch(() => {});
+    }).catch((err) => devError("[vocabulary] upsertVocabularyAiSettings", err));
   }, [aiConfig.baseUrl, aiConfig.accessToken, aiConfig.model]);
 
-  const vocabulary = useMemo(() => new VocabularyClass(), []);
+  const vocabulary = useMemo(
+    () =>
+      new VocabularyClass({
+        fetch: {
+          fetchEntries: getVocabularyEntries,
+          fetchFilterOptions: getVocabularyFilterOptions,
+        },
+      }),
+    [],
+  );
   useEffect(() => {
     vocabulary.data.loadFilterOptions();
   }, [vocabulary]);

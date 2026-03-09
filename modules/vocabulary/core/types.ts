@@ -21,6 +21,8 @@ export interface ICollocationItem {
 
 /** 筛选条件 */
 export interface IVocabularyFilter {
+  /** 单词关键词（模糊匹配，不区分大小写） */
+  word?: string;
   partOfSpeech?: string[];
   prefixIds?: number[];
   suffixIds?: number[];

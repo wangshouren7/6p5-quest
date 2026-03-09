@@ -1,5 +1,6 @@
 import { Subject } from "rxjs";
 import { Controls } from "./controls";
+import type { FetchWordsFn } from "./data";
 import { CorpusData } from "./data";
 import { DictationSession } from "./dictation-session";
 import { PracticeSession } from "./practice-session";
@@ -18,6 +19,7 @@ export type { IStartTestOptions } from "./types";
 
 export interface ICorpusOptions {
   chapters: ChapterItem[];
+  fetchWords: FetchWordsFn;
 }
 
 export class Corpus implements ICorpus {
@@ -36,7 +38,9 @@ export class Corpus implements ICorpus {
   } = { rate: 1, shuffle: false, practiceMode: false };
 
   constructor(options: ICorpusOptions) {
-    this._data = new CorpusData(options.chapters);
+    this._data = new CorpusData(options.chapters, {
+      fetchWords: options.fetchWords,
+    });
     this.data = this._data;
     this._controls = new Controls();
     this.controls = this._controls;

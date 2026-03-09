@@ -1,8 +1,8 @@
 "use client";
 
+import { getGridColsClass } from "@/utils/format";
 import { useObservable } from "rcrx";
 import type { WordItem } from "../core";
-import { getGridColsClass } from "../core/constants";
 import { useCorpus } from "./context";
 import { WordCard } from "./word-card";
 

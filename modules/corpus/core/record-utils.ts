@@ -4,14 +4,12 @@ export function parseWrongIndices(value: unknown): number[] {
   return [];
 }
 
+import { normalizeWord } from "@/utils/string";
+
 export function parseWrongWordStrings(value: unknown): string[] {
   if (Array.isArray(value))
     return value.filter((x): x is string => typeof x === "string");
   return [];
-}
-
-function normalizeWord(w: string): string {
-  return w.trim().toLowerCase();
 }
 
 export interface ListenRecordForCount {

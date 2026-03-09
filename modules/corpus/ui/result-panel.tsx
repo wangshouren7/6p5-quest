@@ -1,21 +1,14 @@
 "use client";
 
-import {
-    getMasteredWordSet,
-    setWordMastered,
-    updateUserWordStats,
-} from "@/modules/corpus/actions";
-import { useRequest } from "ahooks";
+import { getGridColsClass } from "@/utils/format";
+import { normalizeWord } from "@/utils/string";
 import { useObservable } from "rcrx";
-import { useEffect, useMemo, useRef } from "react";
-import { getGridColsClass, USER_ID } from "../core/constants";
+import { useMemo } from "react";
+import { USER_ID } from "../core/constants";
 import { computeResult } from "../core/result";
 import { useCorpus } from "./context";
+import { useResultPanelStats } from "./use-result-panel-stats";
 import { WordCard } from "./word-card";
-
-function normalizeWord(w: string): string {
-  return w.trim().toLowerCase();
-}
 
 export function ResultPanel() {
   const corpus = useCorpus();
@@ -26,7 +19,14 @@ export function ResultPanel() {
   const rate = controls?.rate ?? 1;
   const gridCols = controls?.gridCols ?? 4;
   const gridColsClass = getGridColsClass(gridCols);
-  const submittedRef = useRef(false);
+
+  const { masteredSet, handleToggleMastered } = useResultPanelStats({
+    words,
+    userAnswers,
+    accuracy: accuracy ?? null,
+    corpus,
+    userId: USER_ID,
+  });
 
   const result = useMemo(
     () =>
@@ -41,48 +41,11 @@ export function ResultPanel() {
   );
   const { correctCount } = result;
 
-  useEffect(() => {
-    if (accuracy == null) {
-      submittedRef.current = false;
-      return;
-    }
-    if (words.length === 0) return;
-    const { practiceMode } = corpus.getLastTestMeta();
-    if (practiceMode) return;
-    if (submittedRef.current) return;
-    submittedRef.current = true;
-    const items = words
-      .map((w, i) => ({
-        wordId: w.id,
-        correct:
-          w.word.trim().toLowerCase() ===
-          (userAnswers[i] ?? "").trim().toLowerCase(),
-        userInput: (userAnswers[i] ?? "").trim() || undefined,
-      }))
-      .filter((x): x is typeof x & { wordId: number } => x.wordId != null);
-    updateUserWordStats(USER_ID, items).catch((err) =>
-      console.error("updateUserWordStats failed:", err),
-    );
-  }, [accuracy, words, userAnswers, corpus]);
-
   const {
     rate: savedRate,
     shuffle: savedShuffle,
     practiceMode,
   } = corpus.getLastTestMeta();
-
-  const { data: masteredWords = [], run: runMastered } = useRequest(
-    () => getMasteredWordSet(USER_ID),
-    { refreshDeps: [] },
-  );
-  const masteredSet = useMemo(() => new Set(masteredWords), [masteredWords]);
-  const handleToggleMastered = async (
-    wordId: number,
-    currentMastered: boolean,
-  ) => {
-    await setWordMastered(USER_ID, wordId, !currentMastered);
-    runMastered();
-  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -105,8 +68,7 @@ export function ResultPanel() {
           const rowIndex = Math.floor(index / gridCols);
           const isStripeRow = rowIndex % 2 === 0;
           const userAnswer = (userAnswers[index] ?? "").trim();
-          const isCorrect =
-            word.trim().toLowerCase() === userAnswer.toLowerCase();
+          const isCorrect = normalizeWord(word) === normalizeWord(userAnswer);
           const mastered = masteredSet.has(normalizeWord(word));
 
           return (

@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "next lint",
     "postinstall": "pnpm rebuild better-sqlite3 || true",
     "db:rebuild": "pnpm rebuild better-sqlite3",
     "db:seed": "prisma db seed",
@@ -17,8 +17,10 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "@prisma/adapter-better-sqlite3": "^7.4.2",
     "@prisma/client": "^7.4.2",
+    "@tanstack/react-table": "^8.21.3",
     "ahooks": "^3.9.6",
     "better-sqlite3": "^12.6.2",
     "clsx": "^2.1.1",
@@ -35,6 +37,7 @@
     "rcrx": "^0.0.4",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-hook-form": "^7.71.2",
     "react-use": "^17.6.0",
     "rxjs": "^7.8.2",
     "tailwind-merge": "^3.5.0",

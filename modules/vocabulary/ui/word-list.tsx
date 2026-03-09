@@ -1,20 +1,14 @@
 "use client";
 
 import { cn } from "@/modules/ui/jsx";
+import { PaginationBar } from "@/modules/ui/pagination";
+import { SimpleModal } from "@/modules/ui/simple-modal";
+import { shuffleArray } from "@/utils/array";
+import { getDefaultGridColsForWidth } from "@/utils/format";
 import html2canvas from "html2canvas-pro";
-import {
-  ImageDown,
-  LayoutGrid,
-  List,
-  Maximize2,
-  Minimize2,
-  Pencil,
-  Trash2,
-  Volume2,
-} from "lucide-react";
+import { LayoutGrid, List, Volume2 } from "lucide-react";
 import { useObservable } from "rcrx";
-import { useCallback, useRef, useState } from "react";
-import { deleteVocabularyEntry, getVocabularyEntryById } from "../actions";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type {
   IVocabularyEntryFormData,
   IVocabularyEntryListItem,
@@ -23,18 +17,15 @@ import { useVocabulary } from "./context";
 import { EntryForm } from "./entry-form";
 import { MfpCard } from "./mfp-card";
 import { ReciteView } from "./recite-view";
+import { useWordListActions } from "./use-word-list-actions";
 import { useWordSpeech } from "./use-word-speech";
+import {
+  WordListGridWithFullscreen,
+  WordListTableView,
+  WordListToolbarExtras,
+} from "./word-list-sections";
 
 type ViewMode = "list" | "grid";
-
-function shuffleEntries<T>(list: T[]): T[] {
-  const next = [...list];
-  for (let i = next.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [next[i], next[j]] = [next[j], next[i]];
-  }
-  return next;
-}
 
 interface WordListProps {
   className?: string;
@@ -42,6 +33,8 @@ interface WordListProps {
 
 export function VocabularyWordList({ className }: WordListProps = {}) {
   const { vocabulary, aiConfig } = useVocabulary();
+  const { deleteEntry, fetchEntryById, refresh, setFormError } =
+    useWordListActions();
   const result = useObservable(vocabulary.data.result$);
   const page = useObservable(vocabulary.data.page$);
   const pageSize = useObservable(vocabulary.data.pageSize$);
@@ -55,17 +48,19 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
     (s: number) => vocabulary.data.handlePageSizeChange(s),
     [vocabulary],
   );
-  const onRefresh = useCallback(
-    () => vocabulary.data.handleRefresh(),
-    [vocabulary],
-  );
+  const onRefresh = useCallback(() => refresh(), [refresh]);
   const onError = useCallback(
-    (msg: string | null) => vocabulary.data.setFormError(msg),
-    [vocabulary],
+    (msg: string | null) => setFormError(msg),
+    [setFormError],
   );
   const currentPage = page ?? 1;
   const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [gridCols, setGridCols] = useState(4);
+  useEffect(() => {
+    setGridCols((prev) =>
+      prev === 4 ? getDefaultGridColsForWidth(window.innerWidth) : prev,
+    );
+  }, []);
   const [isGridFullscreen, setIsGridFullscreen] = useState(false);
   /** 全屏网格展示内容：全部 | 仅单词 | 单词+释义 */
   const [fullscreenDisplayMode, setFullscreenDisplayMode] = useState<
@@ -93,6 +88,8 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
   );
   /** 背诵模式是否乱序，由用户选择 */
   const [reciteShuffle, setReciteShuffle] = useState(false);
+  /** 背诵模式是否静音（不自动播放单词发音） */
+  const [reciteMuted, setReciteMuted] = useState(false);
   const { speak } = useWordSpeech();
 
   const totalPages = Math.max(1, Math.ceil(total / (pageSize ?? 200)));
@@ -234,45 +231,28 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
 
   const handleEdit = useCallback(
     async (entry: IVocabularyEntryListItem) => {
-      const full = await getVocabularyEntryById(entry.id);
-      if (!full) {
-        onError?.("无法加载该单词");
-        return;
-      }
-      const data: IVocabularyEntryFormData = {
-        word: full.word,
-        phonetic: full.phonetic ?? "",
-        mnemonic: full.mnemonic ?? "",
-        meanings: full.meanings,
-        prefixIds: full.prefixIds ?? [],
-        suffixIds: full.suffixIds ?? [],
-        rootId: full.rootId ?? null,
-        categoryId: full.categoryId,
-        collocations: full.collocations ?? [],
-      };
-      setEditFormData(data);
-      setEditingId(full.id);
+      await fetchEntryById(
+        entry,
+        (data) => {
+          setEditFormData(data);
+          setEditingId(entry.id);
+        },
+        (msg) => onError?.(msg),
+      );
     },
-    [onError],
+    [fetchEntryById, onError],
   );
 
   const handleDelete = useCallback(
     async (e: React.MouseEvent, id: number) => {
-      e.stopPropagation();
-      if (!confirm("确定要删除该单词吗？")) return;
       setDeleteLoading(id);
       try {
-        const result = await deleteVocabularyEntry(id);
-        if ("error" in result) {
-          onError?.(result.error);
-        } else {
-          onRefresh?.();
-        }
+        await deleteEntry(e, id, onRefresh, (msg) => onError?.(msg));
       } finally {
         setDeleteLoading(null);
       }
     },
-    [onError, onRefresh],
+    [deleteEntry, onError, onRefresh],
   );
 
   const handleExportImage = useCallback(async () => {
@@ -303,9 +283,15 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
   return (
     <div className={cn("space-y-3", className)}>
       <div className="flex flex-wrap items-center gap-3">
-        <span className="text-sm text-base-content/70">
-          共 {total} 条，第 {page} / {totalPages} 页
-        </span>
+        <PaginationBar
+          page={currentPage}
+          totalPages={totalPages}
+          total={total}
+          pageSize={pageSize ?? 200}
+          pageSizeOptions={[50, 200, 300, 500]}
+          onPageChange={onPageChange}
+          onPageSizeChange={onPageSizeChange}
+        />
         <div className="join">
           <button
             type="button"
@@ -332,109 +318,23 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
             <LayoutGrid className="size-4" />
           </button>
         </div>
-        <div className="join">
-          <button
-            type="button"
-            className="btn btn-sm join-item"
-            disabled={currentPage <= 1}
-            onClick={() => onPageChange(currentPage - 1)}
-            aria-label="上一页"
-          >
-            «
-          </button>
-          <button
-            type="button"
-            className="btn btn-sm join-item btn-disabled"
-            aria-hidden
-          >
-            {currentPage}
-          </button>
-          <button
-            type="button"
-            className="btn btn-sm join-item"
-            disabled={currentPage >= totalPages}
-            onClick={() => onPageChange(currentPage + 1)}
-            aria-label="下一页"
-          >
-            »
-          </button>
-        </div>
-        {onPageSizeChange && (
-          <select
-            className="select select-bordered select-sm w-28"
-            value={pageSize ?? 200}
-            onChange={(e) => onPageSizeChange(Number(e.target.value))}
-          >
-            <option value={50}>50/页</option>
-            <option value={200}>200/页</option>
-            <option value={300}>300/页</option>
-            <option value={500}>500/页</option>
-          </select>
-        )}
-        {viewMode === "grid" && (
-          <>
-            <label className="flex items-center gap-1.5 text-sm">
-              <span className="text-base-content/70">每行</span>
-              <input
-                type="number"
-                min={1}
-                max={32}
-                className="input input-bordered input-sm w-14 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                value={gridCols}
-                onChange={(e) => {
-                  const v =
-                    e.target.value === "" ? 1 : parseInt(e.target.value, 10);
-                  const n = Number.isNaN(v) ? 1 : Math.min(32, Math.max(1, v));
-                  setGridCols(n);
-                }}
-                title="每行展示数量 (1–32)"
-                aria-label="每行展示数量"
-              />
-              <span className="text-base-content/70">列</span>
-            </label>
-            <button
-              type="button"
-              className={cn(
-                "btn btn-sm btn-ghost btn-square",
-                isGridFullscreen && "btn-active",
-              )}
-              onClick={() => setIsGridFullscreen((v) => !v)}
-              title={isGridFullscreen ? "退出全屏" : "全屏展示"}
-              aria-label={isGridFullscreen ? "退出全屏" : "全屏展示"}
-            >
-              {isGridFullscreen ? (
-                <Minimize2 className="size-4" />
-              ) : (
-                <Maximize2 className="size-4" />
-              )}
-            </button>
-          </>
-        )}
-        <label className="label cursor-pointer gap-2 py-0 pr-0">
-          <input
-            type="checkbox"
-            className="checkbox checkbox-sm"
-            checked={reciteShuffle}
-            onChange={(e) => setReciteShuffle(e.target.checked)}
-            disabled={reciteActive}
-          />
-          <span className="label-text whitespace-nowrap">背诵乱序</span>
-        </label>
-        <button
-          type="button"
-          className="btn btn-sm"
-          disabled={items.length === 0 || reciteActive}
-          onClick={() => {
-            setReciteItems(reciteShuffle ? shuffleEntries(items) : [...items]);
+        <WordListToolbarExtras
+          viewMode={viewMode}
+          gridCols={gridCols}
+          onGridColsChange={setGridCols}
+          isGridFullscreen={isGridFullscreen}
+          onGridFullscreenChange={setIsGridFullscreen}
+          reciteShuffle={reciteShuffle}
+          onReciteShuffleChange={setReciteShuffle}
+          reciteActive={reciteActive}
+          itemsLength={items.length}
+          onStartRecite={() => {
+            setReciteItems(reciteShuffle ? shuffleArray(items) : [...items]);
             setReciteIndex(0);
             setReciteRevealed(false);
             setReciteActive(true);
           }}
-          title="背诵模式"
-          aria-label="背诵模式"
-        >
-          背诵模式
-        </button>
+        />
       </div>
 
       {reciteActive ? (
@@ -443,6 +343,9 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
           index={reciteIndex}
           revealed={reciteRevealed}
           showFirst={reciteShowFirst}
+          speak={speak}
+          muted={reciteMuted}
+          onMutedChange={setReciteMuted}
           onPrev={() => {
             if (reciteIndex <= 0) return;
             setReciteIndex(reciteIndex - 1);
@@ -450,8 +353,7 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
           }}
           onReveal={() => setReciteRevealed(true)}
           onNext={() => {
-            if (!reciteRevealed) setReciteRevealed(true);
-            else if (reciteIndex < reciteItems.length - 1) {
+            if (reciteIndex < reciteItems.length - 1) {
               setReciteIndex(reciteIndex + 1);
               setReciteRevealed(false);
             }
@@ -460,165 +362,31 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
           onShowFirstChange={setReciteShowFirst}
         />
       ) : viewMode === "list" ? (
-        <div className="overflow-x-auto">
-          <table className="table table-zebra table-sm">
-            <thead>
-              <tr>
-                <th>单词</th>
-                <th>音标</th>
-                <th>词性/释义</th>
-                <th>分类</th>
-                <th className="w-20 text-right">操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((entry) => (
-                <tr
-                  key={entry.id}
-                  className="cursor-pointer hover:bg-base-300"
-                  onClick={() => setSelectedEntry(entry)}
-                >
-                  <td className="font-medium">{entry.word}</td>
-                  <td className="font-mono text-sm opacity-80">
-                    {entry.phonetic ?? "—"}
-                  </td>
-                  <td className="text-sm max-w-xs truncate">
-                    {entry.meanings
-                      .map(
-                        (m) =>
-                          `${m.partOfSpeech} ${m.meanings.filter(Boolean).join("; ")}`,
-                      )
-                      .join(" | ") || "—"}
-                  </td>
-                  <td className="text-sm opacity-80">
-                    {entry.categoryName ?? "—"}
-                  </td>
-                  <td
-                    className="text-right"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <div className="flex justify-end gap-1">
-                      <button
-                        type="button"
-                        className="btn btn-ghost btn-xs btn-square"
-                        onClick={() => handleEdit(entry)}
-                        title="编辑"
-                        aria-label="编辑"
-                      >
-                        <Pencil className="size-3.5" />
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-ghost btn-xs btn-square text-error"
-                        onClick={(e) => handleDelete(e, entry.id)}
-                        disabled={deleteLoading === entry.id}
-                        title="删除"
-                        aria-label="删除"
-                      >
-                        <Trash2 className="size-3.5" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <WordListTableView
+          items={items}
+          onSelectEntry={setSelectedEntry}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          deleteLoading={deleteLoading}
+        />
       ) : (
-        <>
-          {isGridFullscreen && (
-            <div className="fixed inset-0 z-50 bg-base-100 flex flex-col">
-              <div className="flex shrink-0 items-center justify-between gap-3 border-b border-base-300 px-4 py-2">
-                <span className="font-medium">单词网格</span>
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <span className="text-xs text-base-content/60 shrink-0 whitespace-nowrap">
-                      提示透明度
-                    </span>
-                    <input
-                      type="range"
-                      min={0}
-                      max={100}
-                      value={fullscreenHintOpacityLevel}
-                      onChange={(e) =>
-                        setFullscreenHintOpacityLevel(Number(e.target.value))
-                      }
-                      className="range range-primary range-xs w-20"
-                      title="调节分类、释义等提示的透明度"
-                      aria-label="提示透明度"
-                    />
-                    <span className="text-xs text-base-content/50 tabular-nums w-6 text-right">
-                      {fullscreenHintOpacityLevel}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-base-content/70">展示：</span>
-                    <select
-                      className="select select-sm select-bordered w-auto min-w-0"
-                      value={fullscreenDisplayMode}
-                      onChange={(e) =>
-                        setFullscreenDisplayMode(
-                          e.target.value as "full" | "word" | "wordMeaning",
-                        )
-                      }
-                      aria-label="全屏展示内容"
-                    >
-                      <option value="full">全部</option>
-                      <option value="word">仅单词</option>
-                      <option value="wordMeaning">单词+释义</option>
-                    </select>
-                  </div>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-ghost"
-                    onClick={handleExportImage}
-                    disabled={exportImageLoading || items.length === 0}
-                    title="导出图片"
-                    aria-label="导出图片"
-                  >
-                    <ImageDown className="size-4 mr-1" />
-                    {exportImageLoading ? "导出中…" : "导出图片"}
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-ghost"
-                    onClick={() => setIsGridFullscreen(false)}
-                    aria-label="退出全屏"
-                  >
-                    <Minimize2 className="size-4 mr-1" />
-                    退出全屏
-                  </button>
-                </div>
-              </div>
-              <div className="flex-1 overflow-auto">
-                <div
-                  ref={fullscreenGridRef}
-                  className="grid bg-base-100"
-                  style={{
-                    gridTemplateColumns: `repeat(${gridCols}, minmax(0, 1fr))`,
-                  }}
-                >
-                  {fullscreenDisplayMode === "word"
-                    ? gridCardNodesWordOnly
-                    : fullscreenDisplayMode === "wordMeaning"
-                      ? gridCardNodesWordAndMeaning
-                      : gridCardNodes}
-                </div>
-              </div>
-            </div>
-          )}
-          <div
-            className={cn(
-              "grid rounded-lg overflow-hidden p-0 bg-base-200 border border-base-300",
-              isGridFullscreen && "hidden",
-            )}
-            style={{
-              gridTemplateColumns: `repeat(${gridCols}, minmax(0, 1fr))`,
-            }}
-          >
-            {gridCardNodes}
-          </div>
-        </>
+        <WordListGridWithFullscreen
+          gridCols={gridCols}
+          onGridColsChange={setGridCols}
+          isGridFullscreen={isGridFullscreen}
+          fullscreenGridRef={fullscreenGridRef}
+          fullscreenDisplayMode={fullscreenDisplayMode}
+          fullscreenHintOpacityLevel={fullscreenHintOpacityLevel}
+          onFullscreenHintOpacityLevelChange={setFullscreenHintOpacityLevel}
+          onFullscreenDisplayModeChange={setFullscreenDisplayMode}
+          onExportImage={handleExportImage}
+          exportImageLoading={exportImageLoading}
+          itemsLength={items.length}
+          onCloseFullscreen={() => setIsGridFullscreen(false)}
+          gridCardNodes={gridCardNodes}
+          gridCardNodesWordOnly={gridCardNodesWordOnly}
+          gridCardNodesWordAndMeaning={gridCardNodesWordAndMeaning}
+        />
       )}
 
       {items.length === 0 && !reciteActive && (
@@ -627,75 +395,54 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
         </p>
       )}
 
-      {selectedEntry && (
-        <dialog
-          open
-          className="modal modal-open"
-          onClose={() => setSelectedEntry(null)}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setSelectedEntry(null);
-          }}
-        >
-          <div className="modal-box max-w-2xl max-h-[90vh] overflow-auto">
-            <MfpCard
-              data={{
-                word: selectedEntry.word,
-                phonetic: selectedEntry.phonetic,
-                mnemonic: selectedEntry.mnemonic,
-                meanings: selectedEntry.meanings,
-                prefixes: selectedEntry.prefixes,
-                suffixes: selectedEntry.suffixes,
-                root: selectedEntry.root,
-                categoryName: selectedEntry.categoryName,
-                collocations: selectedEntry.collocations ?? [],
-              }}
-              onClose={() => setSelectedEntry(null)}
-            />
-          </div>
-          <form method="dialog" className="modal-backdrop">
-            <button type="submit">关闭</button>
-          </form>
-        </dialog>
-      )}
+      <SimpleModal
+        open={selectedEntry != null}
+        onClose={() => setSelectedEntry(null)}
+      >
+        {selectedEntry && (
+          <MfpCard
+            data={{
+              word: selectedEntry.word,
+              phonetic: selectedEntry.phonetic,
+              mnemonic: selectedEntry.mnemonic,
+              meanings: selectedEntry.meanings,
+              prefixes: selectedEntry.prefixes,
+              suffixes: selectedEntry.suffixes,
+              root: selectedEntry.root,
+              categoryName: selectedEntry.categoryName,
+              collocations: selectedEntry.collocations ?? [],
+            }}
+            onClose={() => setSelectedEntry(null)}
+          />
+        )}
+      </SimpleModal>
 
-      {editingId != null && editFormData && (
-        <dialog
-          open
-          className="modal modal-open"
-          onClose={() => {
-            setEditingId(null);
-            setEditFormData(null);
-          }}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
+      <SimpleModal
+        open={editingId != null && editFormData != null}
+        onClose={() => {
+          setEditingId(null);
+          setEditFormData(null);
+        }}
+      >
+        {editingId != null && editFormData && (
+          <EntryForm
+            key={editingId}
+            aiConfig={aiConfig}
+            entryId={editingId}
+            initialData={editFormData}
+            onSuccess={() => {
               setEditingId(null);
               setEditFormData(null);
-            }
-          }}
-        >
-          <div className="modal-box max-w-2xl max-h-[90vh] overflow-auto">
-            <EntryForm
-              key={editingId}
-              aiConfig={aiConfig}
-              entryId={editingId}
-              initialData={editFormData}
-              onSuccess={() => {
-                setEditingId(null);
-                setEditFormData(null);
-                onRefresh?.();
-              }}
-              onCancel={() => {
-                setEditingId(null);
-                setEditFormData(null);
-              }}
-              onError={onError}
-            />
-          </div>
-          <form method="dialog" className="modal-backdrop">
-            <button type="submit">关闭</button>
-          </form>
-        </dialog>
-      )}
+              onRefresh?.();
+            }}
+            onCancel={() => {
+              setEditingId(null);
+              setEditFormData(null);
+            }}
+            onError={onError}
+          />
+        )}
+      </SimpleModal>
     </div>
   );
 }

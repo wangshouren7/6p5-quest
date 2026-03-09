@@ -1,65 +1,13 @@
 "use client";
 
-import { cn } from "@/modules/ui/jsx";
+import { FilterBarCollapse, FilterField } from "@/modules/ui/filter-bar-layout";
+import { SearchableMultiSelect } from "@/modules/ui/searchable-multi-select";
 import { Search } from "lucide-react";
 import { useObservable } from "rcrx";
 import { useFirstMountState } from "react-use";
 import type { IVocabularyFilter } from "../core";
 import { useVocabulary } from "./context";
-
-export function FilterCheckboxes<T extends string | number>({
-  label,
-  options,
-  selected,
-  onToggle,
-  onReset,
-  renderOption,
-  maxVisible = 20,
-}: {
-  label: string;
-  options: T[];
-  selected: T[];
-  onToggle: (value: T) => void;
-  onReset?: () => void;
-  renderOption: (value: T) => string;
-  /** 最多展示的选项数，0 表示全部；默认 20 */
-  maxVisible?: number;
-}) {
-  const visible = maxVisible <= 0 ? options : options.slice(0, maxVisible);
-  return (
-    <div className="flex flex-wrap items-center gap-2">
-      <span className="label-text w-14 shrink-0">{label}</span>
-      <div className="flex flex-wrap gap-1">
-        {visible.map((value) => (
-          <label key={String(value)} className="label cursor-pointer gap-1">
-            <input
-              type="checkbox"
-              className="checkbox checkbox-sm"
-              checked={selected.includes(value)}
-              onChange={() => onToggle(value)}
-            />
-            <span className="label-text text-xs">{renderOption(value)}</span>
-          </label>
-        ))}
-        {maxVisible > 0 && options.length > maxVisible && (
-          <span className="text-xs text-base-content/60">
-            等 {options.length} 项
-          </span>
-        )}
-        {onReset && (
-          <button
-            type="button"
-            className="btn btn-ghost btn-xs"
-            onClick={onReset}
-            aria-label={`清空${label}`}
-          >
-            清空
-          </button>
-        )}
-      </div>
-    </div>
-  );
-}
+import { MorphemeMultiSelect } from "./morpheme-select";
 
 export function VocabularyFilterBar() {
   const { vocabulary } = useVocabulary();
@@ -78,6 +26,7 @@ export function VocabularyFilterBar() {
   const rootList = options?.roots ?? [];
   const categoryList = options?.categories ?? [];
 
+  const wordQuery = filter?.word ?? "";
   const selectedPos = filter?.partOfSpeech ?? [];
   const selectedPrefixIds = filter?.prefixIds ?? [];
   const selectedSuffixIds = filter?.suffixIds ?? [];
@@ -86,133 +35,153 @@ export function VocabularyFilterBar() {
   const createdAtFrom = filter?.createdAtFrom ?? "";
   const createdAtTo = filter?.createdAtTo ?? "";
 
-  const toggle = <T,>(key: keyof IVocabularyFilter, value: T, current: T[]) => {
-    setFilter((f: IVocabularyFilter) => {
-      const arr = (f[key] as T[]) ?? [];
-      const next = arr.includes(value)
-        ? arr.filter((x) => x !== value)
-        : [...arr, value];
-      return { ...f, [key]: next.length > 0 ? next : undefined };
-    });
-  };
-
   return (
-    <div
-      className={cn(
-        "collapse collapse-arrow rounded-lg border border-base-300 bg-base-200",
-        isFirst ? "collapse-open" : "",
-      )}
-    >
-      <input type="checkbox" aria-label="展开/收起筛选" />
-      <div className="collapse-title min-h-0 py-2 font-medium">单词筛选</div>
-      <div className="collapse-content">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4 pt-1 pb-2">
-          <FilterCheckboxes
-            label="词性"
-            options={partOfSpeechList}
-            selected={selectedPos}
-            onToggle={(v) => toggle("partOfSpeech", v, selectedPos)}
-            onReset={() =>
-              setFilter((f) => ({ ...f, partOfSpeech: undefined }))
+    <FilterBarCollapse title="单词筛选" defaultOpen={isFirst}>
+      <FilterField label="单词">
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            className="input input-sm input-bordered w-full min-w-0"
+            placeholder="输入单词或部分字母，不区分大小写"
+            value={wordQuery}
+            onChange={(e) =>
+              setFilter((f) => ({
+                ...f,
+                word: e.target.value || undefined,
+              }))
             }
-            renderOption={(v) => String(v)}
+            aria-label="单词搜索"
           />
-          <FilterCheckboxes
-            label="前缀"
-            options={prefixList.map((p) => p.id)}
-            selected={selectedPrefixIds}
-            onToggle={(id) => toggle("prefixIds", id, selectedPrefixIds)}
-            onReset={() => setFilter((f) => ({ ...f, prefixIds: undefined }))}
-            renderOption={(id) =>
-              prefixList.find((p) => p.id === id)?.text ?? String(id)
-            }
-          />
-          <FilterCheckboxes
-            label="后缀"
-            options={suffixList.map((s) => s.id)}
-            selected={selectedSuffixIds}
-            onToggle={(id) => toggle("suffixIds", id, selectedSuffixIds)}
-            onReset={() => setFilter((f) => ({ ...f, suffixIds: undefined }))}
-            renderOption={(id) =>
-              suffixList.find((s) => s.id === id)?.text ?? String(id)
-            }
-          />
-          <FilterCheckboxes
-            label="词根"
-            options={rootList.map((r) => r.id)}
-            selected={selectedRootIds}
-            onToggle={(id) => toggle("rootIds", id, selectedRootIds)}
-            onReset={() => setFilter((f) => ({ ...f, rootIds: undefined }))}
-            renderOption={(id) =>
-              rootList.find((r) => r.id === id)?.text ?? String(id)
-            }
-          />
-          <FilterCheckboxes
-            label="分类"
-            options={categoryList.map((c) => c.id)}
-            selected={selectedCategoryIds}
-            onToggle={(id) => toggle("categoryIds", id, selectedCategoryIds)}
-            onReset={() => setFilter((f) => ({ ...f, categoryIds: undefined }))}
-            renderOption={(id) =>
-              categoryList.find((c) => c.id === id)?.name ?? String(id)
-            }
-          />
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="label-text w-14 shrink-0">创建时间</span>
-            <input
-              type="date"
-              className="input input-sm input-bordered w-36"
-              value={createdAtFrom}
-              onChange={(e) =>
-                setFilter((f) => ({
-                  ...f,
-                  createdAtFrom: e.target.value || undefined,
-                }))
-              }
-              aria-label="创建时间从"
-            />
-            <span className="text-xs text-base-content/60">至</span>
-            <input
-              type="date"
-              className="input input-sm input-bordered w-36"
-              value={createdAtTo}
-              onChange={(e) =>
-                setFilter((f) => ({
-                  ...f,
-                  createdAtTo: e.target.value || undefined,
-                }))
-              }
-              aria-label="创建时间至"
-            />
-            {(createdAtFrom || createdAtTo) && (
-              <button
-                type="button"
-                className="btn btn-ghost btn-xs"
-                onClick={() =>
-                  setFilter((f) => ({
-                    ...f,
-                    createdAtFrom: undefined,
-                    createdAtTo: undefined,
-                  }))
-                }
-                aria-label="清空创建时间"
-              >
-                清空
-              </button>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
+          {wordQuery && (
             <button
               type="button"
-              className="btn btn-primary btn-sm"
-              onClick={onFetch}
-              disabled={loading}
+              className="btn btn-ghost btn-xs shrink-0"
+              onClick={() => setFilter((f) => ({ ...f, word: undefined }))}
+              aria-label="清空单词"
             >
-              <Search size={14} /> 搜索
+              清空
             </button>
-          </div>
+          )}
         </div>
+      </FilterField>
+      <SearchableMultiSelect
+        label="词性"
+        options={partOfSpeechList.map((pos) => ({
+          value: pos,
+          label: pos,
+        }))}
+        selected={selectedPos}
+        onChange={(next) =>
+          setFilter((f) => ({
+            ...f,
+            partOfSpeech: next.length > 0 ? next : undefined,
+          }))
+        }
+        placeholder="搜索词性…"
+      />
+      <MorphemeMultiSelect
+        label="前缀"
+        options={prefixList}
+        selectedIds={selectedPrefixIds}
+        onChange={(next) =>
+          setFilter((f) => ({
+            ...f,
+            prefixIds: next.length > 0 ? next : undefined,
+          }))
+        }
+        placeholder="搜索前缀…"
+      />
+      <MorphemeMultiSelect
+        label="后缀"
+        options={suffixList}
+        selectedIds={selectedSuffixIds}
+        onChange={(next) =>
+          setFilter((f) => ({
+            ...f,
+            suffixIds: next.length > 0 ? next : undefined,
+          }))
+        }
+        placeholder="搜索后缀…"
+      />
+      <MorphemeMultiSelect
+        label="词根"
+        options={rootList}
+        selectedIds={selectedRootIds}
+        onChange={(next) =>
+          setFilter((f) => ({
+            ...f,
+            rootIds: next.length > 0 ? next : undefined,
+          }))
+        }
+        placeholder="搜索词根…"
+      />
+      <SearchableMultiSelect
+        label="分类"
+        options={categoryList.map((c) => ({ value: c.id, label: c.name }))}
+        selected={selectedCategoryIds}
+        onChange={(next) =>
+          setFilter((f) => ({
+            ...f,
+            categoryIds: next.length > 0 ? next : undefined,
+          }))
+        }
+        placeholder="搜索分类…"
+      />
+      <FilterField label="创建时间">
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            type="date"
+            className="input input-sm input-bordered w-full min-w-0 sm:w-36"
+            value={createdAtFrom}
+            onChange={(e) =>
+              setFilter((f) => ({
+                ...f,
+                createdAtFrom: e.target.value || undefined,
+              }))
+            }
+            aria-label="创建时间从"
+          />
+          <span className="text-xs text-base-content/60 shrink-0">至</span>
+          <input
+            type="date"
+            className="input input-sm input-bordered w-full min-w-0 sm:w-36"
+            value={createdAtTo}
+            onChange={(e) =>
+              setFilter((f) => ({
+                ...f,
+                createdAtTo: e.target.value || undefined,
+              }))
+            }
+            aria-label="创建时间至"
+          />
+          {(createdAtFrom || createdAtTo) && (
+            <button
+              type="button"
+              className="btn btn-ghost btn-xs"
+              onClick={() =>
+                setFilter((f) => ({
+                  ...f,
+                  createdAtFrom: undefined,
+                  createdAtTo: undefined,
+                }))
+              }
+              aria-label="清空创建时间"
+            >
+              清空
+            </button>
+          )}
+        </div>
+      </FilterField>
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          className="btn btn-primary btn-sm"
+          onClick={onFetch}
+          disabled={loading}
+        >
+          <Search size={14} /> 搜索
+        </button>
       </div>
-    </div>
+    </FilterBarCollapse>
   );
 }

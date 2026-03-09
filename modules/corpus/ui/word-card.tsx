@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/modules/ui/jsx";
+import { formatPhonetic } from "@/utils/string";
 import { Play } from "lucide-react";
 import { playWordAudio } from "../core/audio";
 
@@ -23,10 +24,6 @@ export interface WordCardProps {
   mastered?: boolean;
   /** 切换熟练掌握时回调；存在时展示「熟练掌握」控制 */
   onToggleMastered?: () => void;
-}
-
-function formatPhonetic(phonetic: string): string {
-  return phonetic.replace(/^\/|\/$/g, "");
 }
 
 export function WordCard({

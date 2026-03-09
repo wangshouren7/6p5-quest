@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  getMasteredWordSet,
-  getUserWordStatsForWords,
-  getWordsForDictation,
-  setWordMastered,
-} from "@/modules/corpus/actions";
-import { useRequest } from "ahooks";
+import { getWordsForDictation } from "@/modules/corpus/actions";
 import { useObservable } from "rcrx";
 import { useEffect, useMemo, useState } from "react";
 import { USER_ID } from "../core/constants";
@@ -15,11 +9,8 @@ import type { ICorpus } from "../core/types";
 import { useCorpus } from "./context";
 import { DictationGrid } from "./dictation-grid";
 import { ResultPanel } from "./result-panel";
-import { WordGrid, type WordStat } from "./word-grid";
-
-function normalizeWord(w: string): string {
-  return w.trim().toLowerCase();
-}
+import { useCorpusPageData } from "./use-corpus-page-data";
+import { WordGrid } from "./word-grid";
 
 type PageSizeOption = 200 | 300 | 500 | "custom" | "all";
 
@@ -124,6 +115,11 @@ export function MainContent({
   const [customPageSize, setCustomPageSize] = useState(100);
 
   const displayList = useMemo(() => filteredWords ?? [], [filteredWords]);
+  const { wordStats, handleToggleMastered } = useCorpusPageData({
+    displayList,
+    userId: USER_ID,
+  });
+
   const effectivePageSize =
     pageSizeOption === "all"
       ? Infinity
@@ -142,45 +138,6 @@ export function MainContent({
           (safePage - 1) * effectivePageSize,
           safePage * effectivePageSize,
         );
-
-  const wordIds = useMemo(
-    () => displayList.map((w) => w.id).filter((id): id is number => id != null),
-    [displayList],
-  );
-  const wordIdsKey = wordIds.join(",");
-  const { data: wordStatsArray, run: runWordStats } = useRequest(
-    () => getUserWordStatsForWords(USER_ID, wordIds),
-    { ready: wordIds.length > 0, refreshDeps: [wordIdsKey] },
-  );
-  const wordStats = useMemo(() => {
-    if (!wordStatsArray?.length) return undefined;
-    const m = new Map<number, WordStat>();
-    wordStatsArray.forEach((s) =>
-      m.set(s.wordId, {
-        totalCount: s.totalCount,
-        correctCount: s.correctCount,
-        mastered: s.mastered,
-      }),
-    );
-    return m;
-  }, [wordStatsArray]);
-
-  const { data: masteredWords = [], run: runMastered } = useRequest(
-    () => getMasteredWordSet(USER_ID),
-    { refreshDeps: [] },
-  );
-  const masteredSet = useMemo(() => new Set(masteredWords), [masteredWords]);
-
-  const handleToggleMastered = async (word: string) => {
-    const item = displayList.find(
-      (w) => normalizeWord(w.word) === normalizeWord(word),
-    );
-    if (item?.id == null) return;
-    const current = masteredSet.has(normalizeWord(word));
-    await setWordMastered(USER_ID, item.id, !current);
-    runMastered();
-    runWordStats();
-  };
 
   const shuffle = controls?.shuffle ?? false;
   const rate = controls?.rate ?? 1;
@@ -255,9 +212,9 @@ export function MainContent({
       </div>
 
       <div className="mb-3 flex flex-wrap items-center gap-3">
-        <span className="label-text">每页</span>
+        <span className="label-text shrink-0">每页</span>
         <select
-          className="select select-bordered select-sm w-32"
+          className="select select-bordered select-sm w-full min-w-0 sm:w-32"
           value={pageSizeOption}
           onChange={(e) => {
             const v = e.target.value;
@@ -280,7 +237,7 @@ export function MainContent({
             type="number"
             min={1}
             max={1000}
-            className="input input-bordered input-sm w-24"
+            className="input input-bordered input-sm w-full min-w-0 sm:w-24"
             value={customPageSize}
             onChange={(e) => {
               const next = Math.max(1, parseInt(e.target.value, 10) || 1);
@@ -289,7 +246,7 @@ export function MainContent({
             }}
           />
         )}
-        <span className="text-sm text-base-content/60">
+        <span className="text-sm text-base-content/60 shrink-0">
           第 {safePage} / {totalPages} 页，共 {displayList.length} 条
         </span>
         <Pagination

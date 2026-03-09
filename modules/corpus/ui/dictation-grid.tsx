@@ -1,15 +1,12 @@
 "use client";
 
 import { cn } from "@/modules/ui/jsx";
+import { getGridColsClass } from "@/utils/format";
+import { formatPhonetic, normalizeWord } from "@/utils/string";
 import { useObservable } from "rcrx";
 import { useEffect, useRef, useState } from "react";
-import { getGridColsClass } from "../core/constants";
 import { useCorpus } from "./context";
 import { WordCard } from "./word-card";
-
-function formatPhonetic(phonetic: string): string {
-  return phonetic.replace(/^\/|\/$/g, "");
-}
 
 export function DictationGrid() {
   const corpus = useCorpus();
@@ -96,7 +93,7 @@ export function DictationGrid() {
             !practiceMode && showResultOnBlur && revealedIndices.has(index);
           const userAnswer = (userAnswers[index] ?? "").trim();
           const isCorrect =
-            item.word.trim().toLowerCase() === userAnswer.toLowerCase();
+            normalizeWord(item.word) === normalizeWord(userAnswer);
 
           if (isRevealed) {
             return (

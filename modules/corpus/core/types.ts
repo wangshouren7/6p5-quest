@@ -32,7 +32,7 @@ export interface ICorpusControls {
   showResultOnBlur: boolean;
   /** 听写时每个单词播放间隔（毫秒） */
   dictationIntervalMs: number;
-  /** 单词网格每行列数（2–8） */
+  /** 单词网格每行列数（1–10） */
   gridCols: number;
 }
 

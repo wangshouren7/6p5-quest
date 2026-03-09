@@ -20,21 +20,14 @@ import {
     vocabularyBatchParseResultSchema,
     vocabularyWordsOnlySchema,
 } from "@/modules/vocabulary/core";
+import { getErrorMessage } from "@/utils/error";
+import { devError, devLog, devWarn } from "@/utils/logger";
+import { normalizeWord } from "@/utils/string";
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { DEFAULT_AI_MODEL } from "./constants";
 import { createVocabularyEntry, updateVocabularyEntry } from "./crud";
 import type { IVocabularyAiConfig } from "./types";
-
-const devLog = (...args: unknown[]) => {
-  if (process.env.NODE_ENV !== "production") console.log(...args);
-};
-const devWarn = (...args: unknown[]) => {
-  if (process.env.NODE_ENV !== "production") console.warn(...args);
-};
-const devError = (...args: unknown[]) => {
-  if (process.env.NODE_ENV !== "production") console.error(...args);
-};
 
 const VOCABULARY_AI_FILL_STALE_RUNNING_MS = 5 * 60 * 1000; // 5 分钟
 
@@ -149,7 +142,7 @@ export async function runVocabularyAiFillBatch(): Promise<void> {
         });
         continue;
       }
-      const wordLower = data.word.trim().toLowerCase();
+      const wordLower = normalizeWord(data.word);
       const existing = await db.vocabularyEntry.findUnique({
         where: { wordLower },
       });
@@ -216,7 +209,7 @@ export async function runVocabularyAiFillBatch(): Promise<void> {
       }
     }
   } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
+    const message = getErrorMessage(e, "本批异常");
     devError("[词汇 AI 回填] 本批异常:", message);
     await db.vocabularyAiFillTask
       .updateMany({
@@ -227,7 +220,7 @@ export async function runVocabularyAiFillBatch(): Promise<void> {
           updatedAt: new Date(),
         },
       })
-      .catch(() => {});
+      .catch((err) => devError("[词汇 AI 回填] updateMany failed", err));
   }
 }
 
@@ -322,8 +315,7 @@ Use empty arrays or omit fields if unknown. All meanings in Chinese.`;
       error: `返回格式校验失败: ${result.error.message}`,
     };
   } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
-    return { error: `请求失败: ${message}` };
+    return { error: `请求失败: ${getErrorMessage(e, "未知错误")}` };
   }
 }
 
@@ -487,8 +479,7 @@ export async function aiExtractWordsOnly(
 
     return trimmed.length > 0 ? trimmed : { error: "未识别到单词" };
   } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
-    return { error: `请求失败: ${message}` };
+    return { error: `请求失败: ${getErrorMessage(e, "未知错误")}` };
   }
 }
 
@@ -599,11 +590,9 @@ partOfSpeech MUST be exactly one of: ${posList}. Do NOT use "n." or "v." alone. 
       parsed.entries,
       categoryByName,
     );
-    const byWord = new Map(
-      formDataList.map((d) => [d.word.trim().toLowerCase(), d]),
-    );
+    const byWord = new Map(formDataList.map((d) => [normalizeWord(d.word), d]));
     const ordered = list.map((w) => {
-      const key = w.trim().toLowerCase();
+      const key = normalizeWord(w);
       return (
         byWord.get(key) ?? {
           word: w.trim(),
@@ -620,8 +609,7 @@ partOfSpeech MUST be exactly one of: ${posList}. Do NOT use "n." or "v." alone. 
     });
     return ordered;
   } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
-    return { error: `请求失败: ${message}` };
+    return { error: `请求失败: ${getErrorMessage(e, "未知错误")}` };
   }
 }
 
@@ -718,7 +706,6 @@ Ignore line numbers and segment numbers in the text. Extract every vocabulary en
     );
     return formDataList.filter((d) => d.word.length > 0);
   } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
-    return { error: `请求失败: ${message}` };
+    return { error: `请求失败: ${getErrorMessage(e, "未知错误")}` };
   }
 }

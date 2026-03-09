@@ -2,6 +2,7 @@
 
 import type { ChapterItem, WordItem } from "@/modules/corpus/core/types";
 import { db } from "@/modules/db/client";
+import { normalizeWord } from "@/utils/string";
 
 /** 从 DB 获取章节列表（用于侧栏与选择） */
 export async function getChapters(): Promise<ChapterItem[]> {
@@ -127,7 +128,7 @@ export async function getMasteredWordSet(userId: number): Promise<string[]> {
     where: { userId, mastered: true },
     select: { word: { select: { word: true } } },
   });
-  return rows.map((r) => r.word.word.trim().toLowerCase());
+  return rows.map((r) => normalizeWord(r.word.word));
 }
 
 export interface DictationFilter {

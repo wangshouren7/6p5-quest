@@ -1,7 +1,8 @@
 "use client";
 
 import type { DictationFilter } from "@/modules/corpus/actions";
-import { cn } from "@/modules/ui/jsx";
+import { FilterBarCollapse, FilterField } from "@/modules/ui/filter-bar-layout";
+import { SearchableMultiSelect } from "@/modules/ui/searchable-multi-select";
 import { Search } from "lucide-react";
 import React, { useMemo } from "react";
 import { useFirstMountState } from "react-use";
@@ -13,58 +14,6 @@ interface FilterBarProps {
   setFilter: React.Dispatch<React.SetStateAction<DictationFilter>>;
   loading: boolean;
   onFetch: () => void;
-}
-
-/** 多选筛选项：daisyUI Filter 多选写法（checkbox + btn + reset），见 https://daisyui.com/components/filter/ */
-function FilterCheckboxes<T extends string | number>({
-  label,
-  options,
-  selected,
-  onToggle,
-  onReset,
-  disabled,
-  renderOption,
-}: {
-  label: string;
-  options: T[];
-  selected: T[];
-  onToggle: (value: T) => void;
-  onReset?: () => void;
-  disabled?: boolean;
-  renderOption: (value: T) => string;
-}) {
-  return (
-    <div className="flex flex-wrap items-center gap-2">
-      <span className="label-text w-16 shrink-0">{label}</span>
-      <form
-        className="flex flex-wrap gap-1"
-        onSubmit={(e) => e.preventDefault()}
-        onReset={(e) => {
-          e.preventDefault();
-          onReset?.();
-        }}
-      >
-        {options.map((value) => (
-          <input
-            key={value}
-            type="checkbox"
-            className="btn btn-sm"
-            name={label}
-            aria-label={renderOption(value)}
-            checked={selected.includes(value)}
-            disabled={disabled}
-            onChange={() => onToggle(value)}
-          />
-        ))}
-        <input
-          type="reset"
-          className="btn btn-sm btn-square"
-          value="×"
-          aria-label={`清空${label}`}
-        />
-      </form>
-    </div>
-  );
 }
 
 const MASTERED_OPTIONS = [
@@ -110,161 +59,151 @@ export function FilterBar({
     );
   }, [chapters, chapterIds]);
 
+  const chapterOptions = useMemo(
+    () =>
+      chapters.map((ch) => ({
+        value: ch.id,
+        label: `Ch.${ch.id} ${ch.title}`,
+      })),
+    [chapters],
+  );
+
   const testOptions = useMemo(
-    () => Array.from({ length: maxTestInSelectedChapters }, (_, i) => i + 1),
+    () =>
+      Array.from({ length: maxTestInSelectedChapters }, (_, i) => i + 1).map(
+        (n) => ({ value: n, label: `Test ${n}` }),
+      ),
     [maxTestInSelectedChapters],
   );
 
-  const toggleChapter = (id: number) => {
-    setFilter((f) => {
-      const prev = f.chapterIds ?? [];
-      const next = prev.includes(id)
-        ? prev.filter((x) => x !== id)
-        : [...prev, id];
-      return { ...f, chapterIds: next.length > 0 ? next : undefined };
-    });
-  };
-
-  const toggleTest = (testId: number) => {
-    setFilter((f) => {
-      const prev = f.testIds ?? [];
-      const next = prev.includes(testId)
-        ? prev.filter((x) => x !== testId)
-        : [...prev, testId];
-      return { ...f, testIds: next.length > 0 ? next : undefined };
-    });
-  };
-
   return (
-    <div
-      className={cn(
-        "collapse  collapse-arrow rounded-lg border border-base-300 bg-base-200",
-        isFirst ? "collapse-open" : "",
-      )}
-    >
-      <input type="checkbox" aria-label="展开/收起筛选" />
-      <div className="collapse-title min-h-0 py-2 font-medium">单词筛选</div>
-      <div className="collapse-content">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4 pt-1 pb-2">
-          <FilterCheckboxes
-            label="章节"
-            options={chapters.map((ch) => ch.id)}
-            selected={chapterIds}
-            onToggle={toggleChapter}
-            onReset={() => setFilter((f) => ({ ...f, chapterIds: undefined }))}
-            renderOption={(id) => {
-              const ch = chapters.find((c) => c.id === id);
-              return ch ? `Ch.${ch.id} ${ch.title}` : String(id);
-            }}
+    <FilterBarCollapse title="单词筛选" defaultOpen={isFirst}>
+      <SearchableMultiSelect
+        label="章节"
+        options={chapterOptions}
+        selected={chapterIds}
+        onChange={(next) =>
+          setFilter((f) => ({
+            ...f,
+            chapterIds: next.length > 0 ? next : undefined,
+          }))
+        }
+        placeholder="搜索章节…"
+      />
+      <SearchableMultiSelect
+        label="Test"
+        options={testOptions}
+        selected={testIds}
+        onChange={(next) =>
+          setFilter((f) => ({
+            ...f,
+            testIds: next.length > 0 ? next : undefined,
+          }))
+        }
+        placeholder="搜索 Test…"
+      />
+      <FilterField label="掌握状态">
+        <select
+          className="select select-bordered select-sm w-full min-w-0 sm:w-28"
+          value={masteredToSelectValue(filter.mastered)}
+          onChange={(e) =>
+            setFilter((f) => ({
+              ...f,
+              mastered: selectValueToMastered(e.target.value),
+            }))
+          }
+        >
+          {MASTERED_OPTIONS.map(({ value, label }) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
+        </select>
+      </FilterField>
+      <FilterField label="正确率">
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            type="number"
+            min={0}
+            max={1}
+            step={0.1}
+            placeholder="最小 0～1"
+            className="input input-bordered input-sm w-full min-w-0 sm:w-28"
+            value={filter.correctRateMin ?? ""}
+            onChange={(e) =>
+              setFilter((f) => ({
+                ...f,
+                correctRateMin: e.target.value
+                  ? Number(e.target.value)
+                  : undefined,
+              }))
+            }
           />
-          <FilterCheckboxes
-            label="Test"
-            options={testOptions}
-            selected={testIds}
-            onToggle={toggleTest}
-            onReset={() => setFilter((f) => ({ ...f, testIds: undefined }))}
-            disabled={chapters.length === 0}
-            renderOption={(n) => `Test ${n}`}
+          <span className="text-base-content/60 shrink-0">～</span>
+          <input
+            type="number"
+            min={0}
+            max={1}
+            step={0.1}
+            placeholder="最大 0～1"
+            className="input input-bordered input-sm w-full min-w-0 sm:w-28"
+            value={filter.correctRateMax ?? ""}
+            onChange={(e) =>
+              setFilter((f) => ({
+                ...f,
+                correctRateMax: e.target.value
+                  ? Number(e.target.value)
+                  : undefined,
+              }))
+            }
           />
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="label-text w-16 shrink-0">掌握状态</span>
-            <select
-              className="select select-bordered select-sm w-28"
-              value={masteredToSelectValue(filter.mastered)}
-              onChange={(e) =>
-                setFilter((f) => ({
-                  ...f,
-                  mastered: selectValueToMastered(e.target.value),
-                }))
-              }
-            >
-              {MASTERED_OPTIONS.map(({ value, label }) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="label-text w-16 shrink-0">正确率</span>
-            <input
-              type="number"
-              min={0}
-              max={1}
-              step={0.1}
-              placeholder="最小 0～1"
-              className="input input-bordered input-sm w-28"
-              value={filter.correctRateMin ?? ""}
-              onChange={(e) =>
-                setFilter((f) => ({
-                  ...f,
-                  correctRateMin: e.target.value
-                    ? Number(e.target.value)
-                    : undefined,
-                }))
-              }
-            />
-            <span className="text-base-content/60">～</span>
-            <input
-              type="number"
-              min={0}
-              max={1}
-              step={0.1}
-              placeholder="最大 0～1"
-              className="input input-bordered input-sm w-28"
-              value={filter.correctRateMax ?? ""}
-              onChange={(e) =>
-                setFilter((f) => ({
-                  ...f,
-                  correctRateMax: e.target.value
-                    ? Number(e.target.value)
-                    : undefined,
-                }))
-              }
-            />
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="label-text w-16 shrink-0">错误次数</span>
-            <input
-              type="number"
-              min={0}
-              placeholder="最少"
-              className="input input-bordered input-sm w-24"
-              value={filter.wrongCountMin ?? ""}
-              onChange={(e) =>
-                setFilter((f) => ({
-                  ...f,
-                  wrongCountMin: e.target.value
-                    ? Number(e.target.value)
-                    : undefined,
-                }))
-              }
-            />
-            <span className="text-base-content/60">～</span>
-            <input
-              type="number"
-              min={0}
-              placeholder="最多"
-              className="input input-bordered input-sm w-24"
-              value={filter.wrongCountMax ?? ""}
-              onChange={(e) =>
-                setFilter((f) => ({
-                  ...f,
-                  wrongCountMax: e.target.value
-                    ? Number(e.target.value)
-                    : undefined,
-                }))
-              }
-            />
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="label-text w-16 shrink-0" />
-            <button type="button" className="btn btn-primary" onClick={onFetch}>
-              <Search size={16} /> 搜索
-            </button>
-          </div>
         </div>
+      </FilterField>
+      <FilterField label="错误次数">
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            type="number"
+            min={0}
+            placeholder="最少"
+            className="input input-bordered input-sm w-full min-w-0 sm:w-24"
+            value={filter.wrongCountMin ?? ""}
+            onChange={(e) =>
+              setFilter((f) => ({
+                ...f,
+                wrongCountMin: e.target.value
+                  ? Number(e.target.value)
+                  : undefined,
+              }))
+            }
+          />
+          <span className="text-base-content/60 shrink-0">～</span>
+          <input
+            type="number"
+            min={0}
+            placeholder="最多"
+            className="input input-bordered input-sm w-full min-w-0 sm:w-24"
+            value={filter.wrongCountMax ?? ""}
+            onChange={(e) =>
+              setFilter((f) => ({
+                ...f,
+                wrongCountMax: e.target.value
+                  ? Number(e.target.value)
+                  : undefined,
+              }))
+            }
+          />
+        </div>
+      </FilterField>
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          className="btn btn-primary btn-sm"
+          onClick={onFetch}
+          disabled={loading}
+        >
+          <Search size={14} /> 搜索
+        </button>
       </div>
-    </div>
+    </FilterBarCollapse>
   );
 }

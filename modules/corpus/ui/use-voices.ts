@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { VoiceItem } from "./types";
+import type { VoiceItem } from "../core/types";
 
 export function useVoices(): VoiceItem[] {
   const [voices, setVoices] = useState<VoiceItem[]>([]);

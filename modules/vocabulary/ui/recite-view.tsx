@@ -1,11 +1,13 @@
 "use client";
 
 import { cn } from "@/modules/ui/jsx";
+import { Volume2, VolumeX } from "lucide-react";
 import { useEffect } from "react";
 import type { IVocabularyEntryListItem } from "../core";
 import { MfpCard } from "./mfp-card";
 
 const MEANING_SUMMARY_MAX_LEN = 120;
+const AUTO_PLAY_DELAY_MS = 400;
 
 function meaningSummary(entry: IVocabularyEntryListItem): string {
   if (!entry.meanings?.length) return "（无释义）";
@@ -21,6 +23,11 @@ export interface ReciteViewProps {
   index: number;
   revealed: boolean;
   showFirst: "word" | "meaning";
+  /** 发音函数，传入时启用自动播放与音量按钮 */
+  speak?: (word: string) => void;
+  /** 是否静音（不自动播放） */
+  muted?: boolean;
+  onMutedChange?: (muted: boolean) => void;
   onPrev: () => void;
   onReveal: () => void;
   onNext: () => void;
@@ -33,6 +40,9 @@ export function ReciteView({
   index,
   revealed,
   showFirst,
+  speak,
+  muted = false,
+  onMutedChange,
   onPrev,
   onReveal,
   onNext,
@@ -41,6 +51,13 @@ export function ReciteView({
 }: ReciteViewProps) {
   const total = items.length;
   const entry = total > 0 ? items[index] : null;
+
+  // 背诵模式下切换单词时自动播放发音（未静音时）
+  useEffect(() => {
+    if (!entry?.word || !speak || muted) return;
+    const t = setTimeout(() => speak(entry.word), AUTO_PLAY_DELAY_MS);
+    return () => clearTimeout(t);
+  }, [index, entry?.word, speak, muted]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -69,6 +86,8 @@ export function ReciteView({
       </div>
     );
   }
+
+  if (!entry) return null;
 
   return (
     <div className="flex flex-col gap-4">
@@ -101,6 +120,24 @@ export function ReciteView({
               先显示释义
             </button>
           </div>
+          {speak != null && onMutedChange != null && (
+            <button
+              type="button"
+              className={cn(
+                "btn btn-sm btn-ghost btn-square",
+                muted && "btn-ghost opacity-70",
+              )}
+              onClick={() => onMutedChange(!muted)}
+              title={muted ? "开启发音" : "静音"}
+              aria-label={muted ? "开启发音" : "静音"}
+            >
+              {muted ? (
+                <VolumeX className="size-4" />
+              ) : (
+                <Volume2 className="size-4" />
+              )}
+            </button>
+          )}
         </div>
         <button
           type="button"

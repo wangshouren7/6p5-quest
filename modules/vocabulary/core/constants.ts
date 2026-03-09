@@ -68,7 +68,6 @@ export type MorphemeRole = (typeof MORPHEME_ROLES)[number];
 /** 词汇 AI 补全默认配置（与 Leva useControls 一致） */
 export const DEFAULT_VOCABULARY_AI_CONTROLS = {
   baseUrl: "https://api.openai.com/v1",
-  accessToken:
-    "Ask-or-v1-561192548ad90bcce72a355f26a8e288a47c68793341280e24aeb1962b911bc1",
+  accessToken: "",
   model: "gpt-4o-mini",
 } as const;

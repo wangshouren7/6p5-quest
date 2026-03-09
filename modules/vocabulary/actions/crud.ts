@@ -7,6 +7,7 @@ import type {
     IVocabularyEntryFormData,
 } from "@/modules/vocabulary/core";
 import { VOCABULARY_CATEGORIES } from "@/modules/vocabulary/core";
+import { normalizeWord } from "@/utils/string";
 import {
     normalizeMorphemeText,
     parseCollocationsJson,
@@ -166,7 +167,7 @@ export async function getVocabularyEntryById(id: number) {
 export async function createVocabularyEntry(
   data: IVocabularyEntryFormData,
 ): Promise<{ id: number } | { error: string }> {
-  const wordLower = data.word.trim().toLowerCase();
+  const wordLower = normalizeWord(data.word);
   if (!wordLower) return { error: "单词不能为空" };
 
   const existing = await db.vocabularyEntry.findUnique({
@@ -271,7 +272,7 @@ export async function updateVocabularyEntry(
   const entry = await db.vocabularyEntry.findUnique({ where: { id } });
   if (!entry) return { error: "单词不存在" };
 
-  const wordLower = data.word.trim().toLowerCase();
+  const wordLower = normalizeWord(data.word);
   if (!wordLower) return { error: "单词不能为空" };
 
   const duplicate = await db.vocabularyEntry.findFirst({
