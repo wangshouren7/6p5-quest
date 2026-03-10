@@ -4,6 +4,12 @@ import type { ChapterItem, WordItem } from "@/modules/corpus/core/types";
 import { db } from "@/modules/db/client";
 import { normalizeWord } from "@/utils/string";
 
+/** audioPath 可能是相对路径 /listen/... 或完整 URL（如 Vercel Blob），统一为可用的 audioUrl */
+function toAudioUrl(audioPath: string): string {
+  if (/^https?:\/\//i.test(audioPath)) return audioPath;
+  return audioPath.startsWith("/") ? audioPath : `/${audioPath}`;
+}
+
 /** 从 DB 获取章节列表（用于侧栏与选择） */
 export async function getChapters(): Promise<ChapterItem[]> {
   const chapters = await db.corpusChapter.findMany({
@@ -34,7 +40,7 @@ export async function getWords(
     word: w.word,
     phonetic: w.phonetic ?? undefined,
     meaning: w.meaning,
-    audioUrl: w.audioPath.startsWith("/") ? w.audioPath : `/${w.audioPath}`,
+    audioUrl: toAudioUrl(w.audioPath),
   }));
 }
 
@@ -166,7 +172,7 @@ async function enumerateCorpusWordsFromDb(): Promise<
     word: w.word,
     phonetic: w.phonetic ?? undefined,
     meaning: w.meaning,
-    audioUrl: w.audioPath.startsWith("/") ? w.audioPath : `/${w.audioPath}`,
+    audioUrl: toAudioUrl(w.audioPath),
   }));
 }
 

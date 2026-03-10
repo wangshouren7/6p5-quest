@@ -9,6 +9,7 @@
     "lint": "next lint",
     "db:seed": "prisma db seed",
     "db:reset": "pnpm prisma migrate reset && pnpm db:seed",
+    "upload-corpus-audio": "tsx scripts/upload-corpus-audio-to-blob.ts",
     "postinstall": "pnpm prisma generate"
   },
   "prisma": {
@@ -19,6 +20,7 @@
     "@prisma/adapter-libsql": "^7.4.2",
     "@prisma/client": "^7.4.2",
     "@tanstack/react-table": "^8.21.3",
+    "@vercel/blob": "^2.3.1",
     "ahooks": "^3.9.6",
     "clsx": "^2.1.1",
     "cn": "^0.1.1",
@@ -43,9 +45,11 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/cli-progress": "^3.11.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cli-progress": "^3.12.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
