@@ -9,13 +9,13 @@ import {
     getCoreRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { ImageDown, Maximize2, Minimize2, Pencil, Trash2 } from "lucide-react";
+import { AlertCircle, ImageDown, Maximize2, Minimize2, Pencil, Trash2 } from "lucide-react";
 import { useMemo, type ReactNode } from "react";
 import type { IVocabularyEntryListItem } from "../core";
 
 type ViewMode = "list" | "grid";
 
-/** 工具栏右侧：网格时显示每行列数+全屏按钮，以及背诵乱序+背诵模式按钮。列数控件展示与当前视口有效列数一致。 */
+/** 工具栏右侧：网格时显示每行列数+全屏按钮，以及背诵乱序+背诵模式+听单词按钮。列数控件展示与当前视口有效列数一致。 */
 export function WordListToolbarExtras({
   viewMode,
   gridCols,
@@ -25,8 +25,10 @@ export function WordListToolbarExtras({
   reciteShuffle,
   onReciteShuffleChange,
   reciteActive,
+  listenActive,
   itemsLength,
   onStartRecite,
+  onStartListen,
 }: {
   viewMode: ViewMode;
   gridCols: number;
@@ -36,8 +38,10 @@ export function WordListToolbarExtras({
   reciteShuffle: boolean;
   onReciteShuffleChange: (v: boolean) => void;
   reciteActive: boolean;
+  listenActive: boolean;
   itemsLength: number;
   onStartRecite: () => void;
+  onStartListen: () => void;
 }) {
   return (
     <>
@@ -75,12 +79,22 @@ export function WordListToolbarExtras({
       <button
         type="button"
         className="btn btn-sm"
-        disabled={itemsLength === 0 || reciteActive}
+        disabled={itemsLength === 0 || reciteActive || listenActive}
         onClick={onStartRecite}
         title="背诵模式"
         aria-label="背诵模式"
       >
         背诵模式
+      </button>
+      <button
+        type="button"
+        className="btn btn-sm"
+        disabled={itemsLength === 0 || reciteActive || listenActive}
+        onClick={onStartListen}
+        title="按顺序播放单词发音、拼写与中文释义"
+        aria-label="听单词"
+      >
+        听单词
       </button>
     </>
   );
@@ -93,6 +107,7 @@ export interface WordListTableViewProps {
   onSelectEntry: (entry: IVocabularyEntryListItem) => void;
   onEdit: (entry: IVocabularyEntryListItem) => void;
   onDelete: (e: React.MouseEvent, id: number) => void;
+  onForget?: (entryId: number) => void;
   deleteLoading: number | null;
 }
 
@@ -101,6 +116,7 @@ export function WordListTableView({
   onSelectEntry,
   onEdit,
   onDelete,
+  onForget,
   deleteLoading,
 }: WordListTableViewProps) {
   const columns = useMemo(
@@ -142,6 +158,17 @@ export function WordListTableView({
           <span className="text-sm opacity-80">{getValue() ?? "—"}</span>
         ),
       }),
+      columnHelper.accessor("forgetCount", {
+        header: "遗忘",
+        cell: ({ getValue }) => {
+          const n = getValue() ?? 0;
+          return (
+            <span className="text-sm tabular-nums" title={`遗忘 ${n} 次`}>
+              {n > 0 ? n : "—"}
+            </span>
+          );
+        },
+      }),
       columnHelper.display({
         id: "actions",
         header: () => <span className="w-20 text-right block">操作</span>,
@@ -153,6 +180,17 @@ export function WordListTableView({
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               <div className="flex justify-end gap-1">
+                {onForget && (
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-xs btn-square"
+                    onClick={() => onForget(entry.id)}
+                    title={entry.forgetCount != null && entry.forgetCount > 0 ? `忘了 +1（当前 ${entry.forgetCount}）` : "忘了 +1"}
+                    aria-label="忘了 +1"
+                  >
+                    <AlertCircle className="size-3.5" />
+                  </button>
+                )}
                 <button
                   type="button"
                   className="btn btn-ghost btn-xs btn-square"
@@ -178,7 +216,7 @@ export function WordListTableView({
         },
       }),
     ],
-    [onEdit, onDelete, deleteLoading],
+    [onEdit, onDelete, onForget, deleteLoading],
   );
 
   const table = useReactTable({

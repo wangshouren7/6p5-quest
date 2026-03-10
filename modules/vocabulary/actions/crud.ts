@@ -354,6 +354,24 @@ export async function updateVocabularyEntry(
   return { ok: true };
 }
 
+/** 将指定单词的遗忘次数加 1，返回更新后的次数 */
+export async function incrementVocabularyEntryForgetCount(
+  entryId: number,
+): Promise<{ ok: true; forgetCount: number } | { error: string }> {
+  const entry = await db.vocabularyEntry.findUnique({
+    where: { id: entryId },
+    select: { id: true },
+  });
+  if (!entry) return { error: "单词不存在" };
+
+  const updated = await db.vocabularyEntry.update({
+    where: { id: entryId },
+    data: { forgetCount: { increment: 1 } },
+    select: { forgetCount: true },
+  });
+  return { ok: true, forgetCount: updated.forgetCount };
+}
+
 /** 删除单词 */
 export async function deleteVocabularyEntry(
   id: number,

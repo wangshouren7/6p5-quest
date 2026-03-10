@@ -2,16 +2,16 @@
 
 import { useCallback } from "react";
 import {
-    aiFillVocabulary,
-    createVocabularyEntry,
-    getVocabularyFilterOptions,
-    updateVocabularyEntry,
+  aiFillVocabulary,
+  createVocabularyEntry,
+  getVocabularyFilterOptions,
+  updateVocabularyEntry,
 } from "../actions";
 import type {
-    IVocabularyAiFillResult,
-    IVocabularyEntryFormData,
-    IVocabularyFilterOptions,
-    VocabularyAiConfig,
+  IVocabularyAiFillResult,
+  IVocabularyEntryFormData,
+  IVocabularyFilterOptions,
+  VocabularyAiConfig,
 } from "../core";
 
 export interface UseEntryFormActionsReturn {
@@ -68,8 +68,11 @@ export function useEntryFormActions(): UseEntryFormActionsReturn {
     async (
       entryId: number,
       payload: IVocabularyEntryFormData,
-    ): Promise<{ id?: number; error?: string }> =>
-      updateVocabularyEntry(entryId, payload),
+    ): Promise<{ id?: number; error?: string }> => {
+      const result = await updateVocabularyEntry(entryId, payload);
+      if ("error" in result) return { error: result.error };
+      return { id: entryId };
+    },
     [],
   );
 

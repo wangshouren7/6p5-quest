@@ -3,7 +3,7 @@ export {
     aiParseBatchVocabulary, runVocabularyAiFillBatch, upsertVocabularyAiSettings
 } from "./ai";
 export {
-    createVocabularyEntry, createVocabularyMorpheme, deleteVocabularyEntry, getVocabularyCategories, getVocabularyEntryById, isVocabularyCategoryName, resolveMorphemeIdsFromAiResult, updateVocabularyEntry
+    createVocabularyEntry, createVocabularyMorpheme, deleteVocabularyEntry, getVocabularyCategories, getVocabularyEntryById, incrementVocabularyEntryForgetCount, isVocabularyCategoryName, resolveMorphemeIdsFromAiResult, updateVocabularyEntry
 } from "./crud";
 export { getVocabularyEntries, getVocabularyFilterOptions } from "./filter";
 export {

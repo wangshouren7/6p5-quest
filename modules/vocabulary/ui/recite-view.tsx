@@ -1,22 +1,13 @@
 "use client";
 
 import { cn } from "@/modules/ui/jsx";
-import { Volume2, VolumeX } from "lucide-react";
+import { AlertCircle, Volume2, VolumeX } from "lucide-react";
 import { useEffect } from "react";
 import type { IVocabularyEntryListItem } from "../core";
+import { meaningSummary } from "../core";
 import { MfpCard } from "./mfp-card";
 
-const MEANING_SUMMARY_MAX_LEN = 120;
 const AUTO_PLAY_DELAY_MS = 400;
-
-function meaningSummary(entry: IVocabularyEntryListItem): string {
-  if (!entry.meanings?.length) return "（无释义）";
-  const first = entry.meanings[0];
-  const text = `${first.partOfSpeech} ${first.meanings.filter(Boolean).join("；")}`;
-  return text.length > MEANING_SUMMARY_MAX_LEN
-    ? text.slice(0, MEANING_SUMMARY_MAX_LEN) + "…"
-    : text;
-}
 
 export interface ReciteViewProps {
   items: IVocabularyEntryListItem[];
@@ -33,6 +24,8 @@ export interface ReciteViewProps {
   onNext: () => void;
   onExit: () => void;
   onShowFirstChange: (v: "word" | "meaning") => void;
+  /** 点击「忘了 +1」时调用 */
+  onForget?: (entryId: number) => void;
 }
 
 export function ReciteView({
@@ -48,6 +41,7 @@ export function ReciteView({
   onNext,
   onExit,
   onShowFirstChange,
+  onForget,
 }: ReciteViewProps) {
   const total = items.length;
   const entry = total > 0 ? items[index] : null;
@@ -163,6 +157,7 @@ export function ReciteView({
                 root: entry.root,
                 categoryName: entry.categoryName,
                 collocations: entry.collocations ?? [],
+                forgetCount: entry.forgetCount,
               }}
               className="bg-base-200"
             />
@@ -205,6 +200,25 @@ export function ReciteView({
             揭示
           </button>
         ) : null}
+        {onForget && entry && (
+          <button
+            type="button"
+            className="btn btn-sm btn-ghost gap-1"
+            onClick={() => onForget(entry.id)}
+            title={
+              entry.forgetCount != null && entry.forgetCount > 0
+                ? `忘了 +1（当前 ${entry.forgetCount}）`
+                : "忘了 +1"
+            }
+            aria-label="忘了 +1"
+          >
+            <AlertCircle className="size-3.5" />
+            <span>忘了 +1</span>
+            {entry.forgetCount != null && entry.forgetCount > 0 && (
+              <span className="opacity-70">({entry.forgetCount})</span>
+            )}
+          </button>
+        )}
         <button
           type="button"
           className="btn btn-sm"

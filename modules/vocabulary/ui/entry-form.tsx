@@ -7,28 +7,28 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import type {
-  ICollocationItem,
-  IMorphemeItem,
-  IPartOfSpeechMeaning,
-  IVocabularyAiFillResult,
-  IVocabularyEntryFormData,
-  IVocabularyFilterOptions,
-  VocabularyAiConfig,
+    ICollocationItem,
+    IMorphemeItem,
+    IPartOfSpeechMeaning,
+    IVocabularyAiFillResult,
+    IVocabularyEntryFormData,
+    IVocabularyFilterOptions,
+    VocabularyAiConfig,
 } from "../core";
 import { DEFAULT_PART_OF_SPEECH } from "../core";
 import {
-  entryFormSchema,
-  type EntryFormValues,
+    entryFormSchema,
+    type EntryFormValues,
 } from "../core/entry-form-schema";
 import { useVocabularyOptional } from "./context";
 import {
-  EntryFormActions,
-  EntryFormCollocationsSection,
-  EntryFormHeader,
-  EntryFormMeaningsSection,
-  EntryFormMnemonicSection,
-  EntryFormMorphemesSection,
-  EntryFormWordRow,
+    EntryFormActions,
+    EntryFormCollocationsSection,
+    EntryFormHeader,
+    EntryFormMeaningsSection,
+    EntryFormMnemonicSection,
+    EntryFormMorphemesSection,
+    EntryFormWordRow,
 } from "./entry-form-sections";
 import { useEntryFormActions } from "./use-entry-form-actions";
 
@@ -147,10 +147,11 @@ export function EntryForm({
   const aiFilledSuffixes = watch("aiFilledSuffixes") ?? [];
   const aiFilledRoot = watch("aiFilledRoot") ?? null;
 
+  const loadFilterOptionsFn = actions.loadFilterOptions;
   const loadOptions = useCallback(async () => {
-    const opts = await actions.loadFilterOptions();
+    const opts = await loadFilterOptionsFn();
     setOptions(opts);
-  }, [actions]);
+  }, [loadFilterOptionsFn]);
 
   useEffect(() => {
     if (filterOptionsProp == null) loadOptions();

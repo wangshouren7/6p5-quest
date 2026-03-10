@@ -39,7 +39,21 @@ export function ResultPanel() {
           },
     [words, userAnswers],
   );
-  const { correctCount } = result;
+  const { correctCount, wrongIndices } = result;
+
+  const wrongWords = useMemo(
+    () => wrongIndices.map((i) => words[i]),
+    [words, wrongIndices],
+  );
+
+  const handleContinueWrongWords = () => {
+    if (wrongWords.length === 0) return;
+    corpus.resetTest();
+    corpus.startTest(wrongWords, {
+      rate: savedRate,
+      shuffle: savedShuffle,
+    });
+  };
 
   const {
     rate: savedRate,
@@ -93,13 +107,29 @@ export function ResultPanel() {
         })}
       </div>
 
-      <button
-        type="button"
-        className="btn btn-primary"
-        onClick={() => corpus.resetTest()}
-      >
-        再测一次
-      </button>
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => corpus.resetTest()}
+        >
+          再测一次
+        </button>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={handleContinueWrongWords}
+          disabled={wrongWords.length === 0}
+          title={
+            wrongWords.length === 0
+              ? "没有错词"
+              : `听写本轮 ${wrongWords.length} 个错词`
+          }
+        >
+          继续听写错词
+          {wrongWords.length > 0 && ` (${wrongWords.length})`}
+        </button>
+      </div>
     </div>
   );
 }

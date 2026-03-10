@@ -10,6 +10,7 @@ import { getErrorMessage } from "@/utils/error";
 import { getDefaultGridColsForWidth } from "@/utils/format";
 import { useControls } from "leva";
 import React, { startTransition, useCallback, useState } from "react";
+import { take } from "rxjs";
 import type { ChapterItem } from "../core";
 import { Corpus as CorpusClass } from "../core";
 import { DEFAULT_CORPUS_CONTROLS, USER_ID } from "../core/constants";
@@ -89,11 +90,13 @@ export function Corpus() {
   }, [corpus, rate, shuffle, showResultOnBlur, dictationIntervalMs]);
   React.useEffect(() => {
     if (!corpus || typeof window === "undefined") return;
-    const current = corpus.controls.value$.value.gridCols;
-    if (current === DEFAULT_CORPUS_CONTROLS.gridCols)
-      corpus.controls.change({
-        gridCols: getDefaultGridColsForWidth(window.innerWidth),
-      });
+    const sub = corpus.controls.value$.pipe(take(1)).subscribe((current) => {
+      if (current.gridCols === DEFAULT_CORPUS_CONTROLS.gridCols)
+        corpus.controls.change({
+          gridCols: getDefaultGridColsForWidth(window.innerWidth),
+        });
+    });
+    return () => sub.unsubscribe();
   }, [corpus]);
 
   const [fetchId, setFetchId] = useState(0);

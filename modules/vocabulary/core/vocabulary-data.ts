@@ -1,15 +1,12 @@
 import { getErrorMessage } from "@/utils/error";
 import { BehaviorSubject } from "rxjs";
 import type {
-  IVocabularyEntryListItem,
-  IVocabularyFilter,
-  IVocabularyFilterOptions,
+    IVocabularyFilter,
+    IVocabularyFilterOptions
 } from "./types";
+import type { IVocabularyResult } from "./vocabulary";
 
-export interface IVocabularyResult {
-  items: IVocabularyEntryListItem[];
-  total: number;
-}
+export type { IVocabularyResult };
 
 export interface IVocabularyDataFetch {
   fetchEntries: (

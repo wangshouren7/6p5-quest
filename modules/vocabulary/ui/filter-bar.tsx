@@ -34,6 +34,8 @@ export function VocabularyFilterBar() {
   const selectedCategoryIds = filter?.categoryIds ?? [];
   const createdAtFrom = filter?.createdAtFrom ?? "";
   const createdAtTo = filter?.createdAtTo ?? "";
+  const forgetCountMin = filter?.forgetCountMin;
+  const forgetCountMax = filter?.forgetCountMax;
 
   return (
     <FilterBarCollapse title="单词筛选" defaultOpen={isFirst}>
@@ -170,6 +172,57 @@ export function VocabularyFilterBar() {
               清空
             </button>
           )}
+        </div>
+      </FilterField>
+      <FilterField label="遗忘次数">
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            type="number"
+            min={0}
+            className="input input-sm input-bordered w-20"
+            placeholder="至少"
+            value={forgetCountMin !== undefined ? String(forgetCountMin) : ""}
+            onChange={(e) => {
+              const v = e.target.value;
+              setFilter((f) => ({
+                ...f,
+                forgetCountMin: v === "" ? undefined : Math.max(0, parseInt(v, 10) || 0),
+              }));
+            }}
+            aria-label="遗忘次数至少"
+          />
+          <span className="text-xs text-base-content/60 shrink-0">至</span>
+          <input
+            type="number"
+            min={0}
+            className="input input-sm input-bordered w-20"
+            placeholder="至多"
+            value={forgetCountMax !== undefined ? String(forgetCountMax) : ""}
+            onChange={(e) => {
+              const v = e.target.value;
+              setFilter((f) => ({
+                ...f,
+                forgetCountMax: v === "" ? undefined : Math.max(0, parseInt(v, 10) || 0),
+              }));
+            }}
+            aria-label="遗忘次数至多"
+          />
+          {(forgetCountMin !== undefined) || (forgetCountMax !== undefined) ? (
+            <button
+              type="button"
+              className="btn btn-ghost btn-xs"
+              onClick={() =>
+                setFilter((f) => ({
+                  ...f,
+                  forgetCountMin: undefined,
+                  forgetCountMax: undefined,
+                }))
+              }
+              aria-label="清空遗忘次数"
+            >
+              清空
+            </button>
+          ) : null}
         </div>
       </FilterField>
       <div className="flex items-center gap-2">

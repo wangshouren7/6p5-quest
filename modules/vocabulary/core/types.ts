@@ -32,6 +32,10 @@ export interface IVocabularyFilter {
   createdAtFrom?: string;
   /** 创建时间止（含），YYYY-MM-DD */
   createdAtTo?: string;
+  /** 遗忘次数：至少（>=） */
+  forgetCountMin?: number;
+  /** 遗忘次数：至多（<=） */
+  forgetCountMax?: number;
 }
 
 /** 列表项：单词 + 关联数据 */
@@ -49,6 +53,8 @@ export interface IVocabularyEntryListItem {
   root: IMorphemeItem | null;
   /** 固定搭配（短语 + 意思） */
   collocations: ICollocationItem[];
+  /** 遗忘次数：用户标记「忘了」的累计次数 */
+  forgetCount: number;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -34,7 +34,7 @@ export function useResultPanelStats({
   corpus,
   userId,
 }: UseResultPanelStatsOptions): UseResultPanelStatsReturn {
-  const submittedRef = useRef(false);
+  const submittedTestKeyRef = useRef<string | null>(null);
 
   const { data: masteredWords = [], run: runMastered } = useRequest(
     () => getMasteredWordSet(userId),
@@ -44,14 +44,24 @@ export function useResultPanelStats({
 
   useEffect(() => {
     if (accuracy == null) {
-      submittedRef.current = false;
+      submittedTestKeyRef.current = null;
       return;
     }
     if (words.length === 0) return;
     const { practiceMode } = corpus.getLastTestMeta();
     if (practiceMode) return;
-    if (submittedRef.current) return;
-    submittedRef.current = true;
+    const testKey = [
+      String(userId),
+      accuracy.toFixed(6),
+      words
+        .map(
+          (w, i) =>
+            `${w.id ?? `w:${normalizeWord(w.word)}`}:${normalizeWord(userAnswers[i] ?? "")}`,
+        )
+        .join("|"),
+    ].join("::");
+    if (submittedTestKeyRef.current === testKey) return;
+    submittedTestKeyRef.current = testKey;
     const items = words
       .map((w, i) => ({
         wordId: w.id,
@@ -59,9 +69,11 @@ export function useResultPanelStats({
         userInput: (userAnswers[i] ?? "").trim() || undefined,
       }))
       .filter((x): x is typeof x & { wordId: number } => x.wordId != null);
-    updateUserWordStats(userId, items).catch((err) =>
-      devError("updateUserWordStats failed", err),
-    );
+    if (items.length === 0) return;
+    updateUserWordStats(userId, items).catch((err) => {
+      submittedTestKeyRef.current = null;
+      devError("updateUserWordStats failed", err);
+    });
   }, [accuracy, words, userAnswers, corpus, userId]);
 
   const handleToggleMastered = useCallback(

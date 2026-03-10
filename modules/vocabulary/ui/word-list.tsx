@@ -6,12 +6,14 @@ import { SimpleModal } from "@/modules/ui/simple-modal";
 import { shuffleArray } from "@/utils/array";
 import { getDefaultGridColsForWidth } from "@/utils/format";
 import html2canvas from "html2canvas-pro";
-import { LayoutGrid, List, Volume2 } from "lucide-react";
+import { AlertCircle, LayoutGrid, List, Square, Volume2 } from "lucide-react";
 import { useObservable } from "rcrx";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type {
-  IVocabularyEntryFormData,
-  IVocabularyEntryListItem,
+import { incrementVocabularyEntryForgetCount } from "../actions";
+import {
+  meaningSummary,
+  type IVocabularyEntryFormData,
+  type IVocabularyEntryListItem,
 } from "../core";
 import { useVocabulary } from "./context";
 import { EntryForm } from "./entry-form";
@@ -90,7 +92,65 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
   const [reciteShuffle, setReciteShuffle] = useState(false);
   /** 背诵模式是否静音（不自动播放单词发音） */
   const [reciteMuted, setReciteMuted] = useState(false);
-  const { speak } = useWordSpeech();
+  /** 听单词模式：按顺序播放当前列表的单词、拼写、释义 */
+  const [listenActive, setListenActive] = useState(false);
+  const [listenIndex, setListenIndex] = useState(0);
+  const [listenTotal, setListenTotal] = useState(0);
+  const {
+    speak,
+    speakSequence,
+    cancelSequence,
+    preferredLang,
+    enVoices,
+    preferredVoiceName,
+    setPreferredVoiceName,
+  } = useWordSpeech();
+
+  const playNextWord = useCallback(
+    (list: IVocabularyEntryListItem[], i: number) => {
+      if (i >= list.length) {
+        setListenActive(false);
+        return;
+      }
+      setListenIndex(i);
+      const entry = list[i];
+      const segments = [
+        { text: entry.word, lang: preferredLang },
+        {
+          text: entry.word.split("").join(", "),
+          lang: preferredLang,
+        },
+        { text: meaningSummary(entry), lang: "zh-CN" },
+      ];
+      speakSequence(segments, () => playNextWord(list, i + 1));
+    },
+    [preferredLang, speakSequence],
+  );
+
+  const onStartListen = useCallback(() => {
+    if (items.length === 0) return;
+    setListenTotal(items.length);
+    setListenActive(true);
+    setListenIndex(0);
+    playNextWord(items, 0);
+  }, [items, items.length, playNextWord]);
+
+  const onStopListen = useCallback(() => {
+    cancelSequence();
+    setListenActive(false);
+  }, [cancelSequence]);
+
+  /** 听单词时切换语音：先更新选项，取消当前播放，并从当前单词重新播 */
+  const onListenVoiceChange = useCallback(
+    (value: string | null) => {
+      setPreferredVoiceName(value);
+      if (listenActive && items.length > 0) {
+        cancelSequence();
+        playNextWord(items, listenIndex);
+      }
+    },
+    [listenActive, items, listenIndex, cancelSequence, playNextWord],
+  );
 
   const totalPages = Math.max(1, Math.ceil(total / (pageSize ?? 200)));
 
@@ -122,6 +182,7 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
                   root: entry.root,
                   categoryName: entry.categoryName,
                   collocations: entry.collocations ?? [],
+                  forgetCount: entry.forgetCount,
                 }}
                 onEdit={() => handleEdit(entry)}
                 onDelete={() =>
@@ -130,6 +191,7 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
                     entry.id,
                   )
                 }
+                onForget={() => handleForget(entry.id)}
                 deleteLoading={deleteLoading === entry.id}
                 fillWidth
                 hintOpacity={
@@ -175,6 +237,22 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
               >
                 <Volume2 className="size-3.5" />
               </button>
+              <button
+                type="button"
+                className="btn btn-ghost btn-xs btn-square p-0 min-h-0 h-6 w-6 text-base-content/50 hover:text-base-content/80"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleForget(entry.id);
+                }}
+                title={
+                  entry.forgetCount != null && entry.forgetCount > 0
+                    ? `忘了 +1（当前 ${entry.forgetCount}）`
+                    : "忘了 +1"
+                }
+                aria-label="忘了 +1"
+              >
+                <AlertCircle className="size-3.5" />
+              </button>
             </div>
           );
         })
@@ -218,6 +296,22 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
                 >
                   <Volume2 className="size-3.5" />
                 </button>
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-xs btn-square p-0 min-h-0 h-6 w-6 text-base-content/50 hover:text-base-content/80"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleForget(entry.id);
+                  }}
+                  title={
+                    entry.forgetCount != null && entry.forgetCount > 0
+                      ? `忘了 +1（当前 ${entry.forgetCount}）`
+                      : "忘了 +1"
+                  }
+                  aria-label="忘了 +1"
+                >
+                  <AlertCircle className="size-3.5" />
+                </button>
               </div>
               {meaningText && (
                 <span className="text-sm text-base-content/80 mt-0.5 line-clamp-2">
@@ -253,6 +347,36 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
       }
     },
     [deleteEntry, onError, onRefresh],
+  );
+
+  const handleForget = useCallback(
+    async (entryId: number) => {
+      const result = await incrementVocabularyEntryForgetCount(entryId);
+      if ("error" in result) {
+        onError?.(result.error);
+        return;
+      }
+      onRefresh();
+    },
+    [onError, onRefresh],
+  );
+
+  /** 背诵模式下「忘了 +1」：只更新背诵列表中的该项，不刷新整页；成功后自动揭示 */
+  const handleForgetInRecite = useCallback(
+    async (entryId: number) => {
+      const result = await incrementVocabularyEntryForgetCount(entryId);
+      if ("error" in result) {
+        onError?.(result.error);
+        return;
+      }
+      setReciteItems((prev) =>
+        prev.map((e) =>
+          e.id === entryId ? { ...e, forgetCount: result.forgetCount } : e,
+        ),
+      );
+      setReciteRevealed(true);
+    },
+    [onError],
   );
 
   const handleExportImage = useCallback(async () => {
@@ -327,6 +451,7 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
           reciteShuffle={reciteShuffle}
           onReciteShuffleChange={setReciteShuffle}
           reciteActive={reciteActive}
+          listenActive={listenActive}
           itemsLength={items.length}
           onStartRecite={() => {
             setReciteItems(reciteShuffle ? shuffleArray(items) : [...items]);
@@ -334,8 +459,42 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
             setReciteRevealed(false);
             setReciteActive(true);
           }}
+          onStartListen={onStartListen}
         />
       </div>
+
+      {listenActive && (
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border border-base-300 bg-base-200 px-3 py-2">
+          <span className="text-sm text-base-content/80">
+            正在播放 第 {listenIndex + 1} / {listenTotal}
+          </span>
+          <label className="flex items-center gap-1.5 text-sm">
+            <span className="text-base-content/60 shrink-0">英文语音</span>
+            <select
+              className="select select-sm select-bordered min-w-0 max-w-48"
+              value={preferredVoiceName ?? ""}
+              onChange={(e) => onListenVoiceChange(e.target.value || null)}
+              aria-label="选择英文发音"
+            >
+              <option value="">默认（{preferredLang}）</option>
+              {enVoices.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.name} ({opt.lang})
+                </option>
+              ))}
+            </select>
+          </label>
+          <button
+            type="button"
+            className="btn btn-sm btn-ghost"
+            onClick={onStopListen}
+            aria-label="停止"
+          >
+            <Square className="size-3.5 mr-1 inline" />
+            停止
+          </button>
+        </div>
+      )}
 
       {reciteActive ? (
         <ReciteView
@@ -360,6 +519,7 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
           }}
           onExit={() => setReciteActive(false)}
           onShowFirstChange={setReciteShowFirst}
+          onForget={handleForgetInRecite}
         />
       ) : viewMode === "list" ? (
         <WordListTableView
@@ -367,6 +527,7 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
           onSelectEntry={setSelectedEntry}
           onEdit={handleEdit}
           onDelete={handleDelete}
+          onForget={handleForget}
           deleteLoading={deleteLoading}
         />
       ) : (
@@ -411,6 +572,7 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
               root: selectedEntry.root,
               categoryName: selectedEntry.categoryName,
               collocations: selectedEntry.collocations ?? [],
+              forgetCount: selectedEntry.forgetCount,
             }}
             onClose={() => setSelectedEntry(null)}
           />

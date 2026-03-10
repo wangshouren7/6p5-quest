@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/modules/ui/jsx";
-import { Pencil, Trash2, Volume2 } from "lucide-react";
+import { AlertCircle, Pencil, Trash2, Volume2 } from "lucide-react";
 import type {
   ICollocationItem,
   IMorphemeItem,
@@ -20,6 +20,8 @@ export interface MfpCardData {
   categoryName: string | null;
   /** 固定搭配（短语 + 意思） */
   collocations?: ICollocationItem[];
+  /** 遗忘次数（可选展示） */
+  forgetCount?: number;
 }
 
 export interface MfpCardProps {
@@ -30,6 +32,8 @@ export interface MfpCardProps {
   onDelete?: () => void;
   /** 删除请求进行中时禁用删除按钮 */
   deleteLoading?: boolean;
+  /** 点击「忘了 +1」时调用，传入时显示该按钮 */
+  onForget?: () => void;
   /** 为 true 时卡片宽度填满容器（用于网格布局） */
   fillWidth?: boolean;
   /** 分类与释义等提示的透明度 0–1，小于 1 时弱化显示（如全屏「提示透明度」滑块） */
@@ -42,6 +46,7 @@ export function MfpCard({
   onClose,
   onEdit,
   onDelete,
+  onForget,
   deleteLoading = false,
   fillWidth = false,
   hintOpacity,
@@ -58,9 +63,10 @@ export function MfpCard({
     root,
     categoryName,
     collocations = [],
+    forgetCount: dataForgetCount,
   } = data;
 
-  const hasActions = onClose ?? onEdit ?? onDelete;
+  const hasActions = onClose ?? onEdit ?? onDelete ?? onForget;
   const hasHoverActions = onEdit ?? onDelete;
   const { speak } = useWordSpeech();
 
@@ -100,44 +106,72 @@ export function MfpCard({
                 {categoryName}
               </span>
             )}
+            {dataForgetCount != null && dataForgetCount > 0 && (
+              <span
+                className={cn(
+                  "badge badge-ghost badge-xs tabular-nums text-base-content/70",
+                  dimHints && "select-none transition-opacity duration-200",
+                )}
+                style={dimHints ? { opacity: hintOpacity } : undefined}
+                title="遗忘次数"
+              >
+                忘 {dataForgetCount}
+              </span>
+            )}
           </div>
         </div>
         {hasActions && (
-          <div
-            className={cn(
-              "flex shrink-0 items-center gap-0.5 transition-opacity",
-              hasHoverActions && "opacity-0 group-hover:opacity-100",
-            )}
-          >
-            {onEdit && (
+          <div className="flex shrink-0 items-center gap-0.5">
+            {onForget && (
               <button
                 type="button"
                 className="btn btn-ghost btn-xs btn-square"
                 onClick={(e) => {
                   e.stopPropagation();
-                  onEdit();
+                  onForget();
                 }}
-                title="编辑"
-                aria-label="编辑"
+                title={dataForgetCount != null && dataForgetCount > 0 ? `忘了 +1（当前 ${dataForgetCount}）` : "忘了 +1"}
+                aria-label="忘了 +1"
               >
-                <Pencil className="size-3.5" />
+                <AlertCircle className="size-3.5" />
               </button>
             )}
-            {onDelete && (
-              <button
-                type="button"
-                className="btn btn-ghost btn-xs btn-square text-error"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDelete();
-                }}
-                disabled={deleteLoading}
-                title="删除"
-                aria-label="删除"
-              >
-                <Trash2 className="size-3.5" />
-              </button>
-            )}
+            <div
+              className={cn(
+                "flex items-center gap-0.5 transition-opacity",
+                hasHoverActions && "opacity-0 group-hover:opacity-100",
+              )}
+            >
+              {onEdit && (
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-xs btn-square"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEdit();
+                  }}
+                  title="编辑"
+                  aria-label="编辑"
+                >
+                  <Pencil className="size-3.5" />
+                </button>
+              )}
+              {onDelete && (
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-xs btn-square text-error"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete();
+                  }}
+                  disabled={deleteLoading}
+                  title="删除"
+                  aria-label="删除"
+                >
+                  <Trash2 className="size-3.5" />
+                </button>
+              )}
+            </div>
             {onClose && (
               <button
                 type="button"

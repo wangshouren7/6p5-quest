@@ -82,6 +82,7 @@ model VocabularyEntry {
   category     VocabularyCategory?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   meanings     String?   // JSON: [{ partOfSpeech: string, meanings: string[] }]
   collocations String?   // JSON: [{ phrase: string, meaning: string }] 固定搭配
+  forgetCount  Int       @default(0) // 遗忘次数：用户点击「忘了 +1」累计
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   morphemes    VocabularyEntryMorpheme[]

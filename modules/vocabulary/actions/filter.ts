@@ -73,6 +73,7 @@ export async function getVocabularyEntries(
     suffixes: IMorphemeItem[];
     root: IMorphemeItem | null;
     collocations: ICollocationItem[];
+    forgetCount: number;
     createdAt: Date;
     updatedAt: Date;
   }>;
@@ -108,6 +109,14 @@ export async function getVocabularyEntries(
       createdAt.lte = new Date(`${filter.createdAtTo}T23:59:59.999Z`);
     }
     where.createdAt = createdAt;
+  }
+  const forgetCountMin = filter.forgetCountMin != null && filter.forgetCountMin >= 0 ? filter.forgetCountMin : undefined;
+  const forgetCountMax = filter.forgetCountMax != null && filter.forgetCountMax >= 0 ? filter.forgetCountMax : undefined;
+  if (forgetCountMin != null || forgetCountMax != null) {
+    where.forgetCount = {
+      ...(forgetCountMin != null && { gte: forgetCountMin }),
+      ...(forgetCountMax != null && { lte: forgetCountMax }),
+    };
   }
   if (
     filter.prefixIds?.length ||
@@ -191,6 +200,7 @@ export async function getVocabularyEntries(
           }
         : null,
       collocations: parseCollocationsJson(e.collocations),
+      forgetCount: e.forgetCount ?? 0,
       createdAt: e.createdAt,
       updatedAt: e.updatedAt,
     };

@@ -5,14 +5,14 @@ import { CorpusData } from "./data";
 import { DictationSession } from "./dictation-session";
 import { PracticeSession } from "./practice-session";
 import type {
-  ChapterItem,
-  IControls,
-  ICorpus,
-  ICorpusData,
-  IStartTestOptions,
-  ITestSession,
-  Selection,
-  WordItem,
+    ChapterItem,
+    IControls,
+    ICorpus,
+    ICorpusData,
+    IStartTestOptions,
+    ITestSession,
+    Selection,
+    WordItem,
 } from "./types";
 
 export type { IStartTestOptions } from "./types";
@@ -55,6 +55,7 @@ export class Corpus implements ICorpus {
   }
 
   resetTest() {
+    this.currentSession = null;
     this._data.resetTest();
     if (this.originalWordsBeforeTest.length > 0) {
       this._data.words$.next(this.originalWordsBeforeTest);
