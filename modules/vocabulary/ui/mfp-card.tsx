@@ -1,13 +1,13 @@
 "use client";
 
+import { useWordSpeech } from "@/modules/speech";
 import { cn } from "@/modules/ui/jsx";
 import { AlertCircle, Pencil, Trash2, Volume2 } from "lucide-react";
 import type {
-  ICollocationItem,
-  IMorphemeItem,
-  IPartOfSpeechMeaning,
+    ICollocationItem,
+    IMorphemeItem,
+    IPartOfSpeechMeaning,
 } from "../core";
-import { useWordSpeech } from "./use-word-speech";
 
 export interface MfpCardData {
   word: string;
@@ -130,7 +130,11 @@ export function MfpCard({
                   e.stopPropagation();
                   onForget();
                 }}
-                title={dataForgetCount != null && dataForgetCount > 0 ? `忘了 +1（当前 ${dataForgetCount}）` : "忘了 +1"}
+                title={
+                  dataForgetCount != null && dataForgetCount > 0
+                    ? `忘了 +1（当前 ${dataForgetCount}）`
+                    : "忘了 +1"
+                }
                 aria-label="忘了 +1"
               >
                 <AlertCircle className="size-3.5" />

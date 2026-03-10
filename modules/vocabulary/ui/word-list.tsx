@@ -1,12 +1,13 @@
 "use client";
 
 import { cn } from "@/modules/ui/jsx";
+import { ListenModeBar } from "@/modules/ui/listen-mode-bar";
 import { PaginationBar } from "@/modules/ui/pagination";
 import { SimpleModal } from "@/modules/ui/simple-modal";
 import { shuffleArray } from "@/utils/array";
 import { getDefaultGridColsForWidth } from "@/utils/format";
 import html2canvas from "html2canvas-pro";
-import { AlertCircle, LayoutGrid, List, Square, Volume2 } from "lucide-react";
+import { AlertCircle, LayoutGrid, List, Volume2 } from "lucide-react";
 import { useObservable } from "rcrx";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { incrementVocabularyEntryForgetCount } from "../actions";
@@ -464,36 +465,15 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
       </div>
 
       {listenActive && (
-        <div className="flex flex-wrap items-center gap-2 rounded-lg border border-base-300 bg-base-200 px-3 py-2">
-          <span className="text-sm text-base-content/80">
-            正在播放 第 {listenIndex + 1} / {listenTotal}
-          </span>
-          <label className="flex items-center gap-1.5 text-sm">
-            <span className="text-base-content/60 shrink-0">英文语音</span>
-            <select
-              className="select select-sm select-bordered min-w-0 max-w-48"
-              value={preferredVoiceName ?? ""}
-              onChange={(e) => onListenVoiceChange(e.target.value || null)}
-              aria-label="选择英文发音"
-            >
-              <option value="">默认（{preferredLang}）</option>
-              {enVoices.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.name} ({opt.lang})
-                </option>
-              ))}
-            </select>
-          </label>
-          <button
-            type="button"
-            className="btn btn-sm btn-ghost"
-            onClick={onStopListen}
-            aria-label="停止"
-          >
-            <Square className="size-3.5 mr-1 inline" />
-            停止
-          </button>
-        </div>
+        <ListenModeBar
+          listenIndex={listenIndex}
+          listenTotal={listenTotal}
+          enVoices={enVoices}
+          preferredVoiceName={preferredVoiceName}
+          preferredLang={preferredLang}
+          onVoiceChange={onListenVoiceChange}
+          onStop={onStopListen}
+        />
       )}
 
       {reciteActive ? (

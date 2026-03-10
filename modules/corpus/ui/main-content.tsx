@@ -1,8 +1,10 @@
 "use client";
 
 import { getWordsForDictation } from "@/modules/corpus/actions";
+import { useWordSpeech } from "@/modules/speech";
+import { ListenModeBar } from "@/modules/ui/listen-mode-bar";
 import { useObservable } from "rcrx";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { USER_ID } from "../core/constants";
 import { shuffleWords } from "../core/shuffle";
 import type { ICorpus } from "../core/types";
@@ -19,10 +21,12 @@ function Pagination({
   currentPage,
   totalPages,
   onPageChange,
+  disabled,
 }: {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  disabled?: boolean;
 }) {
   const showPages = ((): number[] => {
     if (totalPages <= 7)
@@ -43,7 +47,7 @@ function Pagination({
       <button
         type="button"
         className="btn btn-sm join-item"
-        disabled={currentPage <= 1}
+        disabled={disabled || currentPage <= 1}
         onClick={() => onPageChange(currentPage - 1)}
         aria-label="上一页"
       >
@@ -64,6 +68,7 @@ function Pagination({
             key={p}
             type="button"
             className={`btn btn-sm join-item ${p === currentPage ? "btn-active" : ""}`}
+            disabled={disabled}
             onClick={() => onPageChange(p)}
             aria-label={`第 ${p} 页`}
           >
@@ -74,7 +79,7 @@ function Pagination({
       <button
         type="button"
         className="btn btn-sm join-item"
-        disabled={currentPage >= totalPages}
+        disabled={disabled || currentPage >= totalPages}
         onClick={() => onPageChange(currentPage + 1)}
         aria-label="下一页"
       >
@@ -113,6 +118,19 @@ export function MainContent({
   const [page, setPage] = useState(1);
   const [pageSizeOption, setPageSizeOption] = useState<PageSizeOption>(200);
   const [customPageSize, setCustomPageSize] = useState(100);
+  /** 听单词模式：按顺序播放当前页单词、拼写、释义 */
+  const [listenActive, setListenActive] = useState(false);
+  const [listenIndex, setListenIndex] = useState(0);
+  const [listenTotal, setListenTotal] = useState(0);
+
+  const {
+    speakSequence,
+    cancelSequence,
+    preferredLang,
+    enVoices,
+    preferredVoiceName,
+    setPreferredVoiceName,
+  } = useWordSpeech();
 
   const displayList = useMemo(() => filteredWords ?? [], [filteredWords]);
   const { wordStats, handleToggleMastered } = useCorpusPageData({
@@ -138,6 +156,58 @@ export function MainContent({
           (safePage - 1) * effectivePageSize,
           safePage * effectivePageSize,
         );
+
+  const playNextWord = useCallback(
+    (list: Awaited<ReturnType<typeof getWordsForDictation>>, i: number) => {
+      if (i >= list.length) {
+        setListenActive(false);
+        return;
+      }
+      setListenIndex(i);
+      const entry = list[i];
+      const segments = [
+        { text: entry.word, lang: preferredLang },
+        {
+          text: entry.word.split("").join(", "),
+          lang: preferredLang,
+        },
+        { text: entry.meaning, lang: "zh-CN" },
+      ];
+      speakSequence(segments, () => playNextWord(list, i + 1));
+    },
+    [preferredLang, speakSequence],
+  );
+
+  const onStartListen = useCallback(() => {
+    if (pageSlice.length === 0) return;
+    setListenTotal(pageSlice.length);
+    setListenActive(true);
+    setListenIndex(0);
+    playNextWord(pageSlice, 0);
+  }, [pageSlice, playNextWord]);
+
+  const onStopListen = useCallback(() => {
+    cancelSequence();
+    setListenActive(false);
+  }, [cancelSequence]);
+
+  const onListenVoiceChange = useCallback(
+    (value: string | null) => {
+      setPreferredVoiceName(value);
+      if (listenActive && pageSlice.length > 0) {
+        cancelSequence();
+        playNextWord(pageSlice, listenIndex);
+      }
+    },
+    [
+      listenActive,
+      pageSlice,
+      listenIndex,
+      setPreferredVoiceName,
+      cancelSequence,
+      playNextWord,
+    ],
+  );
 
   const shuffle = controls?.shuffle ?? false;
   const rate = controls?.rate ?? 1;
@@ -188,6 +258,7 @@ export function MainContent({
         <button
           type="button"
           className="btn btn-primary"
+          disabled={listenActive}
           onClick={handleStartTest}
         >
           开始听写
@@ -195,9 +266,20 @@ export function MainContent({
         <button
           type="button"
           className="btn btn-secondary"
+          disabled={listenActive}
           onClick={handleStartPractice}
         >
           开始练习
+        </button>
+        <button
+          type="button"
+          className="btn btn-sm"
+          disabled={displayList.length === 0 || listenActive}
+          onClick={onStartListen}
+          title="按顺序播放当前页单词发音、拼写与释义"
+          aria-label="听单词"
+        >
+          听单词
         </button>
         <span className="text-sm text-base-content/60">
           共 {displayList.length} 个单词
@@ -210,6 +292,18 @@ export function MainContent({
           清空结果
         </button>
       </div>
+
+      {listenActive && (
+        <ListenModeBar
+          listenIndex={listenIndex}
+          listenTotal={listenTotal}
+          enVoices={enVoices}
+          preferredVoiceName={preferredVoiceName}
+          preferredLang={preferredLang}
+          onVoiceChange={onListenVoiceChange}
+          onStop={onStopListen}
+        />
+      )}
 
       <div className="mb-3 flex flex-wrap items-center gap-3">
         <span className="label-text shrink-0">每页</span>
@@ -253,6 +347,7 @@ export function MainContent({
           currentPage={safePage}
           totalPages={totalPages}
           onPageChange={setPage}
+          disabled={listenActive}
         />
       </div>
 

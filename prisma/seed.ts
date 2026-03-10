@@ -1,18 +1,24 @@
 /**
  * Seed: sync corpus from public/listen/corpus into DB (CorpusChapter, CorpusTest, CorpusWord).
  * Run via: npx prisma db seed  or  pnpm run sync-corpus
+ * 需要配置 TURSO_DATABASE_URL 和 TURSO_AUTH_TOKEN。
  */
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaLibSql } from "@prisma/adapter-libsql";
 import "dotenv/config";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { PrismaClient } from "../modules/db/generated/client";
 
-const dbUrl = process.env["DATABASE_URL"]?.startsWith("file:")
-  ? process.env["DATABASE_URL"]
-  : `file:${path.join(process.cwd(), "prisma", "dev.db")}`;
+const tursoUrl = process.env["TURSO_DATABASE_URL"]?.trim();
+const tursoToken = process.env["TURSO_AUTH_TOKEN"];
+if (!tursoUrl) {
+  throw new Error(
+    "Seed 需要 Turso。请在 .env 中设置 TURSO_DATABASE_URL 和 TURSO_AUTH_TOKEN。",
+  );
+}
+
 const db = new PrismaClient({
-  adapter: new PrismaBetterSqlite3({ url: dbUrl }),
+  adapter: new PrismaLibSql({ url: tursoUrl, authToken: tursoToken ?? "" }),
 });
 
 const CORPUS_BASE = path.join(
