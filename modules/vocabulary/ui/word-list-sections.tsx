@@ -2,14 +2,21 @@
 
 import { GridColsControl } from "@/modules/ui/grid-cols-control";
 import { cn } from "@/modules/ui/jsx";
-import { getGridColsClass } from "@/utils/format";
+import { StripedGrid } from "@/modules/ui/striped-grid";
 import {
-    createColumnHelper,
-    flexRender,
-    getCoreRowModel,
-    useReactTable,
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
 } from "@tanstack/react-table";
-import { AlertCircle, ImageDown, Maximize2, Minimize2, Pencil, Trash2 } from "lucide-react";
+import {
+  AlertCircle,
+  ImageDown,
+  Maximize2,
+  Minimize2,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 import { useMemo, type ReactNode } from "react";
 import type { IVocabularyEntryListItem } from "../core";
 
@@ -185,7 +192,11 @@ export function WordListTableView({
                     type="button"
                     className="btn btn-ghost btn-xs btn-square"
                     onClick={() => onForget(entry.id)}
-                    title={entry.forgetCount != null && entry.forgetCount > 0 ? `忘了 +1（当前 ${entry.forgetCount}）` : "忘了 +1"}
+                    title={
+                      entry.forgetCount != null && entry.forgetCount > 0
+                        ? `忘了 +1（当前 ${entry.forgetCount}）`
+                        : "忘了 +1"
+                    }
                     aria-label="忘了 +1"
                   >
                     <AlertCircle className="size-3.5" />
@@ -297,7 +308,6 @@ export function WordListGridWithFullscreen({
   gridCardNodesWordOnly,
   gridCardNodesWordAndMeaning,
 }: WordListGridWithFullscreenProps) {
-  const gridColsClass = getGridColsClass(gridCols);
   return (
     <>
       {isGridFullscreen && (
@@ -370,28 +380,29 @@ export function WordListGridWithFullscreen({
             </div>
           </div>
           <div className="flex-1 overflow-auto">
-            <div
+            <StripedGrid
               ref={fullscreenGridRef}
-              className={cn("grid bg-base-100", gridColsClass)}
+              gridCols={gridCols}
+              className="bg-base-100"
             >
               {fullscreenDisplayMode === "word"
                 ? gridCardNodesWordOnly
                 : fullscreenDisplayMode === "wordMeaning"
                   ? gridCardNodesWordAndMeaning
                   : gridCardNodes}
-            </div>
+            </StripedGrid>
           </div>
         </div>
       )}
-      <div
+      <StripedGrid
+        gridCols={gridCols}
         className={cn(
-          "grid rounded-lg overflow-hidden p-0 bg-base-200 border border-base-300",
-          gridColsClass,
+          "rounded-lg overflow-hidden border border-base-300",
           isGridFullscreen && "hidden",
         )}
       >
         {gridCardNodes}
-      </div>
+      </StripedGrid>
     </>
   );
 }

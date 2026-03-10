@@ -166,7 +166,7 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
             <div
               key={entry.id}
               className={cn(
-                "overflow-hidden bg-base-200 border-base-300",
+                "overflow-hidden border-base-300",
                 "border-r border-b",
                 isLastInRow && "border-r-0",
                 isLastRow && "border-b-0",
@@ -218,7 +218,7 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
             <div
               key={entry.id}
               className={cn(
-                "overflow-hidden bg-base-200 border-base-300 flex items-center justify-center gap-1 p-2 min-h-10",
+                "overflow-hidden border-base-300 flex items-center justify-center gap-1 p-2 min-h-10",
                 "border-r border-b",
                 isLastInRow && "border-r-0",
                 isLastRow && "border-b-0",
@@ -276,7 +276,7 @@ export function VocabularyWordList({ className }: WordListProps = {}) {
             <div
               key={entry.id}
               className={cn(
-                "overflow-hidden bg-base-200 border-base-300 flex flex-col justify-center p-2 min-h-10",
+                "overflow-hidden border-base-300 flex flex-col justify-center p-2 min-h-10",
                 "border-r border-b",
                 isLastInRow && "border-r-0",
                 isLastRow && "border-b-0",

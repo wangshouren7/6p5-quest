@@ -1,6 +1,6 @@
 "use client";
 
-import { getGridColsClass } from "@/utils/format";
+import { StripedGrid } from "@/modules/ui/striped-grid";
 import { useObservable } from "rcrx";
 import type { WordItem } from "../core";
 import { useCorpus } from "./context";
@@ -29,14 +29,11 @@ export function WordGrid({
   const controls = useObservable(corpus.controls.value$);
   const rate = controls?.rate ?? 1;
   const gridCols = controls?.gridCols ?? 4;
-  const gridColsClass = getGridColsClass(gridCols);
 
   return (
-    <div className={`grid ${gridColsClass} border border-base-300`}>
+    <StripedGrid gridCols={gridCols} className="border border-base-300">
       {words.map((item, index) => {
         const { word, phonetic, meaning, audioUrl, id: wordId } = item;
-        const rowIndex = Math.floor(index / gridCols);
-        const isStripeRow = rowIndex % 2 === 0;
         const stat =
           wordId != null && wordStats ? wordStats.get(wordId) : undefined;
         const totalCount = stat?.totalCount ?? 0;
@@ -54,7 +51,6 @@ export function WordGrid({
             meaning={meaning}
             audioUrl={audioUrl}
             rate={rate}
-            isStripeRow={isStripeRow}
             totalCount={stat != null ? totalCount : undefined}
             errorCount={stat != null ? errorCount : undefined}
             correctRate={
@@ -67,6 +63,6 @@ export function WordGrid({
           />
         );
       })}
-    </div>
+    </StripedGrid>
   );
 }

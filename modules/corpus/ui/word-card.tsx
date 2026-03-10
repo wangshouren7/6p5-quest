@@ -11,6 +11,7 @@ export interface WordCardProps {
   meaning: string;
   audioUrl?: string;
   rate: number;
+  /** 是否属于条纹偶行；不传时由 StripedGrid 外层提供条纹，卡片用透明背景 */
   isStripeRow?: boolean;
   isWrong?: boolean;
   userAnswer?: string;
@@ -32,7 +33,7 @@ export function WordCard({
   meaning,
   audioUrl,
   rate,
-  isStripeRow = false,
+  isStripeRow,
   isWrong = false,
   userAnswer,
   errorCount,
@@ -45,14 +46,19 @@ export function WordCard({
     if (audioUrl) playWordAudio(audioUrl, rate);
   };
 
+  const rowBg =
+    isStripeRow === undefined
+      ? "bg-transparent"
+      : isStripeRow
+        ? "bg-orange-50 dark:bg-orange-950/20"
+        : "bg-white dark:bg-base-200";
+
   return (
     <div
       className={cn(
         "flex flex-col gap-0.5 border border-base-300 p-3",
         "text-neutral-800 dark:text-base-content",
-        isStripeRow
-          ? "bg-orange-50 dark:bg-orange-950/20"
-          : "bg-white dark:bg-base-200",
+        rowBg,
         isWrong &&
           "ring-2 ring-error/50 ring-inset bg-error/5 dark:bg-error/10",
       )}
