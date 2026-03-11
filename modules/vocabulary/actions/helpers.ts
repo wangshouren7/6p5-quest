@@ -21,6 +21,16 @@ export function parseMeaningsJson(raw: string | null): IPartOfSpeechMeaning[] {
   }
 }
 
+/** 是否已有有效释义（非占位）：至少一条 partOfSpeechMeaning 下存在非空释义字符串 */
+export function hasValidMeanings(meanings: IPartOfSpeechMeaning[]): boolean {
+  if (!meanings?.length) return false;
+  return meanings.some(
+    (m) =>
+      Array.isArray(m.meanings) &&
+      m.meanings.some((s) => typeof s === "string" && s.trim() !== ""),
+  );
+}
+
 export function parseCollocationsJson(raw: string | null): ICollocationItem[] {
   if (!raw) return [];
   try {

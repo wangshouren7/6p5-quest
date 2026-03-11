@@ -2,23 +2,23 @@
 
 import { db } from "@/modules/db/client";
 import type {
-    ICollocationItem,
-    IMorphemeItem,
-    IPartOfSpeechMeaning,
-    IVocabularyAiFillResult,
-    IVocabularyEntryFormData,
-    VocabularyBatchParseResultInferred,
+  ICollocationItem,
+  IMorphemeItem,
+  IPartOfSpeechMeaning,
+  IVocabularyAiFillResult,
+  IVocabularyEntryFormData,
+  VocabularyBatchParseResultInferred,
 } from "@/modules/vocabulary/core";
 import {
-    PARTS_OF_SPEECH,
-    safeParseVocabularyAiFillResult,
-    safeParseVocabularyBatchParseResult,
-    safeParseVocabularyWordsOnly,
-    VOCABULARY_BATCH_FILL_SIZE,
-    VOCABULARY_CATEGORIES,
-    vocabularyAiFillResultSchema,
-    vocabularyBatchParseResultSchema,
-    vocabularyWordsOnlySchema,
+  PARTS_OF_SPEECH,
+  safeParseVocabularyAiFillResult,
+  safeParseVocabularyBatchParseResult,
+  safeParseVocabularyWordsOnly,
+  VOCABULARY_BATCH_FILL_SIZE,
+  VOCABULARY_CATEGORIES,
+  vocabularyAiFillResultSchema,
+  vocabularyBatchParseResultSchema,
+  vocabularyWordsOnlySchema,
 } from "@/modules/vocabulary/core";
 import { getErrorMessage } from "@/utils/error";
 import { devError, devLog, devWarn } from "@/utils/logger";
@@ -27,6 +27,7 @@ import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { DEFAULT_AI_MODEL } from "./constants";
 import { createVocabularyEntry, updateVocabularyEntry } from "./crud";
+import { hasValidMeanings, parseMeaningsJson } from "./helpers";
 import type { IVocabularyAiConfig } from "./types";
 
 const VOCABULARY_AI_FILL_STALE_RUNNING_MS = 5 * 60 * 1000; // 5 分钟
@@ -65,53 +66,74 @@ export async function upsertVocabularyAiSettings(
 
 /** 执行一批 AI 回填：读 settings、取 PENDING、调 LLM、写库并更新 Task（供定时任务与 API 复用） */
 export async function runVocabularyAiFillBatch(): Promise<void> {
-  const settings = await db.vocabularyAiSettings.findFirst({
-    orderBy: { id: "asc" },
-  });
-  if (!settings) {
-    devLog("[词汇 AI 回填] 无 VocabularyAiSettings，跳过本轮");
-    return;
-  }
-  if (!settings.accessToken?.trim()) {
-    devLog("[词汇 AI 回填] 未配置 accessToken，跳过本轮");
-    return;
-  }
-
-  const staleThreshold = new Date(
-    Date.now() - VOCABULARY_AI_FILL_STALE_RUNNING_MS,
-  );
-  const reset = await db.vocabularyAiFillTask.updateMany({
-    where: {
-      status: "RUNNING",
-      updatedAt: { lt: staleThreshold },
-    },
-    data: { status: "PENDING", error: null, updatedAt: new Date() },
-  });
-  if (reset.count > 0) {
-    devLog("[词汇 AI 回填] 已将", reset.count, "条超时 RUNNING 重置为 PENDING");
-  }
-
-  const pending = await db.vocabularyAiFillTask.findMany({
-    where: { status: "PENDING" },
-    orderBy: { id: "asc" },
-    take: VOCABULARY_BATCH_FILL_SIZE,
-  });
-  if (pending.length === 0) return;
-
-  const taskIds = pending.map((t) => t.id);
-  await db.vocabularyAiFillTask.updateMany({
-    where: { id: { in: taskIds } },
-    data: { status: "RUNNING", updatedAt: new Date() },
-  });
-
-  const words = pending.map((t) => t.word);
-  const opts = {
-    baseUrl: settings.baseUrl || undefined,
-    accessToken: settings.accessToken,
-    model: settings.model || undefined,
-  };
+  let taskIds: number[] = [];
+  let runningsSet = false;
 
   try {
+    const settings = await db.vocabularyAiSettings.findFirst({
+      orderBy: { id: "asc" },
+    });
+    if (!settings) {
+      devLog("[词汇 AI 回填] 无 VocabularyAiSettings，跳过本轮");
+      return;
+    }
+    if (!settings.accessToken?.trim()) {
+      devLog("[词汇 AI 回填] 未配置 accessToken，跳过本轮");
+      return;
+    }
+
+    const staleThreshold = new Date(
+      Date.now() - VOCABULARY_AI_FILL_STALE_RUNNING_MS,
+    );
+    const reset = await db.vocabularyAiFillTask.updateMany({
+      where: {
+        status: "RUNNING",
+        updatedAt: { lt: staleThreshold },
+      },
+      data: { status: "PENDING", error: null, updatedAt: new Date() },
+    });
+    if (reset.count > 0) {
+      devLog("[词汇 AI 回填] 已将", reset.count, "条超时 RUNNING 重置为 PENDING");
+    }
+
+    const pending = await db.vocabularyAiFillTask.findMany({
+      where: { status: "PENDING" },
+      orderBy: { id: "asc" },
+      take: VOCABULARY_BATCH_FILL_SIZE,
+    });
+    if (pending.length === 0) return;
+
+    taskIds = pending.map((t) => t.id);
+    await db.vocabularyAiFillTask.updateMany({
+      where: { id: { in: taskIds } },
+      data: { status: "RUNNING", updatedAt: new Date() },
+    });
+    runningsSet = true;
+
+    const words = pending.map((t) => t.word);
+    const wordLowers = [...new Set(words.map((w) => normalizeWord(w)))];
+    const existingEntries = await db.vocabularyEntry.findMany({
+      where: { wordLower: { in: wordLowers } },
+      select: { id: true, wordLower: true, meanings: true },
+    });
+    const entryByWordLower = new Map(
+      existingEntries.map((e) => [e.wordLower, e]),
+    );
+    const existingMeaningsByWord: Record<string, IPartOfSpeechMeaning[]> = {};
+    for (const w of wordLowers) {
+      const entry = entryByWordLower.get(w);
+      if (!entry?.meanings) continue;
+      const parsed = parseMeaningsJson(entry.meanings);
+      if (hasValidMeanings(parsed)) existingMeaningsByWord[w] = parsed;
+    }
+
+    const opts = {
+      baseUrl: settings.baseUrl || undefined,
+      accessToken: settings.accessToken,
+      model: settings.model || undefined,
+      existingMeaningsByWord,
+    };
+    devLog("[词汇 AI 回填] 开始填充", words.length, "个单词");
     const result = await aiFillVocabularyBatch(words, opts);
     if ("error" in result) {
       for (const id of taskIds) {
@@ -143,12 +165,14 @@ export async function runVocabularyAiFillBatch(): Promise<void> {
         continue;
       }
       const wordLower = normalizeWord(data.word);
-      const existing = await db.vocabularyEntry.findUnique({
-        where: { wordLower },
-      });
+      const existing = entryByWordLower.get(wordLower) ?? null;
       if (existing) {
+        const preserveMeanings = hasValidMeanings(
+          parseMeaningsJson(existing.meanings),
+        );
         const updateResult = await updateVocabularyEntry(existing.id, data, {
           preserveCategoryIfSet: true,
+          preserveMeaningsIfSet: preserveMeanings,
         });
         if ("ok" in updateResult) {
           await db.vocabularyAiFillTask.update({
@@ -486,7 +510,13 @@ export async function aiExtractWordsOnly(
 /** 分批表单回填：对一批单词（建议 ≤ VOCABULARY_BATCH_FILL_SIZE）请求完整词汇数据 */
 export async function aiFillVocabularyBatch(
   words: string[],
-  options?: { baseUrl?: string; accessToken?: string; model?: string },
+  options?: {
+    baseUrl?: string;
+    accessToken?: string;
+    model?: string;
+    /** 已有释义的单词（key 为 wordLower），回填时以数据库释义为准且不需返回 meanings */
+    existingMeaningsByWord?: Record<string, IPartOfSpeechMeaning[]>;
+  },
 ): Promise<IVocabularyEntryFormData[] | { error: string }> {
   const list = Array.isArray(words)
     ? (words as string[]).filter((w) => typeof w === "string" && w.trim())
@@ -520,6 +550,7 @@ export async function aiFillVocabularyBatch(
 
   const categoryList = VOCABULARY_CATEGORIES.join("、");
   const posList = (PARTS_OF_SPEECH as readonly string[]).join(", ");
+  const existingByWord = options?.existingMeaningsByWord ?? {};
   const systemPrompt = `You are a helpful assistant that fills vocabulary data for English words.
 Given a list of English words, return a JSON object with key "entries": an array of objects, one per word, in the same order as the input list. Each object MUST include all of these fields:
 - word (string)
@@ -531,10 +562,24 @@ Given a list of English words, return a JSON object with key "entries": an array
 - root ({ text, meanings: string[] } or null)
 - category (exactly one of: ${categoryList}, or null)
 - collocations (array of { phrase: string, meaning: string }: 固定搭配，如 [{ phrase: "pay attention", meaning: "注意" }]; use [] if none, never omit)
-partOfSpeech MUST be exactly one of: ${posList}. Do NOT use "n." or "v." alone. For words with clear etymology (e.g. atmosphere, hydrosphere), always fill mnemonic and prefixes/suffixes/root when applicable. Morpheme text: no leading/trailing hyphens. All meanings in Chinese.`;
+partOfSpeech MUST be exactly one of: ${posList}. Do NOT use "n." or "v." alone. For words with clear etymology (e.g. atmosphere, hydrosphere), always fill mnemonic and prefixes/suffixes/root when applicable. Morpheme text: no leading/trailing hyphens. All meanings in Chinese.
+If a word is marked with "已有释义" (existing meanings) in the user message: use the given meanings as the source of truth, do not rewrite them; and you do NOT need to return partOfSpeechMeanings for that word (the system will keep the existing meanings; only fill phonetic, mnemonic, category, morphemes, etc.).`;
 
-  const wordListStr = list.map((w) => w.trim()).join("\n");
-  const userContent = `Return vocabulary data for each of these words, in the same order. One entry per line:\n${wordListStr}`;
+  const userLines = list.map((w) => {
+    const key = normalizeWord(w);
+    const existing = existingByWord[key];
+    if (existing?.length) {
+      const meaningStr = existing
+        .map(
+          (m) =>
+            `${m.partOfSpeech} ${(m.meanings ?? []).filter(Boolean).join("；")}`,
+        )
+        .join(" | ");
+      return `${w.trim()}\t已有释义（请以以下为准，不要改写）：${meaningStr}`;
+    }
+    return w.trim();
+  });
+  const userContent = `Return vocabulary data for each of these words, in the same order. One entry per line:\n${userLines.join("\n")}`;
 
   try {
     const client = new OpenAI({
@@ -644,7 +689,8 @@ export async function aiParseBatchVocabulary(
   const categoryList = VOCABULARY_CATEGORIES.join("、");
   const posList = (PARTS_OF_SPEECH as readonly string[]).join(", ");
   const systemPrompt = `You are a helpful assistant that extracts a list of English vocabulary entries from a pasted text (e.g. a word list with numbers, word, part of speech, and Chinese definitions).
-From the user's text, identify each distinct vocabulary item. For each item return: word (the English word or phrase), phonetic (IPA if inferable, else null), mnemonic (short memory tip in Chinese if easy, else null), partOfSpeechMeanings (array of { partOfSpeech, meanings: string[] } — at least one entry; meanings in Chinese), prefixes/suffixes/root (morpheme arrays or null), category (must be exactly one of: ${categoryList}, or null).
+From the user's text, identify each distinct vocabulary item. Auto-detect: if the source text contains part of speech and Chinese definitions for a word, extract them into partOfSpeechMeanings (array of { partOfSpeech, meanings: string[] }, at least one entry; meanings in Chinese). If the source only lists words without definitions, do NOT invent meanings — use a minimal placeholder for partOfSpeechMeanings (e.g. one entry with empty or placeholder meanings).
+For each item return: word (the English word or phrase), phonetic (IPA if inferable, else null), mnemonic (short memory tip in Chinese if easy, else null), partOfSpeechMeanings (as above), prefixes/suffixes/root (morpheme arrays or null), category (must be exactly one of: ${categoryList}, or null).
 partOfSpeech MUST be exactly one of: ${posList}. Do NOT use "n." or "v." alone; use n.[C], n.[U], n.[C/U], vi., vt., adj., adv., etc.
 Ignore line numbers and segment numbers in the text. Extract every vocabulary entry. Preserve multi-word terms (e.g. "El Nino", "carbon dioxide"). Return a JSON object with a single key "entries" whose value is an array of these objects.`;
 

@@ -5,32 +5,19 @@ import { useControls } from "leva";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  aiExtractWordsOnly,
-  createVocabularyEntriesBatch,
-  createVocabularyImportTasks,
-  getVocabularyFilterOptions,
-  getVocabularyImportTasks,
-  updateVocabularyEntriesCategoryByWords,
-  upsertVocabularyAiSettings,
+    aiParseBatchVocabulary,
+    createVocabularyEntriesBatch,
+    createVocabularyImportTasks,
+    getVocabularyFilterOptions,
+    getVocabularyImportTasks,
+    updateVocabularyEntriesCategoryByWords,
+    upsertVocabularyAiSettings,
 } from "../actions";
 import type { IVocabularyEntryFormData } from "../core";
 import {
-  getStoredVocabularyAiConfig,
-  saveVocabularyAiConfig,
+    getStoredVocabularyAiConfig,
+    saveVocabularyAiConfig,
 } from "./ai-config-storage";
-
-function minimalEntryFromWord(word: string): IVocabularyEntryFormData {
-  return {
-    word: word.trim(),
-    phonetic: "",
-    mnemonic: "",
-    meanings: [{ partOfSpeech: "n.[C]", meanings: [""] }],
-    prefixIds: [],
-    suffixIds: [],
-    rootId: null,
-    categoryId: null,
-  };
-}
 
 /** 仅在客户端挂载后渲染，避免 useControls + localStorage 导致 hydration 报错 */
 export function VocabularyImport() {
@@ -88,8 +75,10 @@ function VocabularyImportContent() {
   }, [aiConfig.baseUrl, aiConfig.accessToken, aiConfig.model]);
 
   const [rawText, setRawText] = useState("");
-  /** 解析出的单词列表 */
-  const [words, setWords] = useState<string[] | null>(null);
+  /** 解析出的词条列表（含词性+释义，若原文有则从原文解析） */
+  const [parsedEntries, setParsedEntries] = useState<
+    IVocabularyEntryFormData[] | null
+  >(null);
   const [parseLoading, setParseLoading] = useState(false);
   const [parseProgress, setParseProgress] = useState<string | null>(null);
   const [parseError, setParseError] = useState<string | null>(null);
@@ -111,15 +100,15 @@ function VocabularyImportContent() {
     string | null
   >(null);
 
-  /** 解析出单词后加载分类选项 */
+  /** 解析出词条后加载分类选项 */
   useEffect(() => {
-    if (words == null || words.length === 0) return;
+    if (parsedEntries == null || parsedEntries.length === 0) return;
     getVocabularyFilterOptions()
       .then(setFilterOptions)
       .catch((err) =>
         devError("[vocabulary-import] getVocabularyFilterOptions", err),
       );
-  }, [words?.length]);
+  }, [parsedEntries?.length]);
 
   /** 当已展示任务列表时，每 5 秒轮询一次 */
   useEffect(() => {
@@ -150,24 +139,22 @@ function VocabularyImportContent() {
     }
     setParseLoading(true);
     setParseError(null);
-    setParseProgress("正在提取单词…");
+    setParseProgress("正在解析词条（有词性/释义则一并提取）…");
     try {
-      const wordsResult = await aiExtractWordsOnly(rawText.trim(), opts);
-      if ("error" in wordsResult) {
-        setParseError(wordsResult.error);
+      const result = await aiParseBatchVocabulary(rawText.trim(), opts);
+      if ("error" in result) {
+        setParseError(result.error);
         setParseProgress(null);
         setParseLoading(false);
         return;
       }
-      const extracted = wordsResult;
-      if (extracted.length === 0) {
-        setParseError("未识别到单词，请检查格式或重试");
+      if (result.length === 0) {
+        setParseError("未识别到词条，请检查格式或重试");
         setParseProgress(null);
         setParseLoading(false);
         return;
       }
-
-      setWords(extracted);
+      setParsedEntries(result);
       setParseProgress(null);
     } finally {
       setParseLoading(false);
@@ -176,7 +163,7 @@ function VocabularyImportContent() {
   }, [rawText, opts]);
 
   const handleReset = useCallback(() => {
-    setWords(null);
+    setParsedEntries(null);
     setTasks(null);
     setRawText("");
     setParseError(null);
@@ -185,8 +172,13 @@ function VocabularyImportContent() {
     setBatchCategoryApplyResult(null);
   }, []);
 
+  const words = useMemo(
+    () => parsedEntries?.map((e) => e.word.trim()).filter(Boolean) ?? [],
+    [parsedEntries],
+  );
+
   const handleBatchApplyCategory = useCallback(async () => {
-    if (!words?.length) return;
+    if (!words.length) return;
     setBatchCategoryApplyLoading(true);
     setBatchCategoryApplyResult(null);
     try {
@@ -207,12 +199,11 @@ function VocabularyImportContent() {
   }, [words, batchCategoryId]);
 
   const handleBatchSave = useCallback(async () => {
-    if (!words?.length) return;
-    const toSave = words.map((w) => minimalEntryFromWord(w));
+    if (!parsedEntries?.length) return;
     setBatchSaveLoading(true);
     setBatchSaveResult(null);
     try {
-      const batchResult = await createVocabularyEntriesBatch(toSave);
+      const batchResult = await createVocabularyEntriesBatch(parsedEntries);
       if ("error" in batchResult) {
         setBatchSaveResult(batchResult.error);
         setBatchSaveLoading(false);
@@ -252,15 +243,15 @@ function VocabularyImportContent() {
     } finally {
       setBatchSaveLoading(false);
     }
-  }, [words, opts]);
+  }, [parsedEntries, words, opts]);
 
-  if (words == null) {
+  if (parsedEntries == null) {
     return (
       <div className="flex flex-col gap-4">
         <p className="text-base-content/70">
-          粘贴包含单词列表的文本，点击「AI
-          解析」提取单词；解析后点击「保存」将单词写入数据库并创建 AI
-          回填任务（后台自动补全释义）。
+          粘贴包含单词列表的文本（若有词性、释义会一并解析），点击「AI
+          解析」；解析后点击「保存」写入数据库并创建 AI
+          回填任务（后台补全音标、记法等）。
         </p>
         {parseProgress && (
           <p className="text-sm text-primary">{parseProgress}</p>
@@ -343,7 +334,7 @@ function VocabularyImportContent() {
       {batchSaveResult && (
         <p className="text-sm text-base-content/70">{batchSaveResult}</p>
       )}
-      {batchSaveResult && words && words.length > 0 && (
+      {batchSaveResult && words.length > 0 && (
         <div className="rounded-lg border border-base-300 bg-base-200/50 p-3">
           <p className="mb-2 text-sm font-medium text-base-content/70">
             为这批单词设置分类（可选）

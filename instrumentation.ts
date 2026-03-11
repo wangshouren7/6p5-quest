@@ -8,7 +8,7 @@ export async function register() {
 
   const { runVocabularyAiFillBatch } =
     await import("@/modules/vocabulary/actions");
-  const INTERVAL_MS = 60 * 1000;
+  const INTERVAL_MS = 3 * 1000;
   let running = false;
 
   setInterval(async () => {

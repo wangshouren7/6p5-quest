@@ -9,6 +9,7 @@ import type {
 import { VOCABULARY_CATEGORIES } from "@/modules/vocabulary/core";
 import { normalizeWord } from "@/utils/string";
 import {
+    hasValidMeanings,
     normalizeMorphemeText,
     parseCollocationsJson,
     parseMeaningsJson,
@@ -267,6 +268,7 @@ export async function updateVocabularyEntry(
   data: IVocabularyEntryFormData,
   options?: {
     /** AI 回填时传 true：若库中已有分类则不覆盖 */ preserveCategoryIfSet?: boolean;
+    /** AI 回填时传 true：若库中已有有效释义则不覆盖 */ preserveMeaningsIfSet?: boolean;
   },
 ): Promise<{ ok: true } | { error: string }> {
   const entry = await db.vocabularyEntry.findUnique({ where: { id } });
@@ -285,8 +287,14 @@ export async function updateVocabularyEntry(
   const preserveCategory =
     Boolean(options?.preserveCategoryIfSet) && hasExistingCategory;
   const categoryId = preserveCategory ? entry.categoryId : data.categoryId;
-  const meaningsJson =
-    data.meanings?.length > 0
+
+  const existingMeanings = parseMeaningsJson(entry.meanings);
+  const preserveMeanings =
+    Boolean(options?.preserveMeaningsIfSet) &&
+    hasValidMeanings(existingMeanings);
+  const meaningsJson = preserveMeanings
+    ? entry.meanings
+    : data.meanings?.length > 0
       ? JSON.stringify(
           data.meanings.filter(
             (m) => m.partOfSpeech?.trim() && m.meanings?.length,
