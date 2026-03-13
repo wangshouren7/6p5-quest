@@ -1,0 +1,67 @@
+<!-- 单词卡 - 正面：单词、例句英文、搭配（仅词）、相关词（仅词） -->
+<div class="card word-card word-front">
+  <div class="word-title">{{单词}}</div>
+  {{#例句英文}}
+  <div class="section example-section">
+    <div class="section-label">例句</div>
+    <div class="example-en">{{例句英文}}</div>
+  </div>
+  {{/例句英文}}
+  {{#搭配简}}
+  <div class="section collocation-section">
+    <div class="section-label">搭配</div>
+    {{搭配简}}
+  </div>
+  {{/搭配简}}
+  {{#笔记简}}
+  <div class="section notes-section">
+    <div class="section-label">相关词</div>
+    {{笔记简}}
+  </div>
+  {{/笔记简}}
+</div>
+
+<style>
+  .word-front {
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    padding: 1.25rem;
+    max-width: 420px;
+    margin: 0 auto;
+    text-align: left;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .word-front .word-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+  }
+  .word-front .section {
+    margin-bottom: 1rem;
+  }
+  .word-front .section:empty {
+    display: none;
+  }
+  .word-front .section-label {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.35rem;
+  }
+  .word-front .example-en {
+    color: #333;
+    font-size: 1rem;
+  }
+  .word-front .collocation-list,
+  .word-front .notes-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: #333;
+  }
+  .word-front .collocation-list li,
+  .word-front .notes-list li {
+    margin-bottom: 0.25rem;
+  }
+</style>

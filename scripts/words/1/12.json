@@ -1,0 +1,223 @@
+[
+  {
+    "word": "rainbow",
+    "phonetic": "/ˈreɪnbəʊ/",
+    "meaning": "n. 虹，彩虹",
+    "exampleEn": "A rainbow is usually seen after a heavy rain.",
+    "exampleCn": "彩虹通常在大雨之后出现。",
+    "collocations": [],
+    "notes": [],
+    "remember": "rain(雨) + bow(弓) -> 雨后像弓一样的形状 -> 彩虹"
+  },
+  {
+    "word": "shower",
+    "phonetic": "/ˈʃaʊə/",
+    "meaning": "n. 阵雨；(一)阵；淋浴",
+    "exampleEn": "The weatherman predicts showers this afternoon.",
+    "exampleCn": "气象预报员预报今天下午有阵雨。",
+    "collocations": [],
+    "notes": [],
+    "remember": "通常指短时间的雨"
+  },
+  {
+    "word": "Celsius",
+    "phonetic": "/ˈselsiəs/",
+    "meaning": "adj. 摄氏的 n. 摄氏温度",
+    "exampleEn": "The maximum temperature in July may be 36 degrees Celsius.",
+    "exampleCn": "7月的最高温度可能达到36摄氏度。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "Fahrenheit",
+        "phonetic": "/ˈfærənhaɪt/",
+        "meaning": "adj. 华氏的 n. 华氏温度"
+      }
+    ],
+    "remember": "以瑞典天文学家 Anders Celsius 的名字命名"
+  },
+  {
+    "word": "temperature",
+    "phonetic": "/ˈtemprətʃə/",
+    "meaning": "n. 气温；体温；温度",
+    "exampleEn": "After the storm, there will be a sharp drop in temperature.",
+    "exampleCn": "暴风雨过后，气温将骤降。",
+    "collocations": [
+      {
+        "collocation": "take the temperature",
+        "meaning": "量体温"
+      }
+    ],
+    "notes": [
+      {
+        "word": "temper",
+        "phonetic": "/ˈtempə/",
+        "meaning": "脾气"
+      }
+    ],
+    "remember": "温度(temperature)常会影响人的脾气(temper)"
+  },
+  {
+    "word": "forecast",
+    "phonetic": "/ˈfɔːkɑːst/",
+    "meaning": "n. 预测，预报 v. 预测，预言",
+    "exampleEn": "The recent statement of the president forecasts a change in the situation.",
+    "exampleCn": "总统最近的一次讲话预示着形势将有所变化。",
+    "collocations": [
+      {
+        "collocation": "weather forecast",
+        "meaning": "天气预报"
+      }
+    ],
+    "notes": [],
+    "remember": "fore(前，先) + cast(抛) -> 预先扔下 -> 预报"
+  },
+  {
+    "word": "peak",
+    "phonetic": "/piːk/",
+    "meaning": "n. 山峰；顶点 v. 达到最大值",
+    "exampleEn": "The mountain peaks are covered with snow all year round.",
+    "exampleCn": "山峰上终年覆盖着雪。",
+    "collocations": [
+      {
+        "collocation": "a mountain peak",
+        "meaning": "山峰"
+      }
+    ],
+    "notes": [],
+    "remember": "象形法：p 像山头，peak 意为山峰"
+  },
+  {
+    "word": "mount",
+    "phonetic": "/maʊnt/",
+    "meaning": "v. 逐渐增加；爬上，登上 n. [M~] 山",
+    "exampleEn": "The old lady can only mount the stairs with difficulty.",
+    "exampleCn": "这位老妇人上楼梯十分艰难。",
+    "collocations": [],
+    "notes": [],
+    "remember": "指登上、上升的过程"
+  },
+  {
+    "word": "mountain",
+    "phonetic": "/ˈmaʊntɪn/",
+    "meaning": "n. 山，山岳，高山",
+    "exampleEn": "The northern side of the mountain is almost vertical.",
+    "exampleCn": "这座山的北坡几乎是垂直的。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "mountainous",
+        "phonetic": "/ˈmaʊntɪnəs/",
+        "meaning": "adj. 多山的"
+      }
+    ],
+    "remember": "mount(登山) + ain -> 高山"
+  },
+  {
+    "word": "range",
+    "phonetic": "/reɪndʒ/",
+    "meaning": "n. 山脉；范围",
+    "exampleEn": "A range of hills rose on our left.",
+    "exampleCn": "山脉在我们的左方出现。",
+    "collocations": [
+      {
+        "collocation": "range from A to B",
+        "meaning": "从A到B变化"
+      },
+      {
+        "collocation": "in the range of",
+        "meaning": "在……范围内"
+      }
+    ],
+    "notes": [],
+    "remember": "本义是“排列成行”，用于地理指“山脉”"
+  },
+  {
+    "word": "ridge",
+    "phonetic": "/rɪdʒ/",
+    "meaning": "n. 山脊，山脉 v. 使隆起",
+    "exampleEn": "The sky above the ridge of the mountains brightened.",
+    "exampleCn": "山脊上方的天空变得明亮起来。",
+    "collocations": [
+      {
+        "collocation": "mountain ridge",
+        "meaning": "山脊"
+      },
+      {
+        "collocation": "roof ridge",
+        "meaning": "屋脊"
+      }
+    ],
+    "notes": [],
+    "remember": "分水岭也可以用该词表达"
+  },
+  {
+    "word": "slope",
+    "phonetic": "/sləʊp/",
+    "meaning": "v. 倾斜；有坡度 n. 山坡；斜坡",
+    "exampleEn": "He ran up the slope to the top of the hill.",
+    "exampleCn": "他跑上斜坡，来到山顶。",
+    "collocations": [],
+    "notes": [],
+    "remember": "s + lope(跑) -> 在斜坡上跑"
+  },
+  {
+    "word": "valley",
+    "phonetic": "/ˈvæli/",
+    "meaning": "n. 山谷，溪谷",
+    "exampleEn": "The valley was hidden from view in the mist.",
+    "exampleCn": "溪谷隐没在雾霭之中，看不见了。",
+    "collocations": [
+      {
+        "collocation": "Happy Valley",
+        "meaning": "欢乐谷"
+      },
+      {
+        "collocation": "Silicon Valley",
+        "meaning": "硅谷"
+      }
+    ],
+    "notes": [],
+    "remember": "两山之间的低洼地地带"
+  },
+  {
+    "word": "hillside",
+    "phonetic": "/ˈhɪlsaɪd/",
+    "meaning": "n. (小山的)山腰，山坡",
+    "exampleEn": "The path steepened as they climbed the hillside.",
+    "exampleCn": "他们顺着山坡往上爬，小径愈发陡峭。",
+    "collocations": [],
+    "notes": [],
+    "remember": "hill(山) + side(边) -> 山腰"
+  },
+  {
+    "word": "overlook",
+    "phonetic": "/ˌəʊvəˈlʊk/",
+    "meaning": "v. 俯瞰，远眺；未注意到",
+    "exampleEn": "The house on the hill overlooks the village.",
+    "exampleCn": "山上的房子可以俯瞰村庄。",
+    "collocations": [
+      {
+        "collocation": "be easily overlooked",
+        "meaning": "容易被忽略的"
+      }
+    ],
+    "notes": [
+      {
+        "word": "neglect",
+        "phonetic": "/nɪˈɡlekt/",
+        "meaning": "忽略(同义词)"
+      }
+    ],
+    "remember": "over(在……之上) + look(看) -> 在上面往下看 -> 俯瞰"
+  },
+  {
+    "word": "southern",
+    "phonetic": "/ˈsʌðən/",
+    "meaning": "adj. 南部的；南方的",
+    "exampleEn": "I prefer the southern climate.",
+    "exampleCn": "我更喜欢南方的气候。(示意例句)",
+    "collocations": [],
+    "notes": [],
+    "remember": "south(南) + ern(形容词后缀)"
+  }
+]

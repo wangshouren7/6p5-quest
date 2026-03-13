@@ -1,0 +1,115 @@
+<!-- 单词卡 - 背面：完整内容 + 可选发音 -->
+<hr id="answer" />
+
+<div class="card word-card word-back">
+  <div class="word-title">{{单词}}</div>
+  <div class="section phonetic-section">{{音标}}</div>
+  <div class="section meaning-section">{{词义}}</div>
+  <div class="section example-section">
+    <div class="section-label">例句</div>
+    <div class="example-en">{{例句英文}}</div>
+    <div class="example-cn">{{例句中文}}</div>
+  </div>
+  {{#搭配详}}
+  <div class="section collocation-section">
+    <div class="section-label">搭配</div>
+    {{搭配详}}
+  </div>
+  {{/搭配详}}
+  {{#笔记详}}
+  <div class="section notes-section">
+    <div class="section-label">相关词</div>
+    {{笔记详}}
+  </div>
+  {{/笔记详}}
+  {{#记忆}}
+  <div class="section remember-section">
+    <div class="section-label">记忆</div>
+    <div class="remember-text">{{记忆}}</div>
+  </div>
+  {{/记忆}}
+  <audio
+    id="word-audio"
+    controls
+    autoplay
+    src="https://dict.youdao.com/dictvoice?audio={{单词}}&type=1"
+  ></audio>
+</div>
+
+<script>
+  (function () {
+    var audio = document.getElementById("word-audio");
+    if (audio) audio.playbackRate = 1;
+  })();
+</script>
+
+<style>
+  .word-back {
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    padding: 1rem 0;
+    max-width: 420px;
+    margin: 0 auto;
+    text-align: left;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .word-back .word-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 0.5rem;
+  }
+  .word-back .section {
+    margin-bottom: 0.85rem;
+  }
+  .word-back .section:empty {
+    display: none;
+  }
+  .word-back .section-label {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.35rem;
+  }
+  .word-back .phonetic-section .phonetic-text {
+    font-size: 1.15rem;
+    color: #2d5a87;
+    font-weight: 500;
+  }
+  .word-back .meaning-section .meaning-text {
+    color: #333;
+    font-size: 1.05rem;
+  }
+  .word-back .example-en {
+    color: #333;
+    margin-bottom: 0.25rem;
+  }
+  .word-back .example-cn {
+    color: #555;
+    font-size: 0.95rem;
+  }
+  .word-back .collocation-list,
+  .word-back .notes-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: #333;
+  }
+  .word-back .collocation-list li,
+  .word-back .notes-list li {
+    margin-bottom: 0.35rem;
+  }
+  .word-back .remember-text {
+    color: #444;
+    font-size: 0.95rem;
+  }
+  .word-back audio {
+    width: 100%;
+    max-width: 320px;
+    height: 36px;
+    margin-top: 0.75rem;
+  }
+  #answer {
+    margin: 1rem 0;
+    border: none;
+    border-top: 1px solid #ddd;
+  }
+</style>

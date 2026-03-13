@@ -1,0 +1,252 @@
+[
+  {
+    "word": "seismic",
+    "phonetic": "/ˈsaɪzmɪk/",
+    "meaning": "地震的, 地震引起的",
+    "exampleEn": "The discovery of seismic activity suggests geological activity could provide large amounts of heat and minerals.",
+    "exampleCn": "地震活动的发现表明地质运动可以提供大量的热量和矿物质。",
+    "collocations": [
+      {
+        "collocation": "a seismic wave",
+        "meaning": "地震波"
+      }
+    ],
+    "notes": [],
+    "remember": "seis (shake 震动) + mic -> 与震动有关的 -> 地震的"
+  },
+  {
+    "word": "avalanche",
+    "phonetic": "/ˈævəlɑːntʃ/",
+    "meaning": "雪崩",
+    "exampleEn": "Yesterday's avalanche destroyed several trees.",
+    "exampleCn": "昨天的雪崩毁坏了一些树木。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "lanche",
+        "phonetic": "/læntʃ/",
+        "meaning": "滑落"
+      }
+    ],
+    "remember": "ava (向下) + lanche (滑落) -> 向下大面积滑落 -> 雪崩"
+  },
+  {
+    "word": "terrain",
+    "phonetic": "/təˈreɪn/",
+    "meaning": "地形",
+    "exampleEn": "He climbed a tree to view the surrounding terrain.",
+    "exampleCn": "他爬上一棵树去查看周围的地形。",
+    "collocations": [
+      {
+        "collocation": "a terrain feature",
+        "meaning": "地形特征"
+      }
+    ],
+    "notes": [
+      {
+        "word": "territory",
+        "phonetic": "/ˈterətri/",
+        "meaning": "领土"
+      }
+    ],
+    "remember": "terr (earth 地) + ain -> 大地的形状 -> 地形"
+  },
+  {
+    "word": "landscape",
+    "phonetic": "/ˈlændskeɪp/",
+    "meaning": "风景，地貌；对……进行景观美化",
+    "exampleEn": "The trees and the mountains made the landscape very beautiful.",
+    "exampleCn": "树木和山脉使风景变得很美。",
+    "collocations": [
+      {
+        "collocation": "natural landscape",
+        "meaning": "自然景色"
+      }
+    ],
+    "notes": [
+      {
+        "word": "land",
+        "phonetic": "/lænd/",
+        "meaning": "陆地"
+      },
+      {
+        "word": "scape",
+        "phonetic": "/skeɪp/",
+        "meaning": "表示性质、状况等"
+      }
+    ],
+    "remember": "land (陆地) + scape (形状) -> 陆地的形状 -> 地貌风景"
+  },
+  {
+    "word": "continent",
+    "phonetic": "/ˈkɒntɪnənt/",
+    "meaning": "大陆；洲",
+    "exampleEn": "It is generally thought that Columbus discovered the American continents.",
+    "exampleCn": "人们通常认为是哥伦布发现了美洲大陆。",
+    "collocations": [
+      {
+        "collocation": "continental breakfast",
+        "meaning": "欧式早餐"
+      }
+    ],
+    "notes": [
+      {
+        "word": "continental",
+        "phonetic": "/ˌkɒntɪˈnentl/",
+        "meaning": "大陆的，大陆性的"
+      }
+    ],
+    "remember": "con (共同) + tin (拿，握) + ent -> 连在一起的大地 -> 大陆"
+  },
+  {
+    "word": "cave",
+    "phonetic": "/keɪv/",
+    "meaning": "洞穴，山洞",
+    "exampleEn": "This cave was used by smugglers in the eighteenth century.",
+    "exampleCn": "该洞穴曾在 18 世纪被走私者使用。",
+    "collocations": [
+      {
+        "collocation": "explore a cave",
+        "meaning": "勘探山洞"
+      }
+    ],
+    "notes": [
+      {
+        "word": "cavern",
+        "phonetic": "/ˈkævən/",
+        "meaning": "大洞穴"
+      }
+    ],
+    "remember": "字母 C 像张开的洞口。"
+  },
+  {
+    "word": "cliff",
+    "phonetic": "/klɪf/",
+    "meaning": "悬崖，峭壁",
+    "exampleEn": "The narrow path leads to a wooden hut on the cliff.",
+    "exampleCn": "这条狭窄的小径通向悬崖上的一个小木屋。",
+    "collocations": [
+      {
+        "collocation": "red cliff",
+        "meaning": "赤壁"
+      }
+    ],
+    "notes": [
+      {
+        "word": "cli",
+        "phonetic": "/klaɪ/",
+        "meaning": "切开"
+      }
+    ],
+    "remember": "cli (切) + ff -> 像被切开的山壁 -> 悬崖"
+  },
+  {
+    "word": "glacier",
+    "phonetic": "/ˈɡlæsiə/",
+    "meaning": "冰河，冰川",
+    "exampleEn": "The glacier dislocated the great stones.",
+    "exampleCn": "冰川使巨石脱离原位。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "glass",
+        "phonetic": "/ɡlɑːs/",
+        "meaning": "玻璃"
+      }
+    ],
+    "remember": "glac (ice 冰) + ier -> 结成冰的一条河 -> 冰河"
+  },
+  {
+    "word": "swamp",
+    "phonetic": "/swɒmp/",
+    "meaning": "沼泽，湿地",
+    "exampleEn": "In the swamp, we were beset by mosquitoes.",
+    "exampleCn": "在沼泽地里，我们受到蚊子围攻。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "marsh",
+        "phonetic": "/mɑːʃ/",
+        "meaning": "湿地，沼泽"
+      }
+    ],
+    "remember": "s (死水) + wamp (water 水) -> 生态死水区 -> 沼泽"
+  },
+  {
+    "word": "delta",
+    "phonetic": "/ˈdeltə/",
+    "meaning": "三角洲",
+    "exampleEn": "The Nile Delta used to be a fertile land.",
+    "exampleCn": "尼罗河三角洲曾是一片肥沃的土地。",
+    "collocations": [
+      {
+        "collocation": "delta air line",
+        "meaning": "达美航空"
+      }
+    ],
+    "notes": [
+      {
+        "word": "alpha",
+        "phonetic": "/ˈælfə/",
+        "meaning": "第一的"
+      },
+      {
+        "word": "beta",
+        "phonetic": "/ˈbiːtə/",
+        "meaning": "测试版"
+      }
+    ],
+    "remember": "源于希腊字母表的第四个字母 Δ，因为形状像三角，被用来表示“三角洲”。"
+  },
+  {
+    "word": "plain",
+    "phonetic": "/pleɪn/",
+    "meaning": "平原；简朴的，明白的",
+    "exampleEn": "Once there were 70 million buffalo roaming the Great Plains.",
+    "exampleCn": "曾经有 7000 万头野牛在北美大平原上漫步。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "plane",
+        "phonetic": "/pleɪn/",
+        "meaning": "平面，飞机"
+      }
+    ],
+    "remember": "平坦的地带 -> 平原。"
+  },
+  {
+    "word": "plateau",
+    "phonetic": "/ˈplætəʊ/",
+    "meaning": "高原",
+    "exampleEn": "The atmosphere is thin on the plateau.",
+    "exampleCn": "高原的空气稀薄。",
+    "collocations": [
+      {
+        "collocation": "plateau climate",
+        "meaning": "高原气候"
+      },
+      {
+        "collocation": "Reach a plateau",
+        "meaning": "达到稳定水平"
+      }
+    ],
+    "notes": [
+      {
+        "word": "bureau",
+        "phonetic": "/ˈbjʊərəʊ/",
+        "meaning": "局，机构"
+      }
+    ],
+    "remember": "plat (flat 平的) + eau (法语词尾) -> 平坦的高地 -> 高原"
+  },
+  {
+    "word": "oasis",
+    "phonetic": "/əʊˈeɪsɪs/",
+    "meaning": "绿洲；宜人之地",
+    "exampleEn": "Oasis symbolises a hope in desert areas.",
+    "exampleCn": "绿洲在沙漠地区象征着一种希望。",
+    "collocations": [],
+    "notes": [],
+    "remember": "与“绿洲”乐队(Oasis)同名。"
+  }
+]

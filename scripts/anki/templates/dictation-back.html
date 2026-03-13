@@ -1,0 +1,76 @@
+<!-- 听写卡片 - 背面 -->
+<hr id="answer" />
+
+<div class="card dictation-back">
+  <div class="answer-word">{{type:单词}}</div>
+  <div class="answer-word">{{单词}}</div>
+  <div class="section phonetic-section">{{音标}}</div>
+  <div class="section meaning-section">{{词义}}</div>
+  <audio
+    id="dictation-audio"
+    controls
+    autoplay
+    src="https://dict.youdao.com/dictvoice?audio={{单词}}&type=1"
+  ></audio>
+</div>
+
+<script>
+  (function () {
+    var audio = document.getElementById("dictation-audio");
+    if (audio) {
+      // 可在此调整语速：0.5 慢速，2.0 快速
+      audio.playbackRate = 1;
+    }
+  })();
+</script>
+
+<style>
+  .dictation-back {
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    padding: 1rem 0;
+    text-align: center;
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+  .dictation-back .answer-word {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+  }
+  .dictation-back .answer-word input {
+    text-align: center;
+  }
+  .dictation-back .section {
+    margin-bottom: 0.75rem;
+  }
+  .dictation-back .section:empty {
+    display: none;
+  }
+  .dictation-back .phonetic-section .phonetic-text {
+    font-size: 1.2rem;
+    color: #2d5a87;
+    font-weight: 500;
+  }
+  .dictation-back .meaning-section .meaning-text {
+    color: #333;
+    font-size: 1.05rem;
+  }
+
+  .dictation-back audio {
+    width: 100%;
+    max-width: 320px;
+    height: 36px;
+    margin-top: 0.5rem;
+  }
+
+  #answer {
+    margin: 1rem 0;
+    border: none;
+    border-top: 1px solid #ddd;
+  }
+</style>

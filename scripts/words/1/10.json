@@ -1,0 +1,247 @@
+[
+  {
+    "word": "meteorology",
+    "phonetic": "/ˌmiːtiəˈrɒlədʒi/",
+    "meaning": "气象学",
+    "exampleEn": "Nowadays, few people like to study meteorology.",
+    "exampleCn": "现在，很少有人愿意学气象学。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "meteorological",
+        "phonetic": "/ˌmiːtiərəˈlɒdʒɪkl/",
+        "meaning": "气象的"
+      },
+      {
+        "word": "meteor",
+        "phonetic": "/ˈmiːtiə(r)/",
+        "meaning": "流星；高处的事物"
+      }
+    ],
+    "remember": "meteor (高处的事物) + logy (学说) → 气象学。"
+  },
+  {
+    "word": "mild",
+    "phonetic": "/maɪld/",
+    "meaning": "温和的；不严重的",
+    "exampleEn": "The weather is mild today; it is neither hot nor cold.",
+    "exampleCn": "今天的天气温暖舒适，不热也不冷。",
+    "collocations": [
+      {
+        "collocation": "a mild climate",
+        "meaning": "温和的气候"
+      }
+    ],
+    "notes": [
+      {
+        "word": "wild",
+        "phonetic": "/waɪld/",
+        "meaning": "野生的"
+      }
+    ],
+    "remember": "联想记忆：和 wild (野生的) 形状相似，但意思相反，是温和的。"
+  },
+  {
+    "word": "heating",
+    "phonetic": "/ˈhiːtɪŋ/",
+    "meaning": "供暖；暖气装置",
+    "exampleEn": "The workers are installing a heating system.",
+    "exampleCn": "工人们正在安装供暖系统。",
+    "collocations": [
+      {
+        "collocation": "central heating",
+        "meaning": "中央暖气系统"
+      }
+    ],
+    "notes": [
+      {
+        "word": "heat",
+        "phonetic": "/hiːt/",
+        "meaning": "热；强烈感情；(使)变热"
+      }
+    ],
+    "remember": "由 heat (热) 加后缀 -ing 构成，表示供暖系统。"
+  },
+  {
+    "word": "moderate",
+    "phonetic": "/ˈmɒdərət/",
+    "meaning": "适度的；温和的；中等的；(使)缓和",
+    "exampleEn": "The wind was strong all day, but it moderated in the evening.",
+    "exampleCn": "一整天，风都刮得很厉害，但到傍晚时有所减弱了。",
+    "collocations": [
+      {
+        "collocation": "a moderate climate",
+        "meaning": "温和的气候"
+      }
+    ],
+    "notes": [],
+    "remember": "词根 mod 表示“模、度”，-erate 为动词或形容词后缀，意为有度、适度。"
+  },
+  {
+    "word": "warm",
+    "phonetic": "/wɔːm/",
+    "meaning": "温暖的；(使)变暖",
+    "exampleEn": "The blood of a warm-blooded animal remains around the same temperature both on warm and cold days.",
+    "exampleCn": "不论天气温暖还是寒冷，恒温动物的血都会保持基本不变的温度。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "warmth",
+        "phonetic": "/wɔːmθ/",
+        "meaning": "温暖；热情"
+      }
+    ],
+    "remember": "常见简单词。注意其派生词 warmth。"
+  },
+  {
+    "word": "thermal",
+    "phonetic": "/ˈθɜːməl/",
+    "meaning": "热量的",
+    "exampleEn": "The thermal energy has become more and more important.",
+    "exampleCn": "热能变得越来越重要了。",
+    "collocations": [],
+    "notes": [],
+    "remember": "来自希腊语 therme (热)。"
+  },
+  {
+    "word": "tropics",
+    "phonetic": "/ˈtrɒpɪks/",
+    "meaning": "热带地区",
+    "exampleEn": "He lives in the tropics.",
+    "exampleCn": "他住在热带地区。",
+    "collocations": [
+      {
+        "collocation": "in the tropics",
+        "meaning": "在热带地区"
+      }
+    ],
+    "notes": [
+      {
+        "word": "tropical",
+        "phonetic": "/ˈtrɒpɪkl/",
+        "meaning": "热带的"
+      }
+    ],
+    "remember": "tropical fruits (热带水果)。"
+  },
+  {
+    "word": "arid",
+    "phonetic": "/ˈærɪd/",
+    "meaning": "干燥的，干旱的；枯燥的",
+    "exampleEn": "It is difficult to grow fruit in arid desert areas.",
+    "exampleCn": "在干燥的沙漠地带栽培水果很困难。",
+    "collocations": [
+      {
+        "collocation": "an arid desert",
+        "meaning": "干旱的荒漠"
+      }
+    ],
+    "notes": [
+      {
+        "word": "acid",
+        "phonetic": "/ˈæsɪd/",
+        "meaning": "酸的"
+      }
+    ],
+    "remember": "联想记忆：arid 干燥的，acid 酸的。"
+  },
+  {
+    "word": "moist",
+    "phonetic": "/mɔɪst/",
+    "meaning": "潮湿的，湿润的",
+    "exampleEn": "His eyes were moist with tears.",
+    "exampleCn": "泪水润湿了他的眼睛。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "moisture",
+        "phonetic": "/ˈmɔɪstʃə(r)/",
+        "meaning": "潮气，湿气；水分"
+      }
+    ],
+    "remember": "常指由于细雨或水汽或某种液体导致的小程度的潮湿。"
+  },
+  {
+    "word": "damp",
+    "phonetic": "/dæmp/",
+    "meaning": "潮湿的，湿气重的",
+    "exampleEn": "The damp match won't strike.",
+    "exampleCn": "这潮湿的火柴划不着。",
+    "collocations": [
+      {
+        "collocation": "a damp climate",
+        "meaning": "潮湿的气候"
+      }
+    ],
+    "notes": [
+      {
+        "word": "dampness",
+        "phonetic": "/ˈdæmpnəs/",
+        "meaning": "潮湿"
+      }
+    ],
+    "remember": "常指阴冷、不舒服的潮湿。"
+  },
+  {
+    "word": "humid",
+    "phonetic": "/ˈhjuːmɪd/",
+    "meaning": "潮湿的，湿热的",
+    "exampleEn": "The milk powder has lumped together because my home is so humid.",
+    "exampleCn": "我家太潮湿了，所以奶粉结块了。",
+    "collocations": [
+      {
+        "collocation": "humid conditions",
+        "meaning": "湿热的天气状况"
+      }
+    ],
+    "notes": [
+      {
+        "word": "humidity",
+        "phonetic": "/hjuːˈmɪdəti/",
+        "meaning": "高温潮湿；湿度"
+      },
+      {
+        "word": "exhume",
+        "phonetic": "/eksˈhjuːm/",
+        "meaning": "出土"
+      },
+      {
+        "word": "inhume",
+        "phonetic": "/ɪnˈhjuːm/",
+        "meaning": "入土"
+      },
+      {
+        "word": "humble",
+        "phonetic": "/ˈhʌmbl/",
+        "meaning": "谦逊的"
+      }
+    ],
+    "remember": "由词根 hum (土) 联想记忆。"
+  },
+  {
+    "word": "snowy",
+    "phonetic": "/ˈsnəʊi/",
+    "meaning": "下雪多的；被雪覆盖的",
+    "exampleEn": "The snowy weather lasted the whole time we were there.",
+    "exampleCn": "我们在那儿的整段时间都是下雪的天气。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "snow",
+        "phonetic": "/snəʊ/",
+        "meaning": "雪"
+      }
+    ],
+    "remember": "snow (雪) + y (形容词后缀)。"
+  },
+  {
+    "word": "frost",
+    "phonetic": "/frɒst/",
+    "meaning": "霜；霜冻；严寒",
+    "exampleEn": "There will be a frost tonight.",
+    "exampleCn": "今晚会有霜冻。",
+    "collocations": [],
+    "notes": [],
+    "remember": "联想：Frozen (冰雪奇缘) 的词首相同，与冷有关。"
+  }
+]

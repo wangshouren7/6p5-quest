@@ -10,6 +10,8 @@
     "db:seed": "prisma db seed",
     "db:reset": "pnpm prisma migrate reset && pnpm db:seed",
     "upload-corpus-audio": "tsx scripts/upload-corpus-audio-to-blob.ts",
+    "extract-words-from-image": "tsx scripts/extract-words-from-image.ts",
+    "anki-words": "tsx scripts/anki/words-json-to-cards.ts",
     "postinstall": "pnpm prisma generate"
   },
   "prisma": {

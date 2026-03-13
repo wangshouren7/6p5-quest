@@ -1,0 +1,206 @@
+[
+  {
+    "word": "mishap",
+    "phonetic": "/'mɪshæp/",
+    "meaning": "n. 小灾难",
+    "exampleEn": "A mishap prevented him from attending the routine company meeting.",
+    "exampleCn": "他遇到点儿麻烦，没能来参加公司的例会。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "mis-",
+        "phonetic": "[mɪs]",
+        "meaning": "前缀：坏的，错的，不好的"
+      },
+      {
+        "word": "hap",
+        "phonetic": "[hæp]",
+        "meaning": "词根：运气"
+      }
+    ],
+    "remember": "mis（坏的）+ hap（运气）→ 不幸。"
+  },
+  {
+    "word": "catastrophic",
+    "phonetic": "/ˌkætə'strɒfɪk/",
+    "meaning": "adj. 灾难性的",
+    "exampleEn": "If the forecast had been wrong, the consequences could have been catastrophic.",
+    "exampleCn": "如果这个预报是错误的，那么结果本可能会是灾难性的。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "cata-",
+        "phonetic": "['kætə]",
+        "meaning": "表示“向下”"
+      },
+      {
+        "word": "stro",
+        "phonetic": "[strəʊ]",
+        "meaning": "表示“星星”"
+      }
+    ],
+    "remember": "起源于“星星所在的位置不好”，即不吉利的行为引发的灾难。"
+  },
+  {
+    "word": "calamity",
+    "phonetic": "/kə'læmɪti/",
+    "meaning": "n. 灾难，不幸的事",
+    "exampleEn": "A hurricane would be a calamity for this low-lying coastal region.",
+    "exampleCn": "飓风会为这片地势低洼的沿海地区带来灾难。",
+    "collocations": [
+      {
+        "collocation": "cause a calamity",
+        "meaning": "酿成灾祸"
+      }
+    ],
+    "notes": [],
+    "remember": "常指造成巨大损失或不幸的自然灾害。"
+  },
+  {
+    "word": "endanger",
+    "phonetic": "/ɪn'deɪndʒə(r)/",
+    "meaning": "v. 使遭受危险，危及",
+    "exampleEn": "If you work hard without rest, you will endanger your health.",
+    "exampleCn": "你若辛勤工作而不休息，会把身体弄坏的。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "endangered",
+        "phonetic": "/ɪn'deɪndʒəd/",
+        "meaning": "adj. 濒临灭绝的"
+      }
+    ],
+    "remember": "en（使）+ danger（危险）→ 使遭受危险。"
+  },
+  {
+    "word": "jeopardise",
+    "phonetic": "/'dʒepədaɪz/",
+    "meaning": "v. 危害，危及",
+    "exampleEn": "If you are rude to the boss, your chances of success may be jeopardised.",
+    "exampleCn": "如果你对老板没有礼貌，就有可能危害到你成功的机会。",
+    "collocations": [
+      {
+        "collocation": "jeopardise sb.'s life",
+        "meaning": "危及某人的生命"
+      }
+    ],
+    "notes": [
+      {
+        "word": "jeopardize",
+        "phonetic": "/'dʒepədaɪz/",
+        "meaning": "美式拼法"
+      }
+    ],
+    "remember": "谐音记忆：Jeo 趴在地上 -> 遇到了危险。"
+  },
+  {
+    "word": "destructive",
+    "phonetic": "/dɪ'strʌktɪv/",
+    "meaning": "adj. 破坏性的，有害的",
+    "exampleEn": "Jealousy is an extremely destructive emotion.",
+    "exampleCn": "嫉妒是一种极具破坏性的情绪。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "destroy",
+        "phonetic": "/dɪ'strɔɪ/",
+        "meaning": "v. 摧毁"
+      },
+      {
+        "word": "construct",
+        "phonetic": "/kən'strʌkt/",
+        "meaning": "v. 建造"
+      }
+    ],
+    "remember": "de（除去）+ struct（建造）+ ive（形容词后缀）→ 毁坏建筑 → 破坏性的。"
+  },
+  {
+    "word": "El Niño",
+    "phonetic": "/el 'niːnjəʊ/",
+    "meaning": "n. 厄尔尼诺现象",
+    "exampleEn": "What changed the equation that year was El Niño.",
+    "exampleCn": "那年是厄尔尼诺现象打破了这种平衡。",
+    "collocations": [],
+    "notes": [],
+    "remember": "指赤道附近东太平洋水域大范围海水异常增温的现象。"
+  },
+  {
+    "word": "greenhouse",
+    "phonetic": "/'ɡriːnhaʊs/",
+    "meaning": "n. 温室，暖房",
+    "exampleEn": "The flowers are grown in the greenhouse.",
+    "exampleCn": "这些花是在温室里栽培的。",
+    "collocations": [
+      {
+        "collocation": "the greenhouse effect",
+        "meaning": "温室效应"
+      },
+      {
+        "collocation": "a greenhouse gas",
+        "meaning": "温室气体"
+      }
+    ],
+    "notes": [],
+    "remember": "组合词：green（绿色的）+ house（房子）。"
+  },
+  {
+    "word": "phenomenon",
+    "phonetic": "/fɪ'nɒmɪnən/",
+    "meaning": "n. 现象",
+    "exampleEn": "Snow is an almost unknown phenomenon in Egypt.",
+    "exampleCn": "在埃及，雪几乎是种不为人知的现象。",
+    "collocations": [
+      {
+        "collocation": "a natural phenomenon",
+        "meaning": "自然现象"
+      },
+      {
+        "collocation": "a social phenomenon",
+        "meaning": "社会现象"
+      }
+    ],
+    "notes": [
+      {
+        "word": "phenomena",
+        "phonetic": "/fɪ'nɒmɪnə/",
+        "meaning": "复数形式"
+      }
+    ],
+    "remember": "pheno（显示，出现）+ menon（名词后缀）→ 现象。"
+  },
+  {
+    "word": "pebble",
+    "phonetic": "/'pebəl/",
+    "meaning": "n. 鹅卵石",
+    "exampleEn": "The boy put his hand into the money bag and drew out a pebble.",
+    "exampleCn": "男孩把手伸进钱袋中，拿出来了一粒鹅卵石。",
+    "collocations": [],
+    "notes": [],
+    "remember": "象声/象形记忆：外形圆润的小石头。"
+  },
+  {
+    "word": "magnet",
+    "phonetic": "/'mæɡnɪt/",
+    "meaning": "n. 磁铁，吸铁石",
+    "exampleEn": "He picked all the pins up with a magnet.",
+    "exampleCn": "他用磁铁捡起了所有的大头针。",
+    "collocations": [
+      {
+        "collocation": "magnetic field",
+        "meaning": "磁场"
+      },
+      {
+        "collocation": "magnetic therapy",
+        "meaning": "磁疗"
+      }
+    ],
+    "notes": [
+      {
+        "word": "magnetic",
+        "phonetic": "/mæɡ'netɪk/",
+        "meaning": "adj. 磁性的，有吸引力的"
+      }
+    ],
+    "remember": "源于希腊人在马格内西亚（Magnesia）地区发现的一种神奇矿石。"
+  }
+]

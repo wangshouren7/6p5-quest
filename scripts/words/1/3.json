@@ -1,0 +1,227 @@
+[
+  {
+    "word": "ore",
+    "phonetic": "/ɔː/",
+    "meaning": "n. 矿石；矿",
+    "exampleEn": "This mountain area is rich in iron ore.",
+    "exampleCn": "这片山区富含铁矿。",
+    "collocations": [],
+    "notes": [],
+    "remember": "直接记忆"
+  },
+  {
+    "word": "mineral",
+    "phonetic": "/'mɪnərəl/",
+    "meaning": "n. 矿物，矿物质；矿产",
+    "exampleEn": "China is rich in mineral resources.",
+    "exampleCn": "中国的矿产资源丰富。",
+    "collocations": [
+      {
+        "collocation": "mineral water",
+        "meaning": "矿泉水"
+      }
+    ],
+    "notes": [
+      {
+        "word": "undermine",
+        "phonetic": "/ˌʌndəˈmaɪn/",
+        "meaning": "暗中破坏"
+      },
+      {
+        "word": "mine",
+        "phonetic": "/maɪn/",
+        "meaning": "矿山"
+      }
+    ],
+    "remember": "来自mine（矿山）的东西 -> 矿物。"
+  },
+  {
+    "word": "marble",
+    "phonetic": "/'mɑːbəl/",
+    "meaning": "n. 大理石；（玩具）弹球",
+    "exampleEn": "They used marble to build the steps.",
+    "exampleCn": "他们用大理石修进台阶。",
+    "collocations": [],
+    "notes": [],
+    "remember": "直接记忆"
+  },
+  {
+    "word": "quartz",
+    "phonetic": "/kwɔːts/",
+    "meaning": "n. 石英",
+    "exampleEn": "Have you bought the quartz clock?",
+    "exampleCn": "你买那座石英钟了吗？",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "quarter",
+        "phonetic": "/ˈkwɔːtə(r)/",
+        "meaning": "四分之一"
+      }
+    ],
+    "remember": "谐音：石英是四面体的石头。"
+  },
+  {
+    "word": "granite",
+    "phonetic": "/'ɡrænɪt/",
+    "meaning": "n. 花岗岩",
+    "exampleEn": "His grave is made of granite.",
+    "exampleCn": "他的墓是用花岗岩造的。",
+    "collocations": [
+      {
+        "collocation": "bite on granite",
+        "meaning": "白费力气，徒劳无功"
+      }
+    ],
+    "notes": [
+      {
+        "word": "gran",
+        "phonetic": "/ɡræn/",
+        "meaning": "颗粒"
+      }
+    ],
+    "remember": "gran（颗粒）+ ite（名词后缀）→ 有颗粒的石头 → 花岗岩。"
+  },
+  {
+    "word": "gust",
+    "phonetic": "/ɡʌst/",
+    "meaning": "n. 一阵狂风；（感情的）迸发",
+    "exampleEn": "A gust of wind blew the leaves off the trees.",
+    "exampleCn": "一阵狂风把树叶从树上吹落。",
+    "collocations": [],
+    "notes": [],
+    "remember": "直接记忆"
+  },
+  {
+    "word": "breeze",
+    "phonetic": "/briːz/",
+    "meaning": "n. 微风，和风",
+    "exampleEn": "We are enjoying the cool breeze that comes from the lake.",
+    "exampleCn": "我们享受着湖面上吹来的凉爽微风。",
+    "collocations": [
+      {
+        "collocation": "gentle breeze",
+        "meaning": "和风，微风"
+      }
+    ],
+    "notes": [],
+    "remember": "直接记忆"
+  },
+  {
+    "word": "monsoon",
+    "phonetic": "/mɒn'suːn/",
+    "meaning": "n. 季风；雨季",
+    "exampleEn": "The monsoon brings rain to us.",
+    "exampleCn": "季风给我们带来了降雨。",
+    "collocations": [
+      {
+        "collocation": "monsoon season",
+        "meaning": "雨季"
+      },
+      {
+        "collocation": "monsoon climate",
+        "meaning": "季风气候"
+      }
+    ],
+    "notes": [
+      {
+        "word": "month",
+        "phonetic": "/mʌnθ/",
+        "meaning": "月份"
+      }
+    ],
+    "remember": "理解为月份(month)相关的季节性风。"
+  },
+  {
+    "word": "gale",
+    "phonetic": "/ɡeɪl/",
+    "meaning": "n. 大风",
+    "exampleEn": "We got our roof blown off in a gale last night.",
+    "exampleCn": "昨夜的大风把我们的房顶给掀掉了。",
+    "collocations": [
+      {
+        "collocation": "a severe gale",
+        "meaning": "一阵大风"
+      }
+    ],
+    "notes": [],
+    "remember": "直接记忆"
+  },
+  {
+    "word": "hurricane",
+    "phonetic": "/ˈhʌrɪkən/",
+    "meaning": "n. 飓风；暴风",
+    "exampleEn": "The hurricane flung their motorboat upon the rocks.",
+    "exampleCn": "飓风把他们的摩托艇抛到岩石上。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "cyclone",
+        "phonetic": "/ˈsaɪkləʊn/",
+        "meaning": "气旋"
+      }
+    ],
+    "remember": "理解为发生在大西洋的强烈风暴。"
+  },
+  {
+    "word": "tornado",
+    "phonetic": "/tɔː'neɪdəʊ/",
+    "meaning": "n. 龙卷风",
+    "exampleEn": "When a tornado touches the ground, it does a lot of damage.",
+    "exampleCn": "当龙卷风到达地面时，会造成很大破坏。",
+    "collocations": [],
+    "notes": [],
+    "remember": "torn=turn转动（旋转的风）。"
+  },
+  {
+    "word": "typhoon",
+    "phonetic": "/ˌtaɪ'fuːn/",
+    "meaning": "n. 台风",
+    "exampleEn": "The typhoon is gathering strength.",
+    "exampleCn": "台风的风力正逐渐增强。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "tycoon",
+        "phonetic": "/taɪ'kuːn/",
+        "meaning": "太君，大亨"
+      }
+    ],
+    "remember": "该词的形成与汉语广东方言“大风”的发音有关。"
+  },
+  {
+    "word": "volcano",
+    "phonetic": "/vɒl'keɪnəʊ/",
+    "meaning": "n. 火山",
+    "exampleEn": "The volcano erupted and two small towns were buried under metres of hot ash, mud and bits of molten rock.",
+    "exampleCn": "这次火山爆发将两座小镇掩埋于数米厚炽热的火山灰、泥浆和熔岩碎块之下。",
+    "collocations": [
+      {
+        "collocation": "an active/dormant/extinct volcano",
+        "meaning": "活/休眠/死火山"
+      },
+      {
+        "collocation": "sit on a volcano",
+        "meaning": "处境危险"
+      }
+    ],
+    "notes": [],
+    "remember": "来自罗马神话中的火神武尔坎（Vulcan）。"
+  },
+  {
+    "word": "erupt",
+    "phonetic": "/ɪ'rʌpt/",
+    "meaning": "v. 爆发，喷发；（斑疹等）突然出现",
+    "exampleEn": "Hot lava erupted from the crust.",
+    "exampleCn": "从地壳中喷发出了滚烫的熔岩。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "eruption",
+        "phonetic": "/ɪˈrʌpʃn/",
+        "meaning": "n. 喷发，爆发"
+      }
+    ],
+    "remember": "词根记忆：e(out)+rupt(break) -> 破裂而出。"
+  }
+]

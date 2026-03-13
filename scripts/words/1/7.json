@@ -1,0 +1,244 @@
+[
+  {
+    "word": "globe",
+    "phonetic": "/ɡləʊb/",
+    "meaning": "n. 球体；地球仪；[the ~] 地球",
+    "exampleEn": "There are people in almost every habitable part of this globe.",
+    "exampleCn": "地球上几乎每一处适于居住的地方都有人在。",
+    "collocations": [
+      {
+        "collocation": "travel around the globe",
+        "meaning": "环游世界"
+      },
+      {
+        "collocation": "global warming",
+        "meaning": "全球变暖"
+      }
+    ],
+    "notes": [
+      {
+        "word": "global",
+        "phonetic": "/ˈɡləʊbl/",
+        "meaning": "adj. 全球的；总体的"
+      },
+      {
+        "word": "globalization",
+        "phonetic": "/ˌɡləʊbəlaɪˈzeɪʃn/",
+        "meaning": "全球化"
+      }
+    ],
+    "remember": "globe 通常指球状物或地球。"
+  },
+  {
+    "word": "hemisphere",
+    "phonetic": "/ˈhemɪsfɪə/",
+    "meaning": "n. 半球",
+    "exampleEn": "In the northern hemisphere, you can hardly see the Magellanic Clouds.",
+    "exampleCn": "在北半球，你几乎看不到麦哲伦云。",
+    "collocations": [
+      {
+        "collocation": "the northern hemisphere",
+        "meaning": "北半球"
+      }
+    ],
+    "notes": [
+      {
+        "word": "hemispheric",
+        "phonetic": "/ˌhemɪˈsferɪk/",
+        "meaning": "adj. 半球形状的；半球的"
+      }
+    ],
+    "remember": "hemi (半) + sphere (球) → 半球。"
+  },
+  {
+    "word": "equator",
+    "phonetic": "/ɪˈkweɪtə/",
+    "meaning": "n. 赤道",
+    "exampleEn": "The equator is an imaginary line around the middle of the earth.",
+    "exampleCn": "赤道是一条假想的环绕地球中部的线。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "equal",
+        "phonetic": "/ˈiːkwəl/",
+        "meaning": "adj. 平等的"
+      }
+    ],
+    "remember": "Equ相等的（赤道将地球平分为相等的两半）。"
+  },
+  {
+    "word": "arctic",
+    "phonetic": "/ˈɑːktɪk/",
+    "meaning": "adj. 极冷的；[A~] 北极的 n. [the A~] 北极地区，北极",
+    "exampleEn": "The polar bear's habitat is the icy waters of the Arctic.",
+    "exampleCn": "北极熊的栖息地是冰冷的北极海域。",
+    "collocations": [
+      {
+        "collocation": "the Arctic Ocean",
+        "meaning": "北冰洋"
+      },
+      {
+        "collocation": "arctic tern",
+        "meaning": "北极燕鸥"
+      }
+    ],
+    "notes": [],
+    "remember": "arctic 常指北极相关的冷。"
+  },
+  {
+    "word": "Antarctic",
+    "phonetic": "/ænˈtɑːktɪk/",
+    "meaning": "adj. 南极的 n. [the ~] 南极地区，南极洲",
+    "exampleEn": "Because of the extreme cold, the environment in the Antarctic is uniquely fragile.",
+    "exampleCn": "极度严寒造成了南极地区绝无仅有的脆弱环境。",
+    "collocations": [],
+    "notes": [],
+    "remember": "ant (对面的) + arctic (北极) → 北极的对面 → 南极。"
+  },
+  {
+    "word": "pole",
+    "phonetic": "/pəʊl/",
+    "meaning": "n. (地) 极；截然相反的两极之一",
+    "exampleEn": "English is spoken from pole to pole.",
+    "exampleCn": "英语在世界各地都通用。",
+    "collocations": [
+      {
+        "collocation": "the South Pole",
+        "meaning": "南极"
+      }
+    ],
+    "notes": [],
+    "remember": "pole 指极点，如南极或北极。"
+  },
+  {
+    "word": "polar",
+    "phonetic": "/ˈpəʊlə/",
+    "meaning": "adj. 极地的，近极地的；对立的",
+    "exampleEn": "In these polar regions, the balance of nature has already been disrupted.",
+    "exampleCn": "在南极地区和北极地区，大自然的平衡已被破坏。",
+    "collocations": [
+      {
+        "collocation": "a polar bear",
+        "meaning": "北极熊"
+      }
+    ],
+    "notes": [
+      {
+        "word": "polarise",
+        "phonetic": "/ˈpəʊləraɪz/",
+        "meaning": "（使）两极化"
+      }
+    ],
+    "remember": "由 pole (极) 衍生出的形容词形式。"
+  },
+  {
+    "word": "axis",
+    "phonetic": "/ˈæksɪs/",
+    "meaning": "n. 轴，轴线",
+    "exampleEn": "The earth's axis is the line between the North and South Poles.",
+    "exampleCn": "地轴是南北极之间的线。",
+    "collocations": [],
+    "notes": [],
+    "remember": "axis 通常指旋转中心。 "
+  },
+  {
+    "word": "deteriorate",
+    "phonetic": "/dɪˈtɪəriəreɪt/",
+    "meaning": "v. 恶化，变坏",
+    "exampleEn": "Relations between the two countries have deteriorated sharply in recent weeks.",
+    "exampleCn": "最近几周，那两个国家间的关系严重恶化了。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "deterioration",
+        "phonetic": "/dɪˌtɪəriəˈreɪʃn/",
+        "meaning": "n. 恶化，变坏"
+      }
+    ],
+    "remember": "De (向下) + terrible (糟糕) 的某种联想，表示变糟。"
+  },
+  {
+    "word": "aggravate",
+    "phonetic": "/ˈæɡrəveɪt/",
+    "meaning": "v. 加重，加剧，使恶化",
+    "exampleEn": "Grief aggravated her illness.",
+    "exampleCn": "痛苦加重了她的病。",
+    "collocations": [
+      {
+        "collocation": "aggravate the differences",
+        "meaning": "加深分歧"
+      }
+    ],
+    "notes": [
+      {
+        "word": "gravity",
+        "phonetic": "/ˈɡrævəti/",
+        "meaning": "n. 重力；严重性"
+      },
+      {
+        "word": "aggregate",
+        "phonetic": "/ˈæɡrɪɡət/",
+        "meaning": "v./n. 合计，总计"
+      }
+    ],
+    "remember": "ag (加强意义) + grav (重的) + ate (使) → 使变重，即加重。"
+  },
+  {
+    "word": "degrade",
+    "phonetic": "/dɪˈɡreɪd/",
+    "meaning": "v. 降解；降低……的身分；使恶化，使退化",
+    "exampleEn": "A dishonest action like that will degrade you.",
+    "exampleCn": "那样不诚实的行为有辱你的身份。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "degradation",
+        "phonetic": "/ˌdeɡrəˈdeɪʃn/",
+        "meaning": "n. 恶化，退化"
+      },
+      {
+        "word": "degradable",
+        "phonetic": "/dɪˈɡreɪdəbl/",
+        "meaning": "可降解的"
+      }
+    ],
+    "remember": "de (向下) + grade (层级) → 降级，降解。"
+  },
+  {
+    "word": "upgrade",
+    "phonetic": "/ˌʌpˈɡreɪd/",
+    "meaning": "v. 使升级；提高，改善",
+    "exampleEn": "The antivirus software should often be upgraded.",
+    "exampleCn": "杀毒软件应当经常升级。",
+    "collocations": [
+      {
+        "collocation": "upgrade (sth.) to sth.",
+        "meaning": "(把某物) 升级为某物"
+      }
+    ],
+    "notes": [
+      {
+        "word": "up-to-date",
+        "phonetic": "/ˌʌp tə ˈdeɪt/",
+        "meaning": "与时俱进，最新的"
+      }
+    ],
+    "remember": "up (向上) + grade (层级) → 升级。"
+  },
+  {
+    "word": "erode",
+    "phonetic": "/ɪˈrəʊd/",
+    "meaning": "v. 侵蚀，腐蚀",
+    "exampleEn": "The waves erode the rocks on the shore.",
+    "exampleCn": "海浪侵蚀着岸边的岩石。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "erosion",
+        "phonetic": "/ɪˈrəʊʒn/",
+        "meaning": "n. 侵蚀，腐蚀"
+      }
+    ],
+    "remember": "erode 侧重于水的冲刷或长时间磨损。"
+  }
+]

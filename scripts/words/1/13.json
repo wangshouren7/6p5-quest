@@ -1,0 +1,220 @@
+[
+  {
+    "word": "southeast",
+    "phonetic": "/ˌsauθ'iːst/",
+    "meaning": "n. 东南方；东南部 adj. 东南方的；东南部的",
+    "exampleEn": "Austria lies to the southeast of Germany.",
+    "exampleCn": "奥地利在德国的东南边。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "southern",
+        "phonetic": "/'sʌðən/",
+        "meaning": "南方的"
+      }
+    ],
+    "remember": "south (南) + east (东) = 东南"
+  },
+  {
+    "word": "southwest",
+    "phonetic": "/ˌsauθ'west/",
+    "meaning": "n. 西南方；西南部 adj. 西南方的；西南部的",
+    "exampleEn": "Ireland is in the southwest of the British Isles.",
+    "exampleCn": "爱尔兰在不列颠群岛的西南部。",
+    "collocations": [],
+    "notes": [],
+    "remember": "south (南) + west (西) = 西南"
+  },
+  {
+    "word": "northeast",
+    "phonetic": "/ˌnɔːθ'iːst/",
+    "meaning": "n. 东北方；东北部 adj. 东北方的；东北部的",
+    "exampleEn": "Snow in October is nothing strange in northeast China.",
+    "exampleCn": "在中国东北部，10月下雪不是什么奇怪的事。",
+    "collocations": [],
+    "notes": [],
+    "remember": "north (北) + east (东) = 东北"
+  },
+  {
+    "word": "northwest",
+    "phonetic": "/ˌnɔːθ'west/",
+    "meaning": "n. 西北方；西北部 adj. 西北方的；西北部的",
+    "exampleEn": "There is a large hilly area in the northwest.",
+    "exampleCn": "西北部有一大片丘陵地带。",
+    "collocations": [],
+    "notes": [],
+    "remember": "north (北) + west (西) = 西北"
+  },
+  {
+    "word": "eastern",
+    "phonetic": "/'iːstən/",
+    "meaning": "adj. 东部的；东方的",
+    "exampleEn": "The eastern situation is similarly intense.",
+    "exampleCn": "东部的情况同样紧张。",
+    "collocations": [],
+    "notes": [],
+    "remember": "east (东) + ern (形容词后缀) = 东方的"
+  },
+  {
+    "word": "oriental",
+    "phonetic": "/ˌɔːri'entl/",
+    "meaning": "adj. 东方的（尤指中国和日本的）",
+    "exampleEn": "She has studied the cultures of oriental countries.",
+    "exampleCn": "她研究过东方各国的文化。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "origin",
+        "phonetic": "/'ɒrɪdʒɪn/",
+        "meaning": "起源"
+      },
+      {
+        "word": "orient",
+        "phonetic": "/'ɔːriənt/",
+        "meaning": "向东；确定方向"
+      }
+    ],
+    "remember": "词根 ori 意为“升起” -> 太阳升起的地方 -> 东方的。"
+  },
+  {
+    "word": "inevitable",
+    "phonetic": "/ɪ'nevɪtəbl/",
+    "meaning": "adj. 不可避免的，必然的",
+    "exampleEn": "Such a difficult operation may not succeed, but it's an inevitable gamble.",
+    "exampleCn": "难度如此之大的手术可能会失败，但我们必须冒险一试。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "evitable",
+        "phonetic": "/'evɪtəbl/",
+        "meaning": "可避免的"
+      }
+    ],
+    "remember": "in（不）+ evitable（可避免的）→ 不可避免的。"
+  },
+  {
+    "word": "irreversible",
+    "phonetic": "/ˌɪrɪ'vɜːsəbl/",
+    "meaning": "adj. 不可逆转的；不可挽回的",
+    "exampleEn": "He suffered irreversible brain damage from the incident.",
+    "exampleCn": "他的大脑在事故中受伤，无法治愈。",
+    "collocations": [],
+    "notes": [],
+    "remember": "ir（不）+ re（回）+ vers（转）+ ible（可...的）→ 不可以转回来的 → 不可逆转的。"
+  },
+  {
+    "word": "irregularly",
+    "phonetic": "/ɪ'regjələli/",
+    "meaning": "adv. 不规则地；不合常规地",
+    "exampleEn": "The patient is breathing irregularly.",
+    "exampleCn": "病人的呼吸很不均匀。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "regularly",
+        "phonetic": "/'regjələli/",
+        "meaning": "有规律地"
+      }
+    ],
+    "remember": "ir (不) + regularly (有规律地)"
+  },
+  {
+    "word": "inappropriate",
+    "phonetic": "/ˌɪnə'prəʊpri-ət/",
+    "meaning": "adj. 不合适的",
+    "exampleEn": "Your bright red coat would be quite inappropriate for a funeral.",
+    "exampleCn": "你鲜艳的红大衣很不适合葬礼。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "appropriate",
+        "phonetic": "/ə'prəʊpriət/",
+        "meaning": "恰当的，合适的"
+      }
+    ],
+    "remember": "in (不) + appropriate (合适的)"
+  },
+  {
+    "word": "abnormal",
+    "phonetic": "/æb'nɔːml/",
+    "meaning": "adj. 不正常的，反常的；变态的",
+    "exampleEn": "El Niño will result in the abnormal weather.",
+    "exampleCn": "厄尔尼诺现象将会导致异常的天气。",
+    "collocations": [
+      {
+        "collocation": "an abnormal climate",
+        "meaning": "异常气候"
+      }
+    ],
+    "notes": [],
+    "remember": "ab (不) + normal (正常的) → 不正常的。"
+  },
+  {
+    "word": "sediment",
+    "phonetic": "/'sedɪmənt/",
+    "meaning": "n. 沉淀物；沉积物",
+    "exampleEn": "The sediment of coffee will settle.",
+    "exampleCn": "咖啡渣会沉淀下去。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "sit",
+        "phonetic": "/sɪt/",
+        "meaning": "坐，落下"
+      }
+    ],
+    "remember": "sed (sit 坐/落) + iment -> 落在底下的东西 -> 沉淀物"
+  },
+  {
+    "word": "silt",
+    "phonetic": "/sɪlt/",
+    "meaning": "n. 淤泥，泥沙 v. (使) 淤塞",
+    "exampleEn": "River sediments gradually silted up the harbour.",
+    "exampleCn": "河流的沉积物逐渐使港口淤塞。",
+    "collocations": [],
+    "notes": [],
+    "remember": "和 sand (沙子) 联想记忆，指细小的泥沙。"
+  },
+  {
+    "word": "muddy",
+    "phonetic": "/'mʌdi/",
+    "meaning": "adj. 泥泞的；浑浊的",
+    "exampleEn": "We left the car and struck out along the muddy track.",
+    "exampleCn": "我们下了车，开始沿着泥泞的小路前行。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "mud",
+        "phonetic": "/mʌd/",
+        "meaning": "泥"
+      }
+    ],
+    "remember": "mud (泥) + dy (形容词后缀)"
+  },
+  {
+    "word": "clay",
+    "phonetic": "/kleɪ/",
+    "meaning": "n. 黏土，陶土",
+    "exampleEn": "Bricks and dishes are made from various kinds of clay.",
+    "exampleCn": "砖和盘子由各种黏土制成。",
+    "collocations": [],
+    "notes": [],
+    "remember": "由其发音和中文“可垒”联系，意为可以垒东西的土。"
+  },
+  {
+    "word": "dirt",
+    "phonetic": "/dɜːt/",
+    "meaning": "n. 污垢，灰尘；[尤美] 泥土",
+    "exampleEn": "The children were outside, playing happily in the dirt.",
+    "exampleCn": "孩子们正在外面的泥土地里开心肠地玩耍。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "dirty",
+        "phonetic": "/'dɜːti/",
+        "meaning": "脏的；下流的"
+      }
+    ],
+    "remember": "联想 dirty (脏的) 的名词形式。"
+  }
+]

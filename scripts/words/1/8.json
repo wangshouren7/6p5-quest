@@ -1,0 +1,244 @@
+[
+  {
+    "word": "Mediterranean",
+    "phonetic": "/ˌmedɪtə'reɪniən/",
+    "meaning": "adj. 地中海的；地中海地区的 n. 地中海；地中海地区",
+    "exampleEn": "This dish is a cross between Asian and Mediterranean food.",
+    "exampleCn": "这道菜融合了亚洲和地中海的风味。",
+    "collocations": [],
+    "notes": [],
+    "remember": "由 Medi (中间) + terra (土地) 组成，意为陆地中间的海。"
+  },
+  {
+    "word": "Atlantic",
+    "phonetic": "/ət'læntɪk/",
+    "meaning": "adj. 大西洋的 n. [the ~] 大西洋",
+    "exampleEn": "The Atlantic coast is within sight of the hotel.",
+    "exampleCn": "从宾馆可以看到大西洋海岸。",
+    "collocations": [],
+    "notes": [],
+    "remember": "源自希腊神话中的巨人阿特拉斯（Atlas）。"
+  },
+  {
+    "word": "pacific",
+    "phonetic": "/pə'sɪfɪk/",
+    "meaning": "adj. 平静的，和平的；[P~] 太平洋的 n. [the P~] 太平洋",
+    "exampleEn": "What a beautiful and pacific place this is!",
+    "exampleCn": "这是一个多么美丽而平静的地方啊！",
+    "collocations": [
+      {
+        "collocation": "Asian-Pacific region",
+        "meaning": "亚太地区"
+      },
+      {
+        "collocation": "Asian-Pacific Economic Cooperation (APEC)",
+        "meaning": "亚太经济合作组织"
+      }
+    ],
+    "notes": [
+      {
+        "word": "pacify",
+        "phonetic": "/'pæsɪfaɪ/",
+        "meaning": "v. 平息，安抚，使平静"
+      }
+    ],
+    "remember": "来自 peace (和平)，意为和平的海洋。"
+  },
+  {
+    "word": "ocean",
+    "phonetic": "/'əʊʃən/",
+    "meaning": "n. 海洋；(五大洋之一的) 洋",
+    "exampleEn": "These creatures live in the depth of the Pacific Ocean.",
+    "exampleCn": "这些生物生活在太平洋的深处。",
+    "collocations": [
+      {
+        "collocation": "an ocean of / oceans of",
+        "meaning": "大量的"
+      }
+    ],
+    "notes": [],
+    "remember": "常指比 sea 更广阔的大洋。"
+  },
+  {
+    "word": "marine",
+    "phonetic": "/mə'ri:n/",
+    "meaning": "adj. 海生的，海洋的；海事的 n. 水兵",
+    "exampleEn": "It is true that a lot of people like marine plants as their food.",
+    "exampleCn": "确实有很多人喜欢食用海洋植物。",
+    "collocations": [
+      {
+        "collocation": "a marine product",
+        "meaning": "海产品"
+      },
+      {
+        "collocation": "marine biology",
+        "meaning": "海洋生物学"
+      }
+    ],
+    "notes": [
+      {
+        "word": "mariner",
+        "phonetic": "/'mærɪnə/",
+        "meaning": "水手，海员"
+      },
+      {
+        "word": "submarine",
+        "phonetic": "/ˌsʌbmə'ri:n/",
+        "meaning": "海底的；潜艇"
+      }
+    ],
+    "remember": "词根 mar 表示“海” (sea)。"
+  },
+  {
+    "word": "navigation",
+    "phonetic": "/ˌnævɪ'ɡeɪʃən/",
+    "meaning": "n. 航行；航海",
+    "exampleEn": "Navigation is a game for brave people.",
+    "exampleCn": "航海是勇敢者的游戏。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "navigator",
+        "phonetic": "/'nævɪɡeɪtə/",
+        "meaning": "n. 航海家；导航员"
+      }
+    ],
+    "remember": "来自 navigate (驾驶，导航)。"
+  },
+  {
+    "word": "gulf",
+    "phonetic": "/ɡʌlf/",
+    "meaning": "n. 海湾",
+    "exampleEn": "The gulf extends northward.",
+    "exampleCn": "海湾向北方延伸。",
+    "collocations": [
+      {
+        "collocation": "gulf war",
+        "meaning": "海湾战争"
+      }
+    ],
+    "notes": [],
+    "remember": "指被陆地包围的大片水域。"
+  },
+  {
+    "word": "beach",
+    "phonetic": "/bi:tʃ/",
+    "meaning": "n. 海滩，河滩",
+    "exampleEn": "They walked along the beach, talking and laughing.",
+    "exampleCn": "他们说说笑笑，沿着海滩散步。",
+    "collocations": [],
+    "notes": [],
+    "remember": "指有沙子或石面的水边。"
+  },
+  {
+    "word": "coast",
+    "phonetic": "/kəʊst/",
+    "meaning": "n. 海岸，海滨",
+    "exampleEn": "He is going to live by the coast for the sake of his health.",
+    "exampleCn": "他为了自己的健康，打算到海滨地区居住。",
+    "collocations": [
+      {
+        "collocation": "coastal city",
+        "meaning": "海滨城市"
+      }
+    ],
+    "notes": [],
+    "remember": "指陆地与海洋接触的地带。"
+  },
+  {
+    "word": "shore",
+    "phonetic": "/ʃɔː/",
+    "meaning": "n. (海、湖等大水域的) 岸，滨",
+    "exampleEn": "His ship pulled in to the shore at midnight.",
+    "exampleCn": "他的船半夜时靠岸。",
+    "collocations": [
+      {
+        "collocation": "on shore",
+        "meaning": "在岸"
+      },
+      {
+        "collocation": "off shore",
+        "meaning": "离岸"
+      }
+    ],
+    "notes": [],
+    "remember": "常指紧挨水边的陆地。"
+  },
+  {
+    "word": "tide",
+    "phonetic": "/taɪd/",
+    "meaning": "n. 趋势，潮流；潮汐",
+    "exampleEn": "The gravitational attraction between the moon and the earth causes tides.",
+    "exampleCn": "月亮与地球间的引力引起潮汐。",
+    "collocations": [
+      {
+        "collocation": "at low tide",
+        "meaning": "退潮时，低潮时"
+      }
+    ],
+    "notes": [
+      {
+        "word": "tidal",
+        "phonetic": "/'taɪdl/",
+        "meaning": "adj. 潮汐的"
+      }
+    ],
+    "remember": "俗语：Time and tide wait for no man (岁月不等人)。"
+  },
+  {
+    "word": "current",
+    "phonetic": "/'kʌrənt/",
+    "meaning": "n. 水流，潮流；电流；气流",
+    "exampleEn": "He was swept away by the current.",
+    "exampleCn": "他被激流卷走了。",
+    "collocations": [],
+    "notes": [],
+    "remember": "作为形容词意为“当前的”。"
+  },
+  {
+    "word": "brook",
+    "phonetic": "/brʊk/",
+    "meaning": "n. 小河，溪",
+    "exampleEn": "Before we drink at a brook, it is good to know its source.",
+    "exampleCn": "溪畔畅饮前，最好知其源。",
+    "collocations": [
+      {
+        "collocation": "stony brook university",
+        "meaning": "石溪大学"
+      }
+    ],
+    "notes": [
+      {
+        "word": "creek",
+        "phonetic": "/kriːk/",
+        "meaning": "小湾，小溪"
+      }
+    ],
+    "remember": "通常指比河更小的自然流动的淡水。"
+  },
+  {
+    "word": "stream",
+    "phonetic": "/striːm/",
+    "meaning": "n. 小河，溪；流 v. 流动，流出",
+    "exampleEn": "On either bank of the stream stand rows of willow trees.",
+    "exampleCn": "小河两岸柳树成行。",
+    "collocations": [],
+    "notes": [],
+    "remember": "强调流动性。"
+  },
+  {
+    "word": "source",
+    "phonetic": "/sɔːs/",
+    "meaning": "n. 河的源头；根源",
+    "exampleEn": "I've heard from reliable sources that the...",
+    "exampleCn": "我从可靠消息来源听说...",
+    "collocations": [
+      {
+        "collocation": "Resource",
+        "meaning": "资源"
+      }
+    ],
+    "notes": [],
+    "remember": "指事物的发源地或出处。"
+  }
+]

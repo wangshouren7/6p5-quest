@@ -1,0 +1,53 @@
+<!-- 听写卡片 - 正面 -->
+<div class="card dictation-card">
+  <p class="dictation-prompt">听音频，写出单词：</p>
+  <div class="input-hint">{{type:单词}}</div>
+  <br />
+  <audio
+    id="dictation-audio"
+    controls
+    autoplay
+    src="https://dict.youdao.com/dictvoice?audio={{单词}}&type=1"
+  ></audio>
+</div>
+
+<script>
+  (function () {
+    var audio = document.getElementById("dictation-audio");
+    if (audio) {
+      // 可在此调整语速：0.5 慢速，2.0 快速
+      audio.playbackRate = 1;
+    }
+  })();
+</script>
+
+<style>
+  .dictation-card {
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    padding: 1.5rem;
+    text-align: center;
+  }
+  .dictation-prompt {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 1rem;
+  }
+  .dictation-card .input-hint {
+    min-height: 2.5rem;
+    font-size: 1.5rem;
+    max-width: 180px;
+    margin: 0 auto 0.5rem auto;
+  }
+  .dictation-card .input-hint input {
+    width: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+    box-sizing: border-box;
+  }
+  .dictation-card audio {
+    width: 100%;
+    max-width: 320px;
+    height: 36px;
+    margin-top: 0.5rem;
+  }
+</style>

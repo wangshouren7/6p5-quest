@@ -1,0 +1,277 @@
+[
+  {
+    "word": "shallow",
+    "phonetic": "/'ʃæləʊ/",
+    "meaning": "adj. 浅的；肤浅的，浅薄的",
+    "exampleEn": "The sea is shallow here.",
+    "exampleCn": "这儿的海水很浅。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "resource",
+        "phonetic": "/rɪ'sɔːs/",
+        "meaning": "n. 资源"
+      },
+      {
+        "word": "shallow-hearted",
+        "phonetic": "/'ʃæləʊ 'hɑːtɪd/",
+        "meaning": "adj. 薄情的"
+      }
+    ],
+    "remember": "对比记忆：deep (深的) - shallow (浅的)"
+  },
+  {
+    "word": "superficial",
+    "phonetic": "/ˌsuːpə'fɪʃəl/",
+    "meaning": "adj. 表皮的，表层的",
+    "exampleEn": "Superficial scratches can be easily removed.",
+    "exampleCn": "表层的划痕很容易去掉的。",
+    "collocations": [
+      {
+        "collocation": "a superficial injury",
+        "meaning": "皮外伤"
+      }
+    ],
+    "notes": [
+      {
+        "word": "face",
+        "phonetic": "/feɪs/",
+        "meaning": "脸"
+      },
+      {
+        "word": "facial",
+        "phonetic": "/'feɪʃəl/",
+        "meaning": "面部的"
+      },
+      {
+        "word": "facial expression",
+        "phonetic": "/'feɪʃəl ɪk'spreʃən/",
+        "meaning": "面部表情"
+      }
+    ],
+    "remember": "词根 super- (在上面) + fic (面) + -ial (形容词后缀)"
+  },
+  {
+    "word": "flat",
+    "phonetic": "/flæt/",
+    "meaning": "adj. 平坦的；扁平的；单调的；n. 公寓",
+    "exampleEn": "In flat open country, there is plenty of grass for the cattle to feed on.",
+    "exampleCn": "在开阔平坦的地区，有大量的青草供牛群食用。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "apartment",
+        "phonetic": "/ə'pɑːtmənt/",
+        "meaning": "公寓"
+      }
+    ],
+    "remember": "象形记忆：l 看上去很长，a、t 看上去很平。"
+  },
+  {
+    "word": "smooth",
+    "phonetic": "/smuːð/",
+    "meaning": "adj. 光滑的；平稳的；流畅的",
+    "exampleEn": "The process of negotiation was not entirely smooth.",
+    "exampleCn": "谈判的过程并不十分顺畅。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "smoothly",
+        "phonetic": "/'smuːðli/",
+        "meaning": "adv. 光滑地；平稳地；流畅地"
+      }
+    ],
+    "remember": "联想：s + mouth (嘴)，说话很顺滑、流畅。"
+  },
+  {
+    "word": "rough",
+    "phonetic": "/rʌf/",
+    "meaning": "adj. 粗糙的；粗略的",
+    "exampleEn": "You'd better give us a rough idea of your price.",
+    "exampleCn": "您最好给我们一个粗略的价格。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "roughly",
+        "phonetic": "/'rʌfli/",
+        "meaning": "adv. 粗糙地；粗略地"
+      }
+    ],
+    "remember": "发音记忆：'肉-夫'，皮肤长得像肉一样粗糙。"
+  },
+  {
+    "word": "sandy",
+    "phonetic": "/'sændi/",
+    "meaning": "adj. 铺满沙的；含沙的",
+    "exampleEn": "We walked across the fields on the sandy path.",
+    "exampleCn": "我们踩着这条沙路穿过田野。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "sand",
+        "phonetic": "/sænd/",
+        "meaning": "n. 沙子"
+      }
+    ],
+    "remember": "词根 sand (沙) + y (形容词后缀)"
+  },
+  {
+    "word": "stony",
+    "phonetic": "/'stəʊni/",
+    "meaning": "adj. 石头的；多石的",
+    "exampleEn": "The ground in this part of the country is poor and stony.",
+    "exampleCn": "该国这个地区的土地贫瘠多石。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "stone",
+        "phonetic": "/stəʊn/",
+        "meaning": "n. 石头"
+      }
+    ],
+    "remember": "词根 stone (石头) + y (形容词后缀)"
+  },
+  {
+    "word": "vertical",
+    "phonetic": "/'vɜːtɪkəl/",
+    "meaning": "adj. 垂直的，直立的",
+    "exampleEn": "In some places the cliff was almost vertical, and too dangerous to climb.",
+    "exampleCn": "在一些地方，悬崖几乎是垂直的，非常危险，不能攀登。",
+    "collocations": [
+      {
+        "collocation": "vertical farming",
+        "meaning": "垂直农场"
+      }
+    ],
+    "notes": [
+      {
+        "word": "horizontal",
+        "phonetic": "/ˌhɒrɪ'zɒntəl/",
+        "meaning": "adj. 水平的"
+      }
+    ],
+    "remember": "词根 vert (转) + ical，转到直立的方向。"
+  },
+  {
+    "word": "steep",
+    "phonetic": "/stiːp/",
+    "meaning": "adj. 陡峭的，陡直的",
+    "exampleEn": "A long steep path leads to a teahouse with a grand view of the sea.",
+    "exampleCn": "一条长而陡的小径通向一家能看见海景的茶室。",
+    "collocations": [],
+    "notes": [],
+    "remember": "阶梯式记忆：s + tee (梯子) + p，梯子很陡。"
+  },
+  {
+    "word": "parallel",
+    "phonetic": "/'pærəlel/",
+    "meaning": "n. 平行线；相似之物 v. 与...相似 adj. 平行的",
+    "exampleEn": "There are few parallels between American football and European football.",
+    "exampleCn": "美式足球（橄榄球）和欧洲足球之间几乎没有什么相似之处。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "unparalleled",
+        "phonetic": "/ʌn'pærəleld/",
+        "meaning": "adj. 无比的，无双的"
+      }
+    ],
+    "remember": "象形记忆：ll 就像两条平行线。"
+  },
+  {
+    "word": "narrow",
+    "phonetic": "/'nærəʊ/",
+    "meaning": "adj. 狭窄的；有限制的 n. [~s] 海峡 v. 变窄",
+    "exampleEn": "The only access to the garden is by a narrow path at the side of the house.",
+    "exampleCn": "到花园去的唯一途径是走房屋侧面的一条窄窄的小路。",
+    "collocations": [
+      {
+        "collocation": "narrow down",
+        "meaning": "减少；限制"
+      }
+    ],
+    "notes": [],
+    "remember": "对比记忆：wide (宽的) - narrow (窄的)"
+  },
+  {
+    "word": "Oceania",
+    "phonetic": "/ˌəʊʃi'eɪniə/",
+    "meaning": "n. 大洋洲",
+    "exampleEn": "Oceania is a separate landmass, but it is separated from Asia by very shallow water.",
+    "exampleCn": "大洋洲是一块单独的陆地，但它与亚洲之间只隔着很浅的水域。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "ocean",
+        "phonetic": "/'əʊʃən/",
+        "meaning": "n. 海洋"
+      }
+    ],
+    "remember": "词根 ocean (海洋) + ia (洲/国家后缀)"
+  },
+  {
+    "word": "mainland",
+    "phonetic": "/'meɪnlənd/",
+    "meaning": "n. 大陆，本土",
+    "exampleEn": "Hawaii and Alaska are not on the mainland of the United States.",
+    "exampleCn": "夏威夷和阿拉斯加不在美国本土上。",
+    "collocations": [],
+    "notes": [],
+    "remember": "合成词：main (主要的) + land (陆地)"
+  },
+  {
+    "word": "peninsula",
+    "phonetic": "/pə'nɪnsjʊlə/",
+    "meaning": "n. 半岛",
+    "exampleEn": "His house is located on the tip of the peninsula.",
+    "exampleCn": "他的房子位于半岛的顶端。",
+    "collocations": [],
+    "notes": [],
+    "remember": "pen (几乎/接近) + insula (岛) = 几乎是岛（半岛）"
+  },
+  {
+    "word": "climate",
+    "phonetic": "/'klaɪmət/",
+    "meaning": "n. 气候；风气，思潮，环境",
+    "exampleEn": "The current political climate in that country is favourable for foreign investment.",
+    "exampleCn": "该国目前的政治环境有利于外国投资。",
+    "collocations": [
+      {
+        "collocation": "climate change",
+        "meaning": "气候变化"
+      },
+      {
+        "collocation": "present economic climate",
+        "meaning": "当前的经济形势"
+      }
+    ],
+    "notes": [],
+    "remember": "谐音记忆：'快买它'，气候多变，趁着好天气快买它。"
+  },
+  {
+    "word": "weather",
+    "phonetic": "/'weðə/",
+    "meaning": "n. 天气，气象",
+    "exampleEn": "In warm weather, you should wear clothing that is cool and comfortable.",
+    "exampleCn": "天气温暖时，你应该穿凉快而舒适的衣服。",
+    "collocations": [],
+    "notes": [],
+    "remember": "注意区分 climate (长期气候) 和 weather (短期天气)。"
+  },
+  {
+    "word": "vertebrate",
+    "phonetic": "/'vɜːtɪbrət/",
+    "meaning": "n. 脊椎动物",
+    "exampleEn": "Humans are categorized as vertebrates.",
+    "exampleCn": "人类被归类为脊椎动物。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "reptile",
+        "phonetic": "/'reptaɪl/",
+        "meaning": "n. 爬行动物"
+      }
+    ],
+    "remember": "词根 vert (转/关节) + brate"
+  }
+]

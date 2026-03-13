@@ -1,0 +1,170 @@
+[
+  {
+    "word": "magma",
+    "phonetic": "/'mægma/",
+    "meaning": "n. 岩浆",
+    "exampleEn": "Some types of minerals are made when magma cools and solidifies.",
+    "exampleCn": "有些类型的矿物是在岩浆冷却凝固的过程中形成的。",
+    "collocations": [],
+    "notes": [],
+    "remember": "字根 mag 意为“揉，捏”，另外在希腊语中 magma 意为“浓厚的软膏”，后引申为岩浆，因其流动起来柔软如膏。"
+  },
+  {
+    "word": "thermodynamic",
+    "phonetic": "/ˌθɜ:məʊdaɪ'næmɪk/",
+    "meaning": "adj. 热力的；热力学的",
+    "exampleEn": "His theory violates current thermodynamic laws.",
+    "exampleCn": "他的理论违反了当前的热力学定律。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "thermometer",
+        "phonetic": "/θə'mɒmɪtə/",
+        "meaning": "温度计"
+      },
+      {
+        "word": "thermodynamics",
+        "phonetic": "/ˌθɜ:məʊdaɪ'næmɪks/",
+        "meaning": "n. 热力学"
+      }
+    ],
+    "remember": "thermo (热) + dynamic (力的；力学) -> 热力的；热力学的。"
+  },
+  {
+    "word": "smog",
+    "phonetic": "/smɒg/",
+    "meaning": "n. 烟雾，雾霾",
+    "exampleEn": "The smog was so bad that schoolchildren were advised to stay indoors.",
+    "exampleCn": "雾霾太严重，建议小学生们留在室内。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "smoggy",
+        "phonetic": "/'smɒgi/",
+        "meaning": "adj. 烟雾弥漫的"
+      }
+    ],
+    "remember": "英文中的混合构词法：smoke + fog -> smog (烟雾)；motor + hotel -> motel (汽车旅馆)；helicopter + airport -> heliport (直升机机场)；breakfast + lunch -> brunch (早午餐)。"
+  },
+  {
+    "word": "fume",
+    "phonetic": "/fju:m/",
+    "meaning": "n. [-s] (难闻且常为有害的) 烟，气体 v. 冒烟；发怒",
+    "exampleEn": "Petrol fumes from cars are poisoning the atmosphere.",
+    "exampleCn": "汽车排放的汽油烟气正在污染大气。",
+    "collocations": [
+      {
+        "collocation": "fume hood",
+        "meaning": "通风柜"
+      }
+    ],
+    "notes": [],
+    "remember": "smoke and fumes = pollution"
+  },
+  {
+    "word": "mist",
+    "phonetic": "/mɪst/",
+    "meaning": "n. 薄雾；水汽；使视线模糊的东西",
+    "exampleEn": "She could hardly recognise her son through a mist of tears.",
+    "exampleCn": "她泪眼模糊，几乎不能认出自己的儿子。",
+    "collocations": [
+      {
+        "collocation": "water mist",
+        "meaning": "水气"
+      },
+      {
+        "collocation": "lost in the mists of time",
+        "meaning": "淹没在时间的迷雾中"
+      }
+    ],
+    "notes": [
+      {
+        "word": "misty",
+        "phonetic": "/'mɪsti/",
+        "meaning": "adj. 有雾的；模糊的"
+      }
+    ],
+    "remember": "通过语境及薄雾的视觉感记忆。"
+  },
+  {
+    "word": "tsunami",
+    "phonetic": "/tsu'nɑ:mi/",
+    "meaning": "n. 海啸",
+    "exampleEn": "A terrible tsunami followed the earthquake.",
+    "exampleCn": "一场骇人的海啸跟随地震而来。",
+    "collocations": [],
+    "notes": [],
+    "remember": "日语音译，来自“港口（tsu）”+“波浪（nami）”。"
+  },
+  {
+    "word": "drought",
+    "phonetic": "/draʊt/",
+    "meaning": "n. 干旱，旱灾",
+    "exampleEn": "Many areas in Africa have suffered severe drought this year.",
+    "exampleCn": "今年，非洲的很多地区遭受了严重的干旱。",
+    "collocations": [
+      {
+        "collocation": "drought resistence",
+        "meaning": "耐旱的"
+      }
+    ],
+    "notes": [],
+    "remember": "词源同 dry (adj. 干的，干燥的)。"
+  },
+  {
+    "word": "flooding",
+    "phonetic": "/'flʌdɪŋ/",
+    "meaning": "n. 洪水泛滥",
+    "exampleEn": "Since the flooding began last month, 16 people have died statewide.",
+    "exampleCn": "自上个月洪水爆发以来，全州已有 16 人死亡。",
+    "collocations": [
+      {
+        "collocation": "flood season",
+        "meaning": "汛期"
+      },
+      {
+        "collocation": "flood in",
+        "meaning": "大量的涌入"
+      }
+    ],
+    "notes": [
+      {
+        "word": "flood",
+        "phonetic": "/flʌd/",
+        "meaning": "v. 淹没；充满 n. 洪水"
+      }
+    ],
+    "remember": "flood (洪水) + -ing (名词后缀)。"
+  },
+  {
+    "word": "torrent",
+    "phonetic": "/'tɒrənt/",
+    "meaning": "n. 激流，洪流",
+    "exampleEn": "A torrent of water poured down the mountain.",
+    "exampleCn": "激流从山上奔流而下。",
+    "collocations": [
+      {
+        "collocation": "a rage torrent",
+        "meaning": "一个汹涌的激流"
+      }
+    ],
+    "notes": [],
+    "remember": "联想记忆，形容水流势不可挡。"
+  },
+  {
+    "word": "earthquake",
+    "phonetic": "/'ɜ:θkweɪk/",
+    "meaning": "n. 地震",
+    "exampleEn": "Several countries in eastern Europe are counting the losses caused by yesterday's earthquake.",
+    "exampleCn": "东欧的几个国家正在统计昨天地震造成的人员伤亡。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "quake",
+        "phonetic": "/kweɪk/",
+        "meaning": "v. 震动，颤动"
+      }
+    ],
+    "remember": "earth (地球) + quake (震动) -> 地震。"
+  }
+]

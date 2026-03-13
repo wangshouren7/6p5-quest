@@ -1,0 +1,217 @@
+[
+  {
+    "word": "atmosphere",
+    "phonetic": "/ˈætməsfɪə/",
+    "meaning": "大气层，大气圈；气氛",
+    "exampleEn": "The approaching examination created a tense atmosphere on the campus.",
+    "exampleCn": "即将来临的考试在校园里制造了一种紧张气氛。",
+    "collocations": [
+      {
+        "collocation": "atmosphere pressure",
+        "meaning": "大气压"
+      },
+      {
+        "collocation": "working atmosphere",
+        "meaning": "工作环境，工作氛围"
+      }
+    ],
+    "notes": [
+      {
+        "word": "atom",
+        "phonetic": "/ˈætəm/",
+        "meaning": "原子"
+      }
+    ],
+    "remember": "atmo (水汽) + sphere (球体，球形) → 大气圈。"
+  },
+  {
+    "word": "hydrosphere",
+    "phonetic": "/ˈhaɪdrəʊsfɪə/",
+    "meaning": "水圈；大气中的水汽",
+    "exampleEn": "All the water of the earth's surface is included in the hydrosphere.",
+    "exampleCn": "地球表面的水都属于水圈的范畴。",
+    "collocations": [],
+    "notes": [],
+    "remember": "hydro (水) + sphere (球体，球形) → 水圈。"
+  },
+  {
+    "word": "lithosphere",
+    "phonetic": "/'lɪθəʊˌsfɪə/",
+    "meaning": "岩石圈",
+    "exampleEn": "The hydrosphere and the lithosphere together form the earth's surface.",
+    "exampleCn": "水圈与岩石圈一起形成地球的表面。",
+    "collocations": [],
+    "notes": [],
+    "remember": "litho (石头) + sphere (球体，球形) → 岩石圈。"
+  },
+  {
+    "word": "oxygen",
+    "phonetic": "/ˈɒksɪdʒən/",
+    "meaning": "氧气",
+    "exampleEn": "Hydrogen and oxygen are gases.",
+    "exampleCn": "氢气和氧气是气体。",
+    "collocations": [],
+    "notes": [],
+    "remember": "词源记忆法。"
+  },
+  {
+    "word": "oxide",
+    "phonetic": "/ˈɒksaɪd/",
+    "meaning": "氧化物",
+    "exampleEn": "Oxide is a part of our daily life.",
+    "exampleCn": "氧化物是我们日常生活的一部分。",
+    "collocations": [],
+    "notes": [],
+    "remember": "与oxygen（氧气）同根。"
+  },
+  {
+    "word": "carbon dioxide",
+    "phonetic": "/ˌkɑːbən daɪˈɒksaɪd/",
+    "meaning": "二氧化碳",
+    "exampleEn": "Soft drinks usually contain carbon dioxide.",
+    "exampleCn": "软饮料中通常含有二氧化碳。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "diversity",
+        "phonetic": "/daɪˈvɜːsəti/",
+        "meaning": "多样性"
+      }
+    ],
+    "remember": "carbon (碳) + di (二) + oxide (氧化物)。"
+  },
+  {
+    "word": "hydrogen",
+    "phonetic": "/ˈhaɪdrədʒən/",
+    "meaning": "氢气",
+    "exampleEn": "Two parts hydrogen, one part oxygen, you'll get water every time.",
+    "exampleCn": "两份氢加一份氧，你就会得到水。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "genius",
+        "phonetic": "/ˈdʒiːniəs/",
+        "meaning": "天才"
+      }
+    ],
+    "remember": "hydro (水) + gen (生成) → 因氢气（与氧气混合燃烧后）会产生水而得名。"
+  },
+  {
+    "word": "core",
+    "phonetic": "/kɔː/",
+    "meaning": "中心，核心；地核",
+    "exampleEn": "He is the core of the working group.",
+    "exampleCn": "他是这个工作小组的核心。",
+    "collocations": [],
+    "notes": [],
+    "remember": "音译：核心（core）。"
+  },
+  {
+    "word": "crust",
+    "phonetic": "/krʌst/",
+    "meaning": "地壳；外壳",
+    "exampleEn": "The crust on the snow was thick enough for us to walk on it.",
+    "exampleCn": "雪上冻结的那层冰很厚，足以让我们在上面行走。",
+    "collocations": [],
+    "notes": [
+      {
+        "word": "crispy",
+        "phonetic": "/ˈkrɪspi/",
+        "meaning": "脆的（食物）"
+      }
+    ],
+    "remember": "地壳像面包的硬皮（crust）。"
+  },
+  {
+    "word": "mantle",
+    "phonetic": "/ˈmæntI/",
+    "meaning": "地幔；斗篷，披风 v. 覆盖",
+    "exampleEn": "Parents often use mantles for their babies to keep warm.",
+    "exampleCn": "父母经常用披风给幼儿御寒。",
+    "collocations": [],
+    "notes": [],
+    "remember": "西方文化中，mantle被视为法力或权力传承的媒介。"
+  },
+  {
+    "word": "longitude",
+    "phonetic": "/ˈlɒndʒɪtjuːd/",
+    "meaning": "经度",
+    "exampleEn": "The captain determines the latitude and longitude of his ship.",
+    "exampleCn": "船长查明船的经纬度。",
+    "collocations": [
+      {
+        "collocation": "a line of longitude",
+        "meaning": "经线"
+      }
+    ],
+    "notes": [],
+    "remember": "long (长的，垂直的) + itude (状态)。"
+  },
+  {
+    "word": "latitude",
+    "phonetic": "/ˈlætɪtjuːd/",
+    "meaning": "纬度",
+    "exampleEn": "Our position is 40 degrees north latitude.",
+    "exampleCn": "我们的位置是北纬40度。",
+    "collocations": [
+      {
+        "collocation": "high latitudes",
+        "meaning": "高纬度地区"
+      }
+    ],
+    "notes": [],
+    "remember": "lat (宽，侧向) + itude (状态)。"
+  },
+  {
+    "word": "horizon",
+    "phonetic": "/həˈraɪzən/",
+    "meaning": "地平线；[~s] 眼界，见识",
+    "exampleEn": "I could see a ship on the horizon.",
+    "exampleCn": "我看见地平线上有一艘轮船。",
+    "collocations": [
+      {
+        "collocation": "broaden sb.'s horizons",
+        "meaning": "开阔眼界"
+      }
+    ],
+    "notes": [
+      {
+        "word": "horizontal",
+        "phonetic": "/ˌhɒrɪˈzɒntl/",
+        "meaning": "adj. 水平的"
+      }
+    ],
+    "remember": "horizon 地平线，记忆其形容词形式horizontal。"
+  },
+  {
+    "word": "altitude",
+    "phonetic": "/ˈæltɪtjuːd/",
+    "meaning": "高度，海拔",
+    "exampleEn": "We are currently flying at an altitude of 8,000 metres.",
+    "exampleCn": "我们目前正在海拔8000米的高空飞行。",
+    "collocations": [],
+    "notes": [],
+    "remember": "alt (高) + itude (表性质、状态) → 高度。"
+  },
+  {
+    "word": "disaster",
+    "phonetic": "/dɪˈzɑːstə/",
+    "meaning": "灾难",
+    "exampleEn": "There was a great flood disaster in East China.",
+    "exampleCn": "华东发生了严重的水灾。",
+    "collocations": [
+      {
+        "collocation": "a disaster film/movie",
+        "meaning": "灾难片"
+      }
+    ],
+    "notes": [
+      {
+        "word": "disastrous",
+        "phonetic": "/dɪˈzɑːstrəs/",
+        "meaning": "adj. 灾难性的"
+      }
+    ],
+    "remember": "dis (坏) + aster (星) → 古人认为星位不好预示灾难。"
+  }
+]
